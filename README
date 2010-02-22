@@ -1,4 +1,4 @@
-SGClient v0.3.1
+SGClient v0.3.2
 
 ================================================================================
 ABSTRACT:
@@ -90,6 +90,8 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
+Version
+- Added license
 
 Version 0.3.1
 - Restructured project.

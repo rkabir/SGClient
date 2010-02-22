@@ -9,6 +9,8 @@
 
 // TODO: CHANGE THESE!!
 
+#import "MyTestingMacros.h"
+
 #define kSGOAuth_Key                @"my_key"
 #define kSGOAuth_Secret             @"my_secret"
 

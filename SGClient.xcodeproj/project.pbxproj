@@ -153,6 +153,7 @@
 		4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGTestingMacros.h; sourceTree = "<group>"; };
 		4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4A64B5F41120D54C00D4E22D /* build_client */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_client; sourceTree = "<group>"; };
+		4AEDCAAE11223A80003C1949 /* MyTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTestingMacros.h; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libSGClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSGClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -192,6 +193,7 @@
 		0867D691FE84028FC02AAC07 /* SGClient */ = {
 			isa = PBXGroup;
 			children = (
+				4AEDCAAE11223A80003C1949 /* MyTestingMacros.h */,
 				4A64B5F41120D54C00D4E22D /* build_client */,
 				4A64A3AA112095BE00D4E22D /* Classes */,
 				4A64A3C6112095BE00D4E22D /* README */,
