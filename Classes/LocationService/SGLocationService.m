@@ -475,7 +475,7 @@ enum SGLocationServiceResponseId {
                        requestId,
                        nil];
     
-    if(start && end) {
+    if(start > 0 && end > 0) {
         NSMutableDictionary* httpParams = [params objectAtIndex:kSGHTTPRequestParameter_Params];
         [httpParams setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
         [httpParams setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
@@ -534,7 +534,7 @@ enum SGLocationServiceResponseId {
                        responseId,
                        nil];
     
-    if(start && end) {
+    if(start > 0 && end > 0) {
         NSMutableDictionary* httpParams = [params objectAtIndex:kSGHTTPRequestParameter_Params];
         [httpParams setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
         [httpParams setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
