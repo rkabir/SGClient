@@ -76,7 +76,7 @@
 #pragma mark SGLocationService delegate methods 
  
 
-- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)responseId responseObject:(NSArray*)objects
+- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)responseId responseObject:(NSDictionary*)objects
 {
     NSDictionary* expectedResponse = [requestIds objectForKey:responseId];
 

@@ -55,11 +55,7 @@
 		4A64A449112095BE00D4E22D /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A410112095BE00D4E22D /* CJSONSerializer.m */; };
 		4A64A44A112095BE00D4E22D /* SGClient_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A411112095BE00D4E22D /* SGClient_Prefix.pch */; };
 		4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
-		4A64B4BA1120A12400D4E22D /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4A64B4BC1120A12500D4E22D /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
-		4A64B4BD1120A12500D4E22D /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4A64B4BE1120A12600D4E22D /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		4A64B4BF1120A12600D4E22D /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
 		4A64B4C01120A6D300D4E22D /* CLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */; };
 		4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
@@ -88,6 +84,10 @@
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
 		4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */; };
+		4A9B91BF114A9B7100C16B55 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
+		4A9B91C0114A9B7200C16B55 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
+		4A9B91C1114A9B7300C16B55 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
+		4ABA11E71148561C00F5EE6D /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -490,11 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A64B4BA1120A12400D4E22D /* SGRecordTests.m in Sources */,
 				4A64B4BC1120A12500D4E22D /* SGLocationServiceTests.m in Sources */,
-				4A64B4BD1120A12500D4E22D /* SGNearbyTests.m in Sources */,
-				4A64B4BE1120A12600D4E22D /* SGLayerTest.m in Sources */,
-				4A64B4BF1120A12600D4E22D /* SGGeoJSONEncoderTests.m in Sources */,
 				4A64B4C01120A6D300D4E22D /* CLLocationAdditions.m in Sources */,
 				4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */,
@@ -517,6 +513,10 @@
 				4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */,
 				4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */,
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
+				4ABA11E71148561C00F5EE6D /* SGLayerTest.m in Sources */,
+				4A9B91BF114A9B7100C16B55 /* SGGeoJSONEncoderTests.m in Sources */,
+				4A9B91C0114A9B7200C16B55 /* SGNearbyTests.m in Sources */,
+				4A9B91C1114A9B7300C16B55 /* SGRecordTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

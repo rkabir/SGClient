@@ -140,4 +140,64 @@ static NSString* testingLayer = kSGTesting_Layer;
     
 }
 
+- (void) testNearby
+{
+    SGLayer* layer = [[SGLayer alloc] initWithLayerName:testingLayer];
+    
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970] - 5.0;
+    NSTimeInterval weekLater = [[NSDate date] timeIntervalSince1970] + 60 * 40;
+    
+    CLLocationCoordinate2D coords = {54.0,54.0};
+    int amount = 20;
+    NSMutableArray* records = [NSMutableArray array];
+    SGRecord* record = nil;
+    for(int i = 0; i < amount; i++) {
+        record = [self createRandomRecord];
+        record.recordId = [NSString stringWithFormat:@"sg-%i", i];
+        
+        if(i % 2) {
+         
+            record.latitude = coords.latitude;
+            record.longitude = coords.longitude;
+        }
+        
+        [records addObject:record];
+    }
+    
+    [layer addRecordAnnotations:records];
+    STAssertTrue([[layer recordAnnotations] count] == amount, @"The layer should have %i records registered.", amount);
+    [self addRecord:records responseId:[layer updateAllRecords]];
+    
+    WAIT_FOR_WRITE();
+    WAIT_FOR_WRITE();
+    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
+    [self retrieveRecord:records responseId:[layer retrieveRecordsForCoordinate:coords
+                                                                         radius:10
+                                                                          types:nil
+                                                                          limit:25
+                                                                          start:currentTime
+                                                                            end:weekLater]];     
+    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertNotNil(recentReturnObject, @"Return object should not be nil");
+    NSArray* features = (NSArray*)[recentReturnObject features];
+    STAssertNotNil(features, @"Features should be returned");
+    STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
+    
+    [self retrieveRecord:records responseId:[layer retrieveRecordsForCoordinate:coords
+                                                                         radius:10
+                                                                          types:nil
+                                                                          limit:25
+                                                                          start:currentTime*2.0
+                                                                            end:weekLater*2.0]];     
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    features = [recentReturnObject features];
+    STAssertTrue([features count] == 0, @"No features should be returned");
+    
+    [self deleteRecord:records responseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+}
+
 @end

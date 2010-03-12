@@ -179,6 +179,25 @@
     return responseId;
 }
 
+- (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
+                                  types:(NSArray*)types
+                                  limit:(NSInteger)limit
+                                  start:(double)start
+                                    end:(double)end;
+{
+    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForGeohash:region
+                                                                                         layers:[NSArray arrayWithObject:layerId]
+                                                                                          types:types
+                                                                                          limit:limit
+                                                                                          start:start
+                                                                                            end:end];
+    
+    if(responseId)
+        [_layerResponseIds addObject:responseId];
+    
+    return responseId;
+}
+
 - (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord 
                                     radius:(double)radius
                                      types:(NSArray*)types
@@ -193,6 +212,27 @@
         [_layerResponseIds addObject:responseId];
     
     return responseId;
+}
+
+- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord 
+                                    radius:(double)radius
+                                     types:(NSArray*)types
+                                     limit:(NSInteger)limit
+                                     start:(double)start
+                                       end:(double)end
+{
+    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForCoordinate:coord
+                                                                                            radius:radius
+                                                                                            layers:[NSArray arrayWithObject:layerId]
+                                                                                             types:types
+                                                                                             limit:limit
+                                                                                             start:start
+                                                                                               end:end];
+    
+    if(responseId)
+        [_layerResponseIds addObject:responseId];
+    
+    return responseId;    
 }
 
 #pragma mark -

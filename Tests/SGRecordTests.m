@@ -146,6 +146,7 @@
     
     [self addRecord:record responseId:[self.locatorService updateRecordAnnotation:record]];    
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
     
     double newLat = 10.01;
     record.latitude = newLat;
@@ -159,10 +160,9 @@
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
 
     STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
-    double lat = [[(NSDictionary*)recentReturnObject coordinates] latitude];
+    double lat = [[[(NSDictionary*)recentReturnObject geometry] coordinates] latitude];
 
-    STAssertEquals(lat, newLat, @"Expected record lat to be %f, but was %f.", lat, newLat);
-
+    STAssertEquals(lat, newLat, @"Expected record lat to be %f, but was %f.", newLat, lat);
     [self deleteRecord:record responseId:[self.locatorService deleteRecordAnnotation:record]];
     [record release];
 }
@@ -259,7 +259,7 @@
                                                                                        radius:1000 
                                                                                        layers:[NSArray arrayWithObject:r1.layer]
                                                                                         types:[NSArray arrayWithObjects:r1.type, r2.type, nil]
-                                                                                        limit:100]];
+                                                                                        limit:25]];
 
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     

@@ -90,7 +90,11 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
-Version
+
+Version 0.3.3
+- Nearby requests can now use the temporal indexes
+
+Version 0.3.2
 - Added license
 
 Version 0.3.1

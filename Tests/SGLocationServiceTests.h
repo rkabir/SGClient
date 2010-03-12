@@ -44,7 +44,7 @@
     
     SGLocationService* locatorService;
     NSMutableDictionary* requestIds;
-    NSObject* recentReturnObject;
+    NSDictionary* recentReturnObject;
 }
 
 @property (nonatomic, retain) SGLocationService* locatorService;
