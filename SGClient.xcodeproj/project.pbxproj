@@ -54,7 +54,6 @@
 		4A64A448112095BE00D4E22D /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A40F112095BE00D4E22D /* CJSONSerializer.h */; };
 		4A64A449112095BE00D4E22D /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A410112095BE00D4E22D /* CJSONSerializer.m */; };
 		4A64A44A112095BE00D4E22D /* SGClient_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A411112095BE00D4E22D /* SGClient_Prefix.pch */; };
-		4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
 		4A64B4BC1120A12500D4E22D /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
 		4A64B4C01120A6D300D4E22D /* CLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */; };
 		4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
@@ -68,8 +67,6 @@
 		4A64B4C91120A6DE00D4E22D /* SGRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3C4112095BE00D4E22D /* SGRecord.m */; };
 		4A64B4CA1120A6DF00D4E22D /* SGLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3C2112095BE00D4E22D /* SGLayer.m */; };
 		4A64B4D41120A78200D4E22D /* SGAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B4D31120A78200D4E22D /* SGAdditions.h */; };
-		4A64B5141120B99800D4E22D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
-		4A64B5151120B99800D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
 		4A64B52E1120B9CF00D4E22D /* SGClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B52D1120B9CF00D4E22D /* SGClient.h */; };
 		4A64B5481120BB0C00D4E22D /* SGTestingMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */; };
 		4A64B5571120BB8B00D4E22D /* Base64Transcoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CA112095BE00D4E22D /* Base64Transcoder.c */; };
@@ -88,7 +85,8 @@
 		4A9B91C0114A9B7200C16B55 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
 		4A9B91C1114A9B7300C16B55 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4ABA11E71148561C00F5EE6D /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
+		90948FE6114DCEE100DDAFF0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90948FE5114DCEE100DDAFF0 /* CoreLocation.framework */; };
+		90948FE8114DCEE100DDAFF0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90948FE7114DCEE100DDAFF0 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,14 +145,14 @@
 		4A64A418112095BE00D4E22D /* SGNearbyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGNearbyTests.m; sourceTree = "<group>"; };
 		4A64A419112095BE00D4E22D /* SGRecordTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGRecordTests.m; sourceTree = "<group>"; };
 		4A64A50D112096BD00D4E22D /* SGClientTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SGClientTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A64A51E1120978F00D4E22D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4A64B4D31120A78200D4E22D /* SGAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAdditions.h; sourceTree = "<group>"; };
 		4A64B52D1120B9CF00D4E22D /* SGClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGClient.h; sourceTree = "<group>"; };
 		4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGTestingMacros.h; sourceTree = "<group>"; };
 		4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4A64B5F41120D54C00D4E22D /* build_client */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_client; sourceTree = "<group>"; };
 		4AEDCAAE11223A80003C1949 /* MyTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTestingMacros.h; sourceTree = "<group>"; };
-		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		90948FE5114DCEE100DDAFF0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = /System/Library/Frameworks/CoreLocation.framework; sourceTree = "<absolute>"; };
+		90948FE7114DCEE100DDAFF0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		D2AAC07E0554694100DB518D /* libSGClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSGClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -163,8 +161,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A64B5141120B99800D4E22D /* Foundation.framework in Frameworks */,
-				4A64B5151120B99800D4E22D /* CoreLocation.framework in Frameworks */,
 				4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,8 +169,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
-				4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */,
+				90948FE6114DCEE100DDAFF0 /* CoreLocation.framework in Frameworks */,
+				90948FE8114DCEE100DDAFF0 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +197,8 @@
 				4A64A412112095BE00D4E22D /* Tests */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
+				90948FE5114DCEE100DDAFF0 /* CoreLocation.framework */,
+				90948FE7114DCEE100DDAFF0 /* Foundation.framework */,
 			);
 			name = SGClient;
 			sourceTree = "<group>";
@@ -208,8 +206,6 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
-				4A64A51E1120978F00D4E22D /* CoreLocation.framework */,
 				4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */,
 			);
 			name = Frameworks;

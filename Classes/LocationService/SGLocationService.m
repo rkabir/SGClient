@@ -373,6 +373,9 @@ enum SGLocationServiceResponseId {
         SGRecord* record = [[SGRecord alloc] init];
         record.recordId = recordId;
         record.layer = layer;
+        record.latitude = coord.latitude;
+        record.longitude = coord.longitude;
+      
         record.properties = [NSMutableDictionary dictionaryWithDictionary:properties];
         
         NSDictionary* geoJSONObject = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotation:record];
