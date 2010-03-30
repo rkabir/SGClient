@@ -428,6 +428,25 @@ enum SGLocationServiceResponseId {
     return requestId;
 }
 
+#pragma mark -
+#pragma mark Layer
+
+- (NSString*) layerInformation:(NSString*)layerName
+{
+    NSString* responseId = [self _getNextResponseId];
+    
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/layer/%@.json", layerName],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    
+    [self _pushInvocationWithArgs:params];
+    
+    return responseId;
+}
 
 #pragma mark -
 #pragma mark Nearby
@@ -547,41 +566,15 @@ enum SGLocationServiceResponseId {
     return responseId;        
 }
 
-- (NSString*) layerInformation:(NSString*)layerName
-{
-    NSString* responseId = [self _getNextResponseId];
-    
-    NSArray* params = [NSArray arrayWithObjects:
-                       @"GET",
-                       [NSString stringWithFormat:@"/layer/%@.json", layerName],
-                       [NSNull null],
-                       [NSNull null],
-                       responseId,
-                       nil];
-    
-    [self _pushInvocationWithArgs:params];
-    
-    return responseId;
-}
+#pragma mark -
+#pragma mark Features
 
-- (NSArray*) _allLayers
-{
-    return [NSArray arrayWithObjects:@"com.simplegeo.global.twitter", @"com.simplegeo.global.brightkite",
-            @"com.simplegeo.global.flickr", @"com.simplegeo.global.geonames", @"com.simplegeo.us.weather",
-            @"com.simplegeo.us.zip", nil];
-}
-
-- (NSArray*) _allTypes
-{
-    return [NSArray arrayWithObjects:kSGLocationType_Place, kSGLocationType_Person, kSGLocationType_Object,
-            kSGLocationType_Note, kSGLocationType_Audio, kSGLocationType_Video, nil];
-}
 
 - (NSString*) reverseGeocode:(CLLocationCoordinate2D)coord
 {
     NSString* responseId = [self _getNextResponseId];
     
-    SGLog(@"SGLocaitonService - Reverse geocoding %f,%f with response %@", coord.latitude, coord.longitude, responseId);
+    SGLog(@"SGLocationService - Reverse geocoding %f,%f with response %@", coord.latitude, coord.longitude, responseId);
     
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
@@ -595,6 +588,50 @@ enum SGLocationServiceResponseId {
     return responseId;
 }
 
+- (NSString*) densityForCoordinate:(CLLocationCoordinate2D)coord day:(NSString*)day hour:(int)hour
+{
+    if(hour < 0 || hour > 24)
+        return [self densityForCoordinate:coord day:day];
+    
+    if(!day)
+        day = kSpotRank_Monday;
+    
+    NSString* responseId = [self _getNextResponseId];
+    
+    SGLog(@"SGLocationService - SpotRank %f,%f on day %@ with response %@", coord.latitude, coord.longitude, day, responseId);
+    NSArray* params = [NSArray arrayWithObjects:
+                            @"GET",
+                            [NSString stringWithFormat:@"/density/%@/%i/%f,%f.json", day, hour, coord.latitude, coord.longitude],
+                            [NSNull null],
+                            [NSNull null],
+                            responseId,
+                       nil];
+    
+    [self _pushInvocationWithArgs:params];
+    
+    return responseId;                   
+}
+
+- (NSString*) densityForCoordinate:(CLLocationCoordinate2D)coord day:(NSString*)day
+{
+    NSString* responseId = [self _getNextResponseId];
+    
+    if(!day)
+        day = kSpotRank_Monday;
+
+    SGLog(@"SGLocationService - SpotRank %f,%f on day %@ with response %@", coord.latitude, coord.longitude, day, responseId);    
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/density/%@/%f,%f.json", day, coord.latitude, coord.longitude],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    
+    [self _pushInvocationWithArgs:params];
+    
+    return responseId;                   
+}
 
 #pragma mark -
 #pragma mark HTTP Request methods 
@@ -818,6 +855,19 @@ enum SGLocationServiceResponseId {
 
 #pragma mark -
 #pragma mark Helper methods 
+
+- (NSArray*) _allLayers
+{
+    return [NSArray arrayWithObjects:@"com.simplegeo.global.twitter", @"com.simplegeo.global.brightkite",
+            @"com.simplegeo.global.flickr", @"com.simplegeo.global.geonames", @"com.simplegeo.us.weather",
+            @"com.simplegeo.us.zip", nil];
+}
+
+- (NSArray*) _allTypes
+{
+    return [NSArray arrayWithObjects:kSGLocationType_Place, kSGLocationType_Person, kSGLocationType_Object,
+            kSGLocationType_Note, kSGLocationType_Audio, kSGLocationType_Video, nil];
+}
 
 
 - (NSString*) _getNextResponseId

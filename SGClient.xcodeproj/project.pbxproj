@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A64A41A112095BE00D4E22D /* CLLocationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AC112095BE00D4E22D /* CLLocationAdditions.h */; };
-		4A64A41B112095BE00D4E22D /* CLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */; };
+		4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
+		4A0943D5115C29A4007E3538 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
+		4A0943D6115C29A4007E3538 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
+		4A0943D7115C29A6007E3538 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A0943D8115C29A7007E3538 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
 		4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */; };
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
@@ -55,16 +58,12 @@
 		4A64A449112095BE00D4E22D /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A410112095BE00D4E22D /* CJSONSerializer.m */; };
 		4A64A44A112095BE00D4E22D /* SGClient_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A411112095BE00D4E22D /* SGClient_Prefix.pch */; };
 		4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
-		4A64B4BC1120A12500D4E22D /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
-		4A64B4C01120A6D300D4E22D /* CLLocationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */; };
 		4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
 		4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */; };
 		4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BF112095BE00D4E22D /* SGOAuth.m */; };
-		4A64B4C61120A6D900D4E22D /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
 		4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BB112095BE00D4E22D /* SGLocationService.m */; };
-		4A64B4C81120A6DA00D4E22D /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		4A64B4C91120A6DE00D4E22D /* SGRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3C4112095BE00D4E22D /* SGRecord.m */; };
 		4A64B4CA1120A6DF00D4E22D /* SGLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3C2112095BE00D4E22D /* SGLayer.m */; };
 		4A64B4D41120A78200D4E22D /* SGAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B4D31120A78200D4E22D /* SGAdditions.h */; };
@@ -84,16 +83,14 @@
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
 		4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */; };
-		4A9B91BF114A9B7100C16B55 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
-		4A9B91C0114A9B7200C16B55 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4A9B91C1114A9B7300C16B55 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
-		4ABA11E71148561C00F5EE6D /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A850432114FE6DF000C31B3 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
+		4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
+		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A64A3AC112095BE00D4E22D /* CLLocationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLLocationAdditions.h; sourceTree = "<group>"; };
-		4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLLocationAdditions.m; sourceTree = "<group>"; };
+		4A094381115C028E007E3538 /* SGSpotRankTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGSpotRankTests.m; sourceTree = "<group>"; };
 		4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GeoJSON+NSArray.h"; sourceTree = "<group>"; };
 		4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GeoJSON+NSArray.m"; sourceTree = "<group>"; };
 		4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GeoJSON+NSDictionary.h"; sourceTree = "<group>"; };
@@ -229,8 +226,6 @@
 		4A64A3AB112095BE00D4E22D /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				4A64A3AC112095BE00D4E22D /* CLLocationAdditions.h */,
-				4A64A3AD112095BE00D4E22D /* CLLocationAdditions.m */,
 				4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */,
 				4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */,
 				4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */,
@@ -360,6 +355,7 @@
 				4A64A418112095BE00D4E22D /* SGNearbyTests.m */,
 				4A64A419112095BE00D4E22D /* SGRecordTests.m */,
 				4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */,
+				4A094381115C028E007E3538 /* SGSpotRankTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -371,7 +367,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A64A41A112095BE00D4E22D /* CLLocationAdditions.h in Headers */,
 				4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */,
 				4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */,
 				4A64A420112095BE00D4E22D /* NSArrayAdditions.h in Headers */,
@@ -490,16 +485,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A64B4BC1120A12500D4E22D /* SGLocationServiceTests.m in Sources */,
-				4A64B4C01120A6D300D4E22D /* CLLocationAdditions.m in Sources */,
 				4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */,
 				4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */,
 				4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */,
 				4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */,
-				4A64B4C61120A6D900D4E22D /* SGLocationTypes.m in Sources */,
 				4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */,
-				4A64B4C81120A6DA00D4E22D /* SGGeoJSONEncoder.m in Sources */,
 				4A64B4C91120A6DE00D4E22D /* SGRecord.m in Sources */,
 				4A64B4CA1120A6DF00D4E22D /* SGLayer.m in Sources */,
 				4A64B5571120BB8B00D4E22D /* Base64Transcoder.c in Sources */,
@@ -513,10 +504,14 @@
 				4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */,
 				4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */,
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
-				4ABA11E71148561C00F5EE6D /* SGLayerTest.m in Sources */,
-				4A9B91BF114A9B7100C16B55 /* SGGeoJSONEncoderTests.m in Sources */,
-				4A9B91C0114A9B7200C16B55 /* SGNearbyTests.m in Sources */,
-				4A9B91C1114A9B7300C16B55 /* SGRecordTests.m in Sources */,
+				4A850432114FE6DF000C31B3 /* SGLocationServiceTests.m in Sources */,
+				4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */,
+				4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */,
+				4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */,
+				4A0943D5115C29A4007E3538 /* SGSpotRankTests.m in Sources */,
+				4A0943D6115C29A4007E3538 /* SGRecordTests.m in Sources */,
+				4A0943D7115C29A6007E3538 /* SGLayerTest.m in Sources */,
+				4A0943D8115C29A7007E3538 /* SGGeoJSONEncoderTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +519,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A64A41B112095BE00D4E22D /* CLLocationAdditions.m in Sources */,
 				4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64A41F112095BE00D4E22D /* GeoJSON+NSDictionary.m in Sources */,
 				4A64A421112095BE00D4E22D /* NSArrayAdditions.m in Sources */,

@@ -139,7 +139,6 @@
     [self deleteRecord:records responseId:[self.locatorService deleteRecordAnnotations:records]];
 }
  
-
 - (void) testUpdateRecord
 {
     SGRecord* record = [self createRandomRecord];
@@ -271,6 +270,24 @@
     STAssertTrue(returnAmount != 0, [@"Should return two records but was " stringByAppendingFormat:@"%i", returnAmount]);
         
     [self deleteRecord:records responseId:[self.locatorService deleteRecordAnnotations:records]];
+}
+
+- (void) testRepeatedUpdated
+{
+    SGRecord* r1 = [self createRandomRecord];
+    [self addRecord:r1 responseId:[self.locatorService updateRecordAnnotation:r1]];    
+    [self addRecord:r1 responseId:[self.locatorService updateRecordAnnotation:r1]];        
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
+    [self retrieveRecord:r1 responseId:[self.locatorService retrieveRecordAnnotation:r1]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
+    STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
+    
+    NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
+    STAssertNotNil(geoJSONObject, @"Return object should be valid");
+    STAssertTrue([geoJSONObject isFeature], @"Return object should be Feature");
+    [self deleteRecord:r1 responseId:[self.locatorService deleteRecordAnnotation:r1]];    
 }
 
 @end

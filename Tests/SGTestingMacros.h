@@ -11,5 +11,4 @@
 
 #define kSGOAuth_Key                @"my_key"
 #define kSGOAuth_Secret             @"my_secret"
-
 #define kSGTesting_Layer            @"com.testing.my"

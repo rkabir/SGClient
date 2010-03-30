@@ -113,7 +113,7 @@
                                                                                        radius:10
                                                                                        layers:[NSArray arrayWithObject:kSGTesting_Layer]
                                                                                         types:nil
-                                                                                        limit:25
+                                                                                        limit:100
                                                                                         start:currentTime
                                                                                        end:weekLater]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
@@ -126,7 +126,7 @@
                                                                                        radius:10
                                                                                        layers:[NSArray arrayWithObject:kSGTesting_Layer]
                                                                                         types:nil
-                                                                                        limit:25
+                                                                                        limit:100
                                                                                         start:currentTime*2.0
                                                                                     end:weekLater*2.0]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
@@ -137,7 +137,7 @@
                                                                                        radius:10
                                                                                        layers:[NSArray arrayWithObject:kSGTesting_Layer]
                                                                                         types:nil
-                                                                                        limit:25
+                                                                                        limit:100
                                                                                         start:currentTime
                                                                                           end:currentTime+120]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
