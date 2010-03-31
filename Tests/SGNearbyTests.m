@@ -64,7 +64,7 @@
         recentReturnObject = nil;
         [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                            radius:10
-                                                                                           layers:[NSArray arrayWithObject:kSGTesting_Layer]
+                                                                                           layer:kSGTesting_Layer
                                                                                             types:nil
                                                                                             limit:100]];     
         [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
@@ -111,7 +111,7 @@
     
     [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                        radius:10
-                                                                                       layers:[NSArray arrayWithObject:kSGTesting_Layer]
+                                                                                       layer:kSGTesting_Layer
                                                                                         types:nil
                                                                                         limit:100
                                                                                         start:currentTime
@@ -124,7 +124,7 @@
     
     [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                        radius:10
-                                                                                       layers:[NSArray arrayWithObject:kSGTesting_Layer]
+                                                                                       layer:kSGTesting_Layer
                                                                                         types:nil
                                                                                         limit:100
                                                                                         start:currentTime*2.0
@@ -135,7 +135,7 @@
     
     [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                        radius:10
-                                                                                       layers:[NSArray arrayWithObject:kSGTesting_Layer]
+                                                                                       layer:kSGTesting_Layer
                                                                                         types:nil
                                                                                         limit:100
                                                                                         start:currentTime

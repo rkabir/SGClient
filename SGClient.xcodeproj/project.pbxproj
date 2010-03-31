@@ -8,10 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4A0943D5115C29A4007E3538 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
-		4A0943D6115C29A4007E3538 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
-		4A0943D7115C29A6007E3538 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		4A0943D8115C29A7007E3538 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
+		4A1B13761162AA8300E194F1 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
+		4A1B13991162B64000E194F1 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
+		4A1B139A1162B64100E194F1 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A1B139B1162B64200E194F1 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
+		4A1B139C1162B64300E194F1 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
 		4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */; };
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
@@ -83,7 +84,6 @@
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
 		4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */; };
-		4A850432114FE6DF000C31B3 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
 		4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -504,14 +504,14 @@
 				4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */,
 				4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */,
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
-				4A850432114FE6DF000C31B3 /* SGLocationServiceTests.m in Sources */,
 				4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */,
 				4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */,
 				4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */,
-				4A0943D5115C29A4007E3538 /* SGSpotRankTests.m in Sources */,
-				4A0943D6115C29A4007E3538 /* SGRecordTests.m in Sources */,
-				4A0943D7115C29A6007E3538 /* SGLayerTest.m in Sources */,
-				4A0943D8115C29A7007E3538 /* SGGeoJSONEncoderTests.m in Sources */,
+				4A1B13761162AA8300E194F1 /* SGLocationServiceTests.m in Sources */,
+				4A1B13991162B64000E194F1 /* SGGeoJSONEncoderTests.m in Sources */,
+				4A1B139A1162B64100E194F1 /* SGLayerTest.m in Sources */,
+				4A1B139B1162B64200E194F1 /* SGRecordTests.m in Sources */,
+				4A1B139C1162B64300E194F1 /* SGSpotRankTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

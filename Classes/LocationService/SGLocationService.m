@@ -63,18 +63,9 @@ static BOOL callbackOnMainThread = NO;
 
 static id<SGAuthorization> _dummyAuthorizer = nil;
 
+//static NSString* mainURL = @"http://ec2-204-236-158-42.us-west-1.compute.amazonaws.com";
 static NSString* mainURL = @"http://api.simplegeo.com";
 static NSString* apiVersion = @"0.1";
-
-enum SGLocationServiceResponseId {
-  
-    kSGLocationServiceResponseId_RetrieveRecord,
-    kSGLocationServiceResponseId_UpdateRecord,
-    
-    kSGLocationServiceResponseId_RecordsInRegion,
-    
-    kSGLocationServiceResponseId_Amount
-};
 
 @interface SGLocationService (Private) <SGAuthorization>
 
@@ -87,7 +78,6 @@ enum SGLocationServiceResponseId {
 - (NSObject*) _retrieveRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push;
 - (NSObject*) _updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties push:(BOOL)push;
 
-- (NSArray*) _allLayers;
 - (NSArray*) _allTypes;
 
 - (void) succeeded:(NSDictionary*)responseDictionary;
@@ -113,11 +103,7 @@ enum SGLocationServiceResponseId {
 - (id) init
 {
     if(self = [super init]) {
-        
-        _requestIds = [[NSMutableArray alloc] init];
-        for(int i = 0; i < kSGLocationServiceResponseId_Amount; i++)
-            [_requestIds addObject:[NSNull null]];
-        
+                
         operationQueue = [[NSOperationQueue alloc] init];
         
         _delegates = [[NSMutableArray alloc] init];
@@ -453,12 +439,12 @@ enum SGLocationServiceResponseId {
  
 
 - (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
-                                layers:(NSArray*)layers
+                                layer:(NSString*)layer
                                  types:(NSArray*)types
                                  limit:(NSInteger)limit
 {
     return [self retrieveRecordsForGeohash:region 
-                                    layers:layers 
+                                    layer:layer
                                      types:types
                                      limit:limit
                                      start:0.0
@@ -466,7 +452,7 @@ enum SGLocationServiceResponseId {
 }
 
 - (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
-                                 layers:(NSArray*)layers
+                                 layer:(NSString*)layer
                                   types:(NSArray*)types
                                   limit:(NSInteger)limit
                                   start:(double)start
@@ -474,23 +460,22 @@ enum SGLocationServiceResponseId {
 {
     NSString* requestId = [self _getNextResponseId];
     
+    if(!layer)
+        return nil;
+    
     char* geohash = geohash_encode(region.latitude, region.longitude, region.precision);
-    
-    if(![NSArray isValidNonEmptyArray:layers])
-        layers = [self _allLayers];
-    
+        
     if(![NSArray isValidNonEmptyArray:types])
         types = [self _allTypes];
     
-    SGLog(@"SGLocationService - Retrieving records nearby %s with response %@ and layers %@", geohash, requestId, [layers componentsJoinedByString:@", "]);
+    SGLog(@"SGLocationService - Retrieving records nearby %s with response %@ and layer %@", geohash, requestId, layer);
     
     NSMutableArray* params = [NSMutableArray arrayWithObjects:
                        @"GET",
-                       [NSString stringWithFormat:@"/nearby/%s.json", geohash],
+                       [NSString stringWithFormat:@"/records/%@/nearby/%s.json", layer, geohash],
                        [NSNull null],
                        [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSString stringWithFormat:@"%i", limit], @"limit",
-                        [layers componentsJoinedByString:@","], @"layers",
                         [types componentsJoinedByString:@","], @"types",
                         nil],
                        requestId,
@@ -510,13 +495,13 @@ enum SGLocationServiceResponseId {
 
 - (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
                                    radius:(double)radius
-                                   layers:(NSArray*)layers
+                                   layer:(NSString*)layer
                                     types:(NSArray*)types
                                     limit:(NSInteger)limit
 { 
     return [self retrieveRecordsForCoordinate:coord
                                        radius:radius
-                                       layers:layers 
+                                       layer:layer
                                         types:types
                                         limit:limit
                                         start:0.0
@@ -525,31 +510,29 @@ enum SGLocationServiceResponseId {
 
 - (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
                                     radius:(double)radius
-                                    layers:(NSArray*)layers
+                                    layer:(NSString*)layer
                                      types:(NSArray*)types
                                      limit:(NSInteger)limit
                                      start:(double)start
                                     end:(double)end
 {
-    NSString* responseId = [self _getNextResponseId];
-    
-    if(![NSArray isValidNonEmptyArray:layers])
-        layers = [self _allLayers];
+    if(!layer)
+        return nil;
     
     if(![NSArray isValidNonEmptyArray:types])
         types = [self _allTypes];
     
-    SGLog(@"SGLocationService - Retrieving records nearby %f,%f from (%@) with response %@", coord.latitude, coord.longitude,
-          [layers componentsJoinedByString:@","], responseId);
+    NSString* responseId = [self _getNextResponseId];   
+    SGLog(@"SGLocationService - Retrieving records nearby %f,%f from %@ with response %@", coord.latitude, coord.longitude, 
+                layer, responseId);
     
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
-                       [NSString stringWithFormat:@"/nearby/%f,%f.json", coord.latitude, coord.longitude],
+                       [NSString stringWithFormat:@"/records/%@/nearby/%f,%f.json", layer, coord.latitude, coord.longitude],
                        [NSNull null],
                        [NSMutableDictionary dictionaryWithObjectsAndKeys:
                         [NSString stringWithFormat:@"%f", radius], @"radius",
                         [NSString stringWithFormat:@"%i", limit], @"limit",
-                        [layers componentsJoinedByString:@","], @"layers",
                         [types componentsJoinedByString:@","], @"types",
                         nil],
                        responseId,
@@ -856,13 +839,6 @@ enum SGLocationServiceResponseId {
 #pragma mark -
 #pragma mark Helper methods 
 
-- (NSArray*) _allLayers
-{
-    return [NSArray arrayWithObjects:@"com.simplegeo.global.twitter", @"com.simplegeo.global.brightkite",
-            @"com.simplegeo.global.flickr", @"com.simplegeo.global.geonames", @"com.simplegeo.us.weather",
-            @"com.simplegeo.us.zip", nil];
-}
-
 - (NSArray*) _allTypes
 {
     return [NSArray arrayWithObjects:kSGLocationType_Place, kSGLocationType_Person, kSGLocationType_Object,
@@ -878,7 +854,6 @@ enum SGLocationServiceResponseId {
 
 - (void) dealloc
 {
-    [_requestIds release];
     [_delegates release];
     [operationQueue release];
     

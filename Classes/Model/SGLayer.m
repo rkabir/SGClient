@@ -170,7 +170,7 @@
 - (NSString*) retrieveRecordsForGeohash:(SGGeohash)region types:(NSArray*)types limit:(NSInteger)limit
 {
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForGeohash:region
-                                                                                       layers:[NSArray arrayWithObject:layerId]
+                                                                                       layer:layerId
                                                                                         types:types
                                                                                         limit:limit];
     if(responseId)
@@ -186,7 +186,7 @@
                                     end:(double)end;
 {
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForGeohash:region
-                                                                                         layers:[NSArray arrayWithObject:layerId]
+                                                                                         layer:layerId
                                                                                           types:types
                                                                                           limit:limit
                                                                                           start:start
@@ -205,7 +205,7 @@
 {
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForCoordinate:coord
                                                                                             radius:radius
-                                                                                            layers:[NSArray arrayWithObject:layerId]
+                                                                                            layer:layerId
                                                                                              types:types
                                                                                              limit:limit];
     if(responseId)
@@ -223,7 +223,7 @@
 {
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForCoordinate:coord
                                                                                             radius:radius
-                                                                                            layers:[NSArray arrayWithObject:layerId]
+                                                                                            layer:layerId
                                                                                              types:types
                                                                                              limit:limit
                                                                                              start:start

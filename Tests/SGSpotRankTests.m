@@ -81,8 +81,8 @@
 {
     STAssertTrue([geoJSONTile isFeature], @"Tile should be a feature");
     NSDictionary* properties = (NSDictionary*)[geoJSONTile properties];
-    STAssertNotNil([properties objectForKey:@"blockTrend"], @"blockTrend should be a key in the properties dictionary");
-    STAssertNotNil([properties objectForKey:@"blockScore"], @"blockScore should be a key in the properties dictionary");
+    STAssertNotNil([properties objectForKey:@"worldwide_rank"], @"worldwide_rank should be a key in the properties dictionary");
+    STAssertNotNil([properties objectForKey:@"trending_rank"], @"trending_rank should be a key in the properties dictionary");
 }
 
 

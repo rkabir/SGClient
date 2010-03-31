@@ -198,7 +198,7 @@
      
         [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                            radius:10.0
-                                                                                           layers:[NSArray arrayWithObject:p1.layer]
+                                                                                           layer:p1.layer
                                                                                             types:[NSArray arrayWithObject:type]
                                                                                             limit:100]];
     
@@ -239,7 +239,7 @@
     
     SGGeohash region = SGGeohashMake(r1.latitude, r1.longitude, 2);
     [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForGeohash:region
-                                                                                   layers:[NSArray arrayWithObject:r1.layer]
+                                                                                   layer:r1.layer
                                                                                     types:[NSArray arrayWithObjects:r1.type, r2.type, nil]
                                                                                     limit:10]];    
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
@@ -256,7 +256,7 @@
     CLLocationCoordinate2D coord = {20.01, 20.01};
     [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
                                                                                        radius:1000 
-                                                                                       layers:[NSArray arrayWithObject:r1.layer]
+                                                                                       layer:r1.layer
                                                                                         types:[NSArray arrayWithObjects:r1.type, r2.type, nil]
                                                                                         limit:25]];
 

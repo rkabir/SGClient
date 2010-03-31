@@ -38,7 +38,7 @@
 
 // Delay requests after writes to give them a chance to be 
 // registered.
-#define WAIT_FOR_WRITE()              sleep(2)
+#define WAIT_FOR_WRITE()              sleep(5)
 
 @interface SGLocationServiceTests : SenTestCase <SGLocationServiceDelegate> {
     
