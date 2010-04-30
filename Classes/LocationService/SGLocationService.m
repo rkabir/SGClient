@@ -63,7 +63,6 @@ static BOOL callbackOnMainThread = NO;
 
 static id<SGAuthorization> _dummyAuthorizer = nil;
 
-//static NSString* mainURL = @"http://ec2-204-236-158-42.us-west-1.compute.amazonaws.com";
 static NSString* mainURL = @"http://api.simplegeo.com";
 static NSString* apiVersion = @"0.1";
 
@@ -355,7 +354,6 @@ static NSString* apiVersion = @"0.1";
         
         requestId = [self _getNextResponseId];
         
-        SGLog(@"SGLocationService - Updating record <%@, %@> with response %@", recordId, layer, requestId);
         SGRecord* record = [[SGRecord alloc] init];
         record.recordId = recordId;
         record.layer = layer;
@@ -397,8 +395,6 @@ static NSString* apiVersion = @"0.1";
        layer && ![layer isKindOfClass:[NSNull class]]) {
         
         requestId = [self _getNextResponseId];
-        
-        SGLog(@"SGLocationService - Retrieving history for record <%@, %@> with response %@", recordId, layer, requestId);        
         
         NSArray* params = [NSArray arrayWithObjects:
                            @"GET",
@@ -467,8 +463,6 @@ static NSString* apiVersion = @"0.1";
         
     if(![NSArray isValidNonEmptyArray:types])
         types = [self _allTypes];
-    
-    SGLog(@"SGLocationService - Retrieving records nearby %s with response %@ and layer %@", geohash, requestId, layer);
     
     NSMutableArray* params = [NSMutableArray arrayWithObjects:
                        @"GET",
@@ -557,7 +551,6 @@ static NSString* apiVersion = @"0.1";
 {
     NSString* responseId = [self _getNextResponseId];
     
-    SGLog(@"SGLocationService - Reverse geocoding %f,%f with response %@", coord.latitude, coord.longitude, responseId);
     
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
@@ -571,6 +564,9 @@ static NSString* apiVersion = @"0.1";
     return responseId;
 }
 
+#pragma mark -
+#pragma mark SpotRank
+
 - (NSString*) densityForCoordinate:(CLLocationCoordinate2D)coord day:(NSString*)day hour:(int)hour
 {
     if(hour < 0 || hour > 24)
@@ -581,7 +577,6 @@ static NSString* apiVersion = @"0.1";
     
     NSString* responseId = [self _getNextResponseId];
     
-    SGLog(@"SGLocationService - SpotRank %f,%f on day %@ with response %@", coord.latitude, coord.longitude, day, responseId);
     NSArray* params = [NSArray arrayWithObjects:
                             @"GET",
                             [NSString stringWithFormat:@"/density/%@/%i/%f,%f.json", day, hour, coord.latitude, coord.longitude],
@@ -602,7 +597,6 @@ static NSString* apiVersion = @"0.1";
     if(!day)
         day = kSpotRank_Monday;
 
-    SGLog(@"SGLocationService - SpotRank %f,%f on day %@ with response %@", coord.latitude, coord.longitude, day, responseId);    
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
                        [NSString stringWithFormat:@"/density/%@/%f,%f.json", day, coord.latitude, coord.longitude],
@@ -614,6 +608,68 @@ static NSString* apiVersion = @"0.1";
     [self _pushInvocationWithArgs:params];
     
     return responseId;                   
+}
+
+#pragma mark -
+#pragma mark PushPin
+
+- (NSString*) contains:(CLLocationCoordinate2D)coord;
+{
+    NSString* responseId = [self _getNextResponseId];
+    
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/contains/%f,%f.json", coord.latitude, coord.longitude],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    
+    [self _pushInvocationWithArgs:params];
+
+    return responseId;                       
+}
+
+- (NSString*) boundary:(NSString*)featureId
+{
+    NSString* responseId = [self _getNextResponseId];
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/boundary/%@.json", featureId],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    
+    [self _pushInvocationWithArgs:params];    
+    
+    return responseId;
+}
+
+- (NSString*) overlapsType:(NSString*)type inPolygon:(SGEnvelope)envelope withLimit:(int)limit
+{
+    NSString* responseId = [self _getNextResponseId];
+    NSString* envelopeString = SGEnvelopeGetString(envelope);
+    
+    NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+    
+    if(type)
+        [dictionary setValue:type forKey:@"type"];
+
+    if(limit > 0)
+        [dictionary setValue:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/overlaps/%@.json", envelopeString],
+                       [NSNull null],
+                       dictionary,
+                       responseId,
+                       nil];
+
+    [self _pushInvocationWithArgs:params];    
+    
+    return responseId;
 }
 
 #pragma mark -
