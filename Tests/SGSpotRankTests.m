@@ -50,7 +50,7 @@
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
     NSString* responseId = [self.locatorService densityForCoordinate:coords day:kSpotRank_Monday];
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles." record:[NSNull null]]
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles."]
                         forKey:responseId];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
@@ -68,7 +68,7 @@
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
     NSString* responseId = [self.locatorService densityForCoordinate:coords day:kSpotRank_Thursday hour:4];
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles." record:[NSNull null]]
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles."]
                         forKey:responseId];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     

@@ -50,24 +50,23 @@
     [SGLocationService callbackOnMainThread:NO];
 }
 
-- (void) addRecord:(NSObject*)record responseId:(NSString*)responseId
+- (void) addRecordResponseId:(NSString*)responseId
 {
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add the record" record:record]
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add the record"]
                         forKey:responseId];
 
 }
 
-- (void) deleteRecord:(NSObject*)record responseId:(NSString*)responseId
+- (void) deleteRecordResponseId:(NSString*)responseId
 {
     [self.requestIds setObject:[self expectedResponse:YES
-                                              message:@"Record should be deleted."
-                                               record:record]
+                                              message:@"Record should be deleted."]
                         forKey:responseId];    
 }
 
-- (void) retrieveRecord:(NSObject*)record responseId:(NSString*)responseId
+- (void) retrieveRecordResponseId:(NSString*)responseId
 {
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to retrieve the record" record:record]
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to retrieve the record"]
                         forKey:responseId];
 }
 
@@ -82,16 +81,14 @@
 
     if(expectedResponse && objects) {
         
+        
+        // We want to retain a point for the return object so 
+        // the tests can do some validation
         recentReturnObject = [objects retain];
         
-        SGRecord* record = [expectedResponse objectForKey:@"record"];
-        if(record) {
-            
-            BOOL success = [[expectedResponse objectForKey:@"success"] boolValue];
-            NSString* message = [expectedResponse objectForKey:@"message"];
-            STAssertTrue(success, message);
-
-        }
+        BOOL success = [[expectedResponse objectForKey:@"success"] boolValue];
+        NSString* message = [expectedResponse objectForKey:@"message"];
+        STAssertTrue(success, message);
         
         [requestIds removeObjectForKey:responseId];
     } 
@@ -116,12 +113,11 @@
 #pragma mark Helper methods 
  
 
-- (NSDictionary*) expectedResponse:(BOOL)succeed message:(NSString*)message record:(NSObject*)record
+- (NSDictionary*) expectedResponse:(BOOL)succeed message:(NSString*)message
 {
     NSDictionary* dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithBool:succeed], @"success",
                                 message, @"message",
-                                record, @"record",
                                 nil];
     
     return dictionary;

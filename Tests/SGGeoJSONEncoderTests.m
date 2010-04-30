@@ -48,7 +48,6 @@
     STAssertTrue([[dictionary type] isEqualToString:@"FeatureCollection"], @"Initial record should be of type FeatureCollection.");
     
     NSDictionary* feature = [[dictionary features] objectAtIndex:0];
-    NSLog([[feature geometry] description]);
     double value = [[[feature geometry] coordinates] latitude];
     STAssertTrue(value == record.latitude, @"Latitude should be %f, but was %f.", record.latitude, value);
     value = [[[feature geometry] coordinates] longitude];

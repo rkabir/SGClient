@@ -55,18 +55,18 @@
         [records addObject:record];
     }
 
-    [self addRecord:records responseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
     WAIT_FOR_WRITE();
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
     for(int i = 0; i < 10; i++) {
     
         recentReturnObject = nil;
-        [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                           radius:10
-                                                                                           layer:kSGTesting_Layer
-                                                                                            types:nil
-                                                                                            limit:100]];     
+        [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
+                                                                                  radius:10
+                                                                                   layer:kSGTesting_Layer
+                                                                                   types:nil
+                                                                                   limit:100]];     
         [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
         STAssertNotNil(recentReturnObject, @"Return object should not be nil");
         
@@ -85,7 +85,7 @@
         STAssertTrue([(NSArray*)recentReturnObject count] > 0, @"Return amount should be greater than zero.");
     }
     
-    [self deleteRecord:records responseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
 }
 
 
@@ -105,48 +105,48 @@
         [records addObject:record];
     }    
         
-    [self addRecord:records responseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
     WAIT_FOR_WRITE();
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                       radius:10
-                                                                                       layer:kSGTesting_Layer
-                                                                                        types:nil
-                                                                                        limit:100
-                                                                                        start:currentTime
-                                                                                       end:weekLater]];     
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
+                                                                              radius:10
+                                                                               layer:kSGTesting_Layer
+                                                                               types:nil
+                                                                               limit:100
+                                                                               start:currentTime
+                                                                                 end:weekLater]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     NSArray* features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
     
-    [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                       radius:10
-                                                                                       layer:kSGTesting_Layer
-                                                                                        types:nil
-                                                                                        limit:100
-                                                                                        start:currentTime*2.0
-                                                                                    end:weekLater*2.0]];     
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
+                                                                              radius:10
+                                                                               layer:kSGTesting_Layer
+                                                                               types:nil
+                                                                               limit:100
+                                                                               start:currentTime*2.0
+                                                                                 end:weekLater*2.0]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     features = [recentReturnObject features];
     STAssertTrue([features count] == 0, @"No features should be returned");
     
-    [self retrieveRecord:records responseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                       radius:10
-                                                                                       layer:kSGTesting_Layer
-                                                                                        types:nil
-                                                                                        limit:100
-                                                                                        start:currentTime
-                                                                                          end:currentTime+120]];     
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
+                                                                              radius:10
+                                                                               layer:kSGTesting_Layer
+                                                                               types:nil
+                                                                               limit:100
+                                                                               start:currentTime
+                                                                                 end:currentTime+120]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
     
-    [self deleteRecord:records responseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
 }
 
 - (void) testReverseGeocoder
@@ -154,7 +154,7 @@
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
     NSString* responseId = [self.locatorService reverseGeocode:coords];
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a reverse geocode object." record:[NSNull null]]
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a reverse geocode object."]
                         forKey:responseId];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
 

@@ -38,7 +38,7 @@
 
 // Delay requests after writes to give them a chance to be 
 // registered.
-#define WAIT_FOR_WRITE()              sleep(5)
+#define WAIT_FOR_WRITE()              sleep(3)
 
 @interface SGLocationServiceTests : SenTestCase <SGLocationServiceDelegate> {
     
@@ -51,13 +51,13 @@
 @property (nonatomic, retain) NSMutableDictionary* requestIds;
 @property (nonatomic, retain) NSObject* recentReturnObject;
 
-- (NSDictionary*) expectedResponse:(BOOL)succeed message:(NSString*)message record:(NSObject*)record;
+- (NSDictionary*) expectedResponse:(BOOL)succeed message:(NSString*)message;
 
 - (SGRecord*) createCopyOfRecord:(SGRecord *)record;
 - (SGRecord*) createRandomRecord;
 
-- (void) deleteRecord:(NSObject*)record responseId:(NSString*)responseId;
-- (void) addRecord:(NSObject*)record responseId:(NSString*)responseId;
-- (void) retrieveRecord:(NSObject*)record responseId:(NSString*)responseId;
+- (void) deleteRecordResponseId:(NSString*)responseId;
+- (void) addRecordResponseId:(NSString*)responseId;
+- (void) retrieveRecordResponseId:(NSString*)responseId;
 
 @end
