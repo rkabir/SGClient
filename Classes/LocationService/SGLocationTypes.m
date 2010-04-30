@@ -35,9 +35,16 @@
 #import "SGLocationTypes.h"
 
 SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    
-    SGGeohash region = {latitude, longitude, precision};
-    
+    SGGeohash region = {latitude, longitude, precision};    
     return region;
+}
 
+SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
+    SGEnvelope envelope = {south, west, north, east};
+    return envelope;
+}
+
+NSString* SGEnvelopeGetString(SGEnvelope polygon) {
+    return [NSString stringWithFormat:@"%f,%f,%f,%f",
+            polygon.south, polygon.west, polygon.north, polygon.east];
 }
