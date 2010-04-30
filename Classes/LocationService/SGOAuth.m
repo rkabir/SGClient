@@ -116,7 +116,8 @@
                  parameters:(NSDictionary*)params
                  httpMethod:(NSString*)method
 {
-	NSURL *requestURL = [NSURL URLWithString:file relativeToURL:[NSURL URLWithString:url]];
+	NSURL *requestURL = [NSURL URLWithString:[file stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                               relativeToURL:[NSURL URLWithString:url]];
     NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:requestURL];    
     if(method)
         request.HTTPMethod = method;
@@ -139,7 +140,7 @@
     NSString* newURL = [NSString stringWithFormat:@"%@?%@", [requestURL absoluteString], [self _normalizeRequestParams:newOAuthParams]];
     [request setURL:[NSURL URLWithString:newURL]];
     
-    SGLog(@"SGOAuth - %@ method being sent to %@ at %@", method, newURL , file);
+    SGLog(@"SGOAuth - %@ %@", method, newURL);
     NSError* error = nil;
     NSURLResponse* response = nil;  
     
