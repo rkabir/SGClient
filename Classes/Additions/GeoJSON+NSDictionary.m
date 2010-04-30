@@ -34,6 +34,13 @@
 
 #import "GeoJSON+NSDictionary.h"
 
+@interface NSDictionary (SGGeoJSONObejctPrivate)
+
+- (BOOL) isType:(NSString *)type;
+
+@end
+
+
 @implementation NSDictionary (SGGeoJSONObject)
 
 - (NSString*) type
@@ -133,21 +140,35 @@
 
 - (BOOL) isFeature
 {
-    NSString* type = [self type];
-    return type && [type isEqualToString:@"Feature"];
+    return [self isType:@"Feature"];
 }
 
 - (BOOL) isFeatureCollection;
 {
-    NSString* type = [self type];
-    return type && [type isEqualToString:@"FeatureCollection"];
+    return [self isType:@"FeatureCollection"];
 }
 
 - (BOOL) isPoint
 {
-    NSString* type = [self type];
-    return type && [type isEqualToString:@"Point"];
+    return [self isType:@"Point"];
 }
+
+- (BOOL) isMultiPolygon
+{
+    return [self isType:@"MultiPolygon"];
+}
+
+- (BOOL) isPolygon
+{
+    return [self isType:@"Polygon"];
+}
+
+- (BOOL) isType:(NSString*)type
+{
+    NSString* featureType = [self type];
+    return type && [featureType isEqualToString:type];
+}
+
 
 @end
 
