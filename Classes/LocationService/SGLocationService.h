@@ -401,7 +401,7 @@
 * @method contains:
 * @abstract ￼Does a "pushpin" query through a series of polygon layers and identifies the "cone" of
 * administrative and other boundaries in which the point lies.
-* @discussion ￼Returns a FeatureCollection where the features contains these key fields: id, name, 
+* @discussion ￼Returns a NSArray where the elements contains these key fields: id, name, 
 * abbr, type and bounds.
 *
 * id: A string that uniquely identifies the feature in the SimpleGeo gazetteer. This ID can be used to query the exact shape of the polygon itself via the `boundary` API call. 

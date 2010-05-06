@@ -39,8 +39,6 @@
     
 }
 
-- (void) assertValidPushPinPolygon:(NSDictionary*)feature;
-
 @end
 
 
@@ -49,28 +47,21 @@
 - (void) testContains
 {
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
-    NSString* responseId = [self.locatorService  contains:coords];
-    
+    NSString* responseId = [self.locatorService contains:coords];
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a collection of polygons."]
                         forKey:responseId];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    STAssertTrue([recentReturnObject isFeatureCollection], @"Return object should be a collection of features");
+    STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of json objects.");
     
-    NSArray* features = [recentReturnObject objectForKey:@"features"];
-    int size = [features count];
+    int size = [recentReturnObject count];
     STAssertTrue(size == 9, @"Nine polygons should be returned but was %i", size);
-    for(NSDictionary* feature in features)
-        [self assertValidPushPinPolygon:feature];    
 }
 
 - (void) testBoundary
 {
     NSArray* boundaries = [NSArray arrayWithObjects:
-                           [NSArray arrayWithObjects:@"Country:AF:tqnbw2", @"Afghanistan", @"0", @"1", @"291", nil],
-                           [NSArray arrayWithObjects:@"Country:GB:gcw4ye", @"United Kingdom", @"1", @"1", @"26", nil],
-                           [NSArray arrayWithObjects:@"Country:US:9z18bh", @"United States", @"1", @"1", @"70", nil],
-                           [NSArray arrayWithObjects:@"Country:VU:rtq9kf", @"Vanuatu", @"1", @"1", @"11", nil],
+                           [NSArray arrayWithObjects:@"Province:Bauchi:s1zj73", @"Bauchi", nil],
                            nil];
     
     NSString* responseId = nil;
@@ -78,8 +69,6 @@
      
         NSString* featureId = [boundary objectAtIndex:0];
         NSString* name = [boundary objectAtIndex:1];
-//        NSString* rings = [boundary objectAtIndex:2];
-//        NSString* vertices = [boundary objectAtIndex:3];
         
         responseId = [self.locatorService boundary:featureId];
         [self.requestIds setObject:[self expectedResponse:YES message:@"Must return a feature"] forKey:responseId];
@@ -91,6 +80,15 @@
         STAssertTrue([[properties objectForKey:@"id"] isEqualToString:featureId], @"Feature ids should match up.");
         STAssertTrue([[properties objectForKey:@"name"] isEqualToString:name], @"Names should match up.");
     }
+}
+
+- (void) testBadBoundary
+{
+    NSString* featureId = @"bad:id:";
+    NSString* responseId = [self.locatorService boundary:featureId];
+    [self.requestIds setObject:[self expectedResponse:NO message:@"No such ID."] forKey:responseId];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
 }
 
 - (void) testOverlaps
@@ -115,15 +113,10 @@
         responseId = [self.locatorService overlapsType:nil inPolygon:envelope withLimit:[abbrs count]];
         [self.requestIds setObject:[self expectedResponse:YES message:@"Must return a feature collections."] forKey:responseId];
         [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-        STAssertTrue([recentReturnObject isFeatureCollection], @"Return object should be a feature collection");
-        STAssertTrue([[recentReturnObject features] count] == [abbrs count], @"Unexpected length of features.");
+        STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of features.");
+        STAssertTrue([recentReturnObject count] == [abbrs count], @"Unexpected length of features.");
     }
                          
-}
-
-- (void) assertValidPushPinPolygon:(NSDictionary*)feature
-{
-    STAssertTrue([[[feature geometry] type] isEqualToString:@"Polygon"], @"Geometry type should be Polygon");
 }
 
 @end

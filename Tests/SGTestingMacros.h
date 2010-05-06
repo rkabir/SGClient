@@ -6,7 +6,6 @@
 //  Copyright 2010 SimpleGeo. All rights reserved.
 //
 
-
 // TODO: CHANGE THESE!!
 
 #define kSGOAuth_Key                @"my_key"

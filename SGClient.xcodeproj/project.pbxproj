@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4A1B13761162AA8300E194F1 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
-		4A1B13991162B64000E194F1 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
-		4A1B139A1162B64100E194F1 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		4A1B139B1162B64200E194F1 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
-		4A1B139C1162B64300E194F1 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
+		4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
+		4A40D92D1193669B0096BE6A /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
+		4A40D92E1193669C0096BE6A /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A40D92F1193669C0096BE6A /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
+		4A40D9301193669D0096BE6A /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
+		4A40D9311193669E0096BE6A /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */; };
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
@@ -84,6 +84,7 @@
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
 		4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */; };
+		4A9067EB118A57AF00129851 /* SGPushPinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */; };
 		4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -150,6 +151,7 @@
 		4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGTestingMacros.h; sourceTree = "<group>"; };
 		4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4A64B5F41120D54C00D4E22D /* build_client */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_client; sourceTree = "<group>"; };
+		4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPushPinTests.m; sourceTree = "<group>"; };
 		4AEDCAAE11223A80003C1949 /* MyTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTestingMacros.h; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libSGClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSGClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -356,6 +358,7 @@
 				4A64A419112095BE00D4E22D /* SGRecordTests.m */,
 				4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */,
 				4A094381115C028E007E3538 /* SGSpotRankTests.m */,
+				4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -506,12 +509,13 @@
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
 				4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */,
 				4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */,
-				4A0943BD115C17CB007E3538 /* SGNearbyTests.m in Sources */,
-				4A1B13761162AA8300E194F1 /* SGLocationServiceTests.m in Sources */,
-				4A1B13991162B64000E194F1 /* SGGeoJSONEncoderTests.m in Sources */,
-				4A1B139A1162B64100E194F1 /* SGLayerTest.m in Sources */,
-				4A1B139B1162B64200E194F1 /* SGRecordTests.m in Sources */,
-				4A1B139C1162B64300E194F1 /* SGSpotRankTests.m in Sources */,
+				4A9067EB118A57AF00129851 /* SGPushPinTests.m in Sources */,
+				4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */,
+				4A40D92D1193669B0096BE6A /* SGGeoJSONEncoderTests.m in Sources */,
+				4A40D92E1193669C0096BE6A /* SGLayerTest.m in Sources */,
+				4A40D92F1193669C0096BE6A /* SGNearbyTests.m in Sources */,
+				4A40D9301193669D0096BE6A /* SGSpotRankTests.m in Sources */,
+				4A40D9311193669E0096BE6A /* SGRecordTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +567,7 @@
 				HEADER_SEARCH_PATHS = Classes;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
+				SDKROOT = iphoneos3.1.3;
 			};
 			name = Debug;
 		};
@@ -577,6 +582,7 @@
 				GCC_PREFIX_HEADER = Resources/SGClient_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
+				SDKROOT = iphoneos3.1.3;
 			};
 			name = Release;
 		};
@@ -638,7 +644,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.1.3;
 				VERSION_INFO_PREFIX = "";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -668,7 +674,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.1.3;
 				VERSION_INFO_PREFIX = Resources/SGClient_Prefix.pch;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
