@@ -81,7 +81,7 @@
 * @property
 * @abstract The operation queue that is used to send HTTP requests.
 */
-@property (nonatomic, readonly) NSOperationQueue* operationQueue;
+@property (nonatomic, retain) NSOperationQueue* operationQueue;
 
 /*!
 * @property
@@ -178,7 +178,7 @@
 * @method updateRecordAnnotations:
 * @abstract Updates an array of @link //simplegeo/ooc/intf/SGRecordAnnotation SGRecordAnnotations @/link in
 * SimpleGeo.
-* @discussion See @link updateRecord:layer:properties: updateRecord:layer:properties: @/link
+* @discussion See @link updateRecord:layer:coord:properties: updateRecord:layer:coord:properties: @/link
 * @param records ￼An array of records.
 * @result A response id that is used to identifier the return value from SimpleGeo. 
 * You can use this value in @link SGLocationServiceDelegate delegate @/link.
@@ -189,10 +189,12 @@
 * @method updateRecord:layer:properties:
 * @abstract Updates a record with the given properties.
 * @discussion Use this method to update records in SimpleGeo. If the record id is not found in the layer
-* then a new record will be created. 
+* then a new record will be created.
 * @param recordId The id of the record.
 * @param layer The layer in which the record is located in.
-* @param properties The new properties for the record.
+* @param properties The new properties for the record. Every record is required to contain
+* a type. The type of the record needs to be declared in the properties dictionary. If no
+* type is declared, the value is assumed to be of type "object".
 * @result A response id that is used to identifier the return value from SimpleGeo. 
 * You can use this value in @link SGLocationServiceDelegate delegate @/link.
 */
