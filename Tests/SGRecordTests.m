@@ -138,7 +138,7 @@
     
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
 }
- 
+
 - (void) testUpdateRecord
 {
     SGRecord* record = [self createRandomRecord];
@@ -160,10 +160,29 @@
 
     STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
     double lat = [[[(NSDictionary*)recentReturnObject geometry] coordinates] latitude];
-
     STAssertEquals(lat, newLat, @"Expected record lat to be %f, but was %f.", newLat, lat);
+    
+    NSString* oldRecordType = record.type;
+    record.type = kSGLocationType_Image;
+    
+    [self addRecordResponseId:[self.locatorService updateRecord:record.recordId
+                                                          layer:record.layer
+                                                          coord:record.coordinate
+                                                     properties:record.properties]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
+
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId
+                                                                 layer:record.layer]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+
+    STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
+    NSString* newObjectType = [[(NSDictionary*)recentReturnObject properties] objectForKey:@"type"];
+    STAssertTrue([newObjectType isEqualToString:record.type], @"The a new type should be registered with the record.");
+    STAssertFalse([oldRecordType isEqualToString:record.type], @"The record should not retain its old type.");
+    
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];
-    [record release];
+    [record release];    
 }
 
 - (void) testNearbyRecords

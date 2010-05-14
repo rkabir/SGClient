@@ -47,7 +47,8 @@
 
 @implementation SGRecord 
 
-@synthesize longitude, latitude, created, expires, layer, type, recordId, properties, layerLink, selfLink;
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink;
+@dynamic type;
 
 - (id) init
 {
@@ -58,7 +59,7 @@
         recordId = nil;
         created = [[NSDate date] timeIntervalSince1970];
         expires = 0;
-        type = @"object";
+        type = nil;
         layerLink = nil;
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
@@ -69,6 +70,27 @@
     }
     
     return self;
+}
+
+#pragma mark -
+#pragma mark Accessor methods 
+
+/* The type object needs to be stored in the properties dictionary */
+- (void) setType:(NSString*)newType
+{
+    if(!properties)
+        properties = [[NSMutableDictionary alloc] init];
+    
+    [properties setObject:newType forKey:@"type"];
+}
+
+- (NSString*) type
+{
+    NSString* recordType = kSGLocationType_Object;
+    if(properties && [properties objectForKey:@"type"])
+        recordType = [properties objectForKey:@"type"];
+    
+    return recordType;
 }
 
 #pragma mark -

@@ -361,6 +361,10 @@ static NSString* apiVersion = @"0.1";
         record.latitude = coord.latitude;
         record.longitude = coord.longitude;
         
+        NSString* type = [properties objectForKey:@"type"];
+        if(type)
+            record.type = type;
+        
         NSDictionary* geoJSONObject = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotation:record];
         
         NSData* body = [[[CJSONSerializer serializer] serializeObject:geoJSONObject] dataUsingEncoding:NSASCIIStringEncoding];
@@ -905,7 +909,7 @@ static NSString* apiVersion = @"0.1";
 - (NSString*) _getNextResponseId
 {
     requestIdNumber++;
-    return [NSString stringWithFormat:@"%i", requestIdNumber];
+    return [NSString stringWithFormat:@"SGLocationService-%i", requestIdNumber];
 }
 
 - (void) dealloc

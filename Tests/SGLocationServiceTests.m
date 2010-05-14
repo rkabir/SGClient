@@ -39,7 +39,6 @@
 
 - (void) setUp
 {
-        
     locatorService = [SGLocationService sharedLocationService];
     STAssertNotNil(locatorService, @"Shared locator service should be created.");
     
@@ -80,8 +79,6 @@
     NSDictionary* expectedResponse = [requestIds objectForKey:responseId];
 
     if(expectedResponse && objects) {
-        
-        
         // We want to retain a point for the return object so 
         // the tests can do some validation
         recentReturnObject = [objects retain];
@@ -98,7 +95,6 @@
 {
     NSDictionary* expectedResponse = [requestIds objectForKey:requestId];
     if(expectedResponse && error) {
-    
         recentReturnObject = nil;
         BOOL success = [[expectedResponse objectForKey:@"success"] boolValue];
         NSString* message = [expectedResponse objectForKey:@"message"];
@@ -108,10 +104,8 @@
     }
 }
 
-
 #pragma mark -
 #pragma mark Helper methods 
- 
 
 - (NSDictionary*) expectedResponse:(BOOL)succeed message:(NSString*)message
 {
