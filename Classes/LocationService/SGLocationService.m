@@ -386,12 +386,12 @@ static NSString* apiVersion = @"0.1";
 }
 
 
-- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record
+- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record limit:(int)limit
 {
-    return [self retrieveRecordHistory:record.recordId layer:record.layer];
+    return [self retrieveRecordHistory:record.recordId layer:record.layer limit:limit];
 }
 
-- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer
+- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer limit:(int)limit
 {
     NSString* requestId = nil;
     
@@ -400,11 +400,15 @@ static NSString* apiVersion = @"0.1";
         
         requestId = [self _getNextResponseId];
         
+        NSObject* limitParam = [NSNull null];
+        if(limit > 0)
+            limitParam = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+        
         NSArray* params = [NSArray arrayWithObjects:
                            @"GET",
                            [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId],
                            [NSNull null],
-                           [NSNull null],
+                           limitParam,
                            requestId,
                            nil];
         

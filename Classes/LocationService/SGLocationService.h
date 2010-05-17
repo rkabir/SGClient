@@ -233,24 +233,28 @@
 
 /*!
 * @method retrieveRecordAnnotationHistory:
-* @abstract￼Retrieve the record history of a @/link //simplegeo/ooc/intf/SGAnnotationRecord SGAnnotationRecord @/link.
-* @discussion￼See @link retrieveHistory:layer: retrieveHistory:layer: @/link
+* @abstract￼ Retrieve the record history of a @/link //simplegeo/ooc/intf/SGAnnotationRecord SGAnnotationRecord @/link.
+* @discussion ￼See @link retrieveHistory:layer: retrieveHistory:layer: @/link
 * @param record The record 
+* @param limit The maximum amount to return. 
 * @result A response id that is used to identifier the return value from SimpleGeo. 
 * You can use this value in @link SGLocationServiceDelegate delegate @/link.
 */
-- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record;
+- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record limit:(int)limit;
 
 /*!
 * @method retrieveHistory:layer:
-* @abstract￼Retrieves the history of a single record.
-* @discussion This method allows retrieve the history of a record.
+* @abstract￼ Retrieves the history of a single record.
+* @discussion Return a reverse chronological list of where a record has been over time.
+* Currently only returns the last 10 places a record has been. The response is a 
+* GeoJSON GeometryCollection containing a list of Point objects, each with a created field containing the timestamp.
 * @param recordId￼The id of the record that wants to know about its history.
 * @param layer The layer in which the record is located in.
+* @param limit The maximum amount to return.
 * @result A response id that is used to identifier the return value from SimpleGeo. 
 * You can use this value in @link SGLocationServiceDelegate delegate @/link.
 */
-- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer;
+- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer limit:(int)limit;
 
 #pragma mark -
 #pragma mark Layer

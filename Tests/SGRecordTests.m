@@ -38,7 +38,6 @@
 
 @end
 
-
 @implementation SGRecordTests
 
 - (void) testRecordCreation
@@ -71,7 +70,7 @@
     [dumbRecord release];
     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-} 
+}
 
 - (void) testRecordFetch
 {
@@ -251,6 +250,31 @@
     STAssertNotNil(geoJSONObject, @"Return object should be valid");
     STAssertTrue([geoJSONObject isFeature], @"Return object should be Feature");
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];    
+}
+
+- (void) testHistory
+{
+    SGRecord* r1 = [self createRandomRecord];
+    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];
+    for(int i = 0; i < 10; i++) {
+        r1.created = r1.created+100;
+        [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];    
+        [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        WAIT_FOR_WRITE();
+    }
+    
+    NSString* responseId = [self.locatorService retrieveRecordAnnotationHistory:r1 limit:5];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:responseId];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
+    NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
+    STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
+    STAssertTrue([geoJSONObject isGeometryCollection], @"The history endpoint should return a collection of geometries.");
+    
+    NSArray* geometries = [geoJSONObject geometries];
+    STAssertTrue([geometries count] == 5, @"The history endpoint should return the proper limit.");
+    
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];
 }
 
 @end

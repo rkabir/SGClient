@@ -18,7 +18,7 @@ inform the linker to load the categories from the static library.
 ================================================================================
 BUILD REQUIREMENTS:
 
-iPhone SDK 3.1
+iPhone SDK 3.2
 
 Frameworks
 - CoreLocation

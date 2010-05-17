@@ -75,6 +75,15 @@
     return properties;
 }
 
+- (NSArray*) geometries
+{
+    NSArray* geometries = nil;
+    if([self isGeometryCollection])
+        geometries = [self objectForKey:@"geometries"];
+    
+    return geometries;
+}
+
 - (double) created
 {
     double created = -1.0;
@@ -148,6 +157,11 @@
     return [self isType:@"FeatureCollection"];
 }
 
+- (BOOL) isGeometryCollection
+{
+    return [self isType:@"GeometryCollection"];
+}
+
 - (BOOL) isPoint
 {
     return [self isType:@"Point"];
@@ -168,7 +182,6 @@
     NSString* featureType = [self type];
     return type && [featureType isEqualToString:type];
 }
-
 
 @end
 
@@ -214,6 +227,11 @@
 - (void) setFeatures:(NSArray*)features
 {
     [self setObject:features forKey:@"features"];
+}
+
+- (void) setGeometries:(NSArray*)geometries
+{
+    [self setObject:geometries forKey:@"geometries"];
 }
 
 @end
