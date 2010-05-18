@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGQuery.h
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,28 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import <Foundation/Foundation.h>
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
-}
+/*!
+* @protocol SGQuery
+* @abstract ￼A protocol that helps define a query object.
+*/
+@protocol SGQuery
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
-}
+/*!
+* @method params
+* @abstract ￼Returns a dictionary who's key/values will be used
+* in order to fulfill a HTTP GET request.
+* @result A dictionary that will be used in the construction of valid
+* HTTP params.
+*/
+- (NSMutableDictionary*) params;
 
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
-}
+/*!
+* @method uri
+* @abstract Returns the correct URI for this query.
+* @result ￼The URI for this query.
+*/
+- (NSString*) uri;
 
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
-}
+@end

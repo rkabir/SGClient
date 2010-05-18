@@ -36,6 +36,7 @@
 #import "SGRecordAnnotation.h"
 #import "SGLocationTypes.h"
 #import "SGAuthorization.h"
+#import "SGNearbyQuery.h"
 
 @protocol SGLocationServiceDelegate;
 
@@ -248,6 +249,10 @@
 * @discussion Return a reverse chronological list of where a record has been over time.
 * Currently only returns the last 10 places a record has been. The response is a 
 * GeoJSON GeometryCollection containing a list of Point objects, each with a created field containing the timestamp.
+*
+* This type of query supports pagination. If a limit is reached server-side but there are still more records that can be 
+* returned, the key "next_cursor" will be set as a top-level value in the return object. The key is 
+* an encripted string that can be used to return the next set of records in the queried sequence. 
 * @param recordId￼The id of the record that wants to know about its history.
 * @param layer The layer in which the record is located in.
 * @param limit The maximum amount to return.
@@ -270,88 +275,26 @@
 
 #pragma mark -
 #pragma mark Nearby
+
+/*!
+* @method nearby:
+* @abstract ￼Retieves records based on the @link //simplegeo/ooc/cl/SGNearbyQuery SGNearbyQuery @/link
+* properties that are set.
+* @discussion ￼There are two forms of nearby queries: @link //simplegeo/ooc/cl/SGGeohashNearbyQuery SGGeohashNearbyQuery @/link
+* and @link //simplegeo/ooc/cl/SGLatLonNearbyQuery SGLatLonNearbyQuery @/link. To see the common filter properties, take a look
+* at @link //simplegeo/ooc/cl/SGNearbyQuery SGNearbyQuery @/link.
+*
+* This type of query supports pagination. If a limit is reached server-side but there are still more records that can be 
+* returned, the key "next_cursor" will be set as a top-level value in the return object. The key is 
+* an encripted string that can be used to return the next set of records in the queried sequence.
+* 
+* @param query ￼The @link //simplegeo/ooc/cl/SGNearbyQuery SGNearbyQuery @/link object
+* that will be used to produce the proper request.
+* @result A response id that is used to identifier the return value from SimpleGeo. 
+* You can use this value in @link SGLocationServiceDelegate delegate @/link. 
+*/
+- (NSString*) nearby:(SGNearbyQuery*)query;
  
-/*!
-* @method retrieveRecordsForGeohash:layer:types:limit:
-* @abstract Gets records that are located in a specific geohash.
-* @param geohash The geohash that should be searched.
-* @param layer The layer to search in.
-* @param types An array of types that will help filter the search.
-* @param limit The amount of records to obtain. 
-* @result A response id that is used to identifier the return value from SimpleGeo. 
-* You can use this value in @link SGLocationServiceDelegate delegate @/link.
-*/
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)geohash 
-                                layer:(NSString*)layer
-                                 types:(NSArray*)types
-                                 limit:(NSInteger)limit;
-
-/*!
-* @method retrieveRecordsForGeohash:layer:type:limit:
-* @abstract Gets records that are located in a specific geohash and within 
-* a given interval. To make use of our time based index,
-* the difference between start and end must not be greater than 60 minutes.
-* @param geohash The geohash that should be searched.
-* @param layer The layer to search in.
-* @param types An array of types that will help filter the search.
-* @param start An Epoch timestamp that is the beginning of the time interval in seconds.
-* @param end An Epoch timestamp that is the end of the time interval in seconds.
-* @param limit The amount of records to obtain. 
-* @result A response id that is used to identifier the return value from SimpleGeo. 
-* You can use this value in @link SGLocationServiceDelegate delegate @/link.
-*/
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)geohash 
-                                 layer:(NSString*)layer
-                                  types:(NSArray*)types
-                                  limit:(NSInteger)limitend
-                                  start:(double)start
-                                 end:(double)end;
-
-
-/*!
-* @method retrieveRecordsForCoordinate:radius:layer:types:limit:
-* @abstract Get records that are located within a radius of coordinate.
-* @param coord The origin of the radius.
-* @param radius The radius of the search space. (km)
-* @param layer The layer to search in.
-* @param types An array of types that will help filter the search.
-* @param limit￼The amount of records to obtain. 
-* @result A response id that is used to identifier the return value from SimpleGeo. 
-* You can use this value in @link SGLocationServiceDelegate delegate @/link. 
-*/
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
-                                   radius:(double)radius
-                                   layer:(NSString*)layer
-                                    types:(NSArray*)types
-                                    limit:(NSInteger)limit;
-
-/*!
-* @method retrieveRecordsForCoordinate:radius:layer:types:limit:
-* @abstract Get records that are located within a radius of a coordinate and within
-* a given interval. To make use of our time based index, the difference between
-* start and end must not be greater than 60 minutes.
-* @param coord The origin of the radius.
-* @param radius The radius of the search space. (km)
-* @param layer The layer to search in.
-* @param types An array of types that will help filter the search.
-* @param limit￼The amount of records to obtain. 
-* @param start An Epoch timestamp that is the beginning of the time interval in seconds.
-* @param end An Epoch timestamp that is the end of the time interval in seconds.
-* @result A response id that is used to identifier the return value from SimpleGeo. 
-* You can use this value in @link SGLocationServiceDelegate delegate @/link. 
-*/
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
-                                    radius:(double)radius
-                                    layer:(NSString*)layer
-                                     types:(NSArray*)types
-                                     limit:(NSInteger)limit
-                                     start:(double)start
-                                    end:(double)end;
-
-
-#pragma mark -
-#pragma mark Features
-
 /*!
 * @method reverseGeocode:
 * @abstract Returns resource information for a given pair lat/lon coordinate.

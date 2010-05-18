@@ -371,7 +371,7 @@ static NSString* apiVersion = @"0.1";
         
         params = [NSArray arrayWithObjects:
                            @"PUT",
-                           [@"/records" stringByAppendingFormat:@"/%@/%@.json", layer, recordId],
+                           [NSString stringWithFormat:@"/records/%@/%@.json", layer, recordId],
                            body,
                            [NSNull null],
                            requestId,
@@ -403,7 +403,7 @@ static NSString* apiVersion = @"0.1";
         NSObject* limitParam = [NSNull null];
         if(limit > 0)
             limitParam = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
-        
+
         NSArray* params = [NSArray arrayWithObjects:
                            @"GET",
                            [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId],
@@ -411,10 +411,10 @@ static NSString* apiVersion = @"0.1";
                            limitParam,
                            requestId,
                            nil];
-        
+
         [self _pushInvocationWithArgs:params];
     }
-    
+
     return requestId;
 }
 
@@ -440,120 +440,22 @@ static NSString* apiVersion = @"0.1";
 
 #pragma mark -
 #pragma mark Nearby
- 
 
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
-                                layer:(NSString*)layer
-                                 types:(NSArray*)types
-                                 limit:(NSInteger)limit
-{
-    return [self retrieveRecordsForGeohash:region 
-                                    layer:layer
-                                     types:types
-                                     limit:limit
-                                     start:0.0
-                                    end:0.0];
-}
-
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
-                                 layer:(NSString*)layer
-                                  types:(NSArray*)types
-                                  limit:(NSInteger)limit
-                                  start:(double)start
-                                 end:(double)end;
+- (NSString*) nearby:(SGNearbyQuery*)query
 {
     NSString* requestId = [self _getNextResponseId];
     
-    if(!layer)
-        return nil;
-    
-    char* geohash = geohash_encode(region.latitude, region.longitude, region.precision);
-        
-    if(![NSArray isValidNonEmptyArray:types])
-        types = [self _allTypes];
-    
-    NSMutableArray* params = [NSMutableArray arrayWithObjects:
-                       @"GET",
-                       [NSString stringWithFormat:@"/records/%@/nearby/%s.json", layer, geohash],
-                       [NSNull null],
-                       [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                        [NSString stringWithFormat:@"%i", limit], @"limit",
-                        [types componentsJoinedByString:@","], @"types",
-                        nil],
-                       requestId,
-                       nil];
-    
-    if(start > 0 && end > 0) {
-        NSMutableDictionary* httpParams = [params objectAtIndex:kSGHTTPRequestParameter_Params];
-        [httpParams setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
-        [httpParams setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
-    }    
-    
+    NSMutableArray* params = [NSArray arrayWithObjects:
+                              @"GET",
+                              [query uri],
+                              [NSNull null],
+                              [query params],
+                              requestId,
+                              nil];
     [self _pushInvocationWithArgs:params];
     
     return requestId;
-    
 }
-
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
-                                   radius:(double)radius
-                                   layer:(NSString*)layer
-                                    types:(NSArray*)types
-                                    limit:(NSInteger)limit
-{ 
-    return [self retrieveRecordsForCoordinate:coord
-                                       radius:radius
-                                       layer:layer
-                                        types:types
-                                        limit:limit
-                                        start:0.0
-                                       end:0.0];
-}
-
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord
-                                    radius:(double)radius
-                                    layer:(NSString*)layer
-                                     types:(NSArray*)types
-                                     limit:(NSInteger)limit
-                                     start:(double)start
-                                    end:(double)end
-{
-    if(!layer)
-        return nil;
-    
-    if(![NSArray isValidNonEmptyArray:types])
-        types = [self _allTypes];
-    
-    NSString* responseId = [self _getNextResponseId];   
-    SGLog(@"SGLocationService - Retrieving records nearby %f,%f from %@ with response %@", coord.latitude, coord.longitude, 
-                layer, responseId);
-    
-    NSArray* params = [NSArray arrayWithObjects:
-                       @"GET",
-                       [NSString stringWithFormat:@"/records/%@/nearby/%f,%f.json", layer, coord.latitude, coord.longitude],
-                       [NSNull null],
-                       [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                        [NSString stringWithFormat:@"%f", radius], @"radius",
-                        [NSString stringWithFormat:@"%i", limit], @"limit",
-                        [types componentsJoinedByString:@","], @"types",
-                        nil],
-                       responseId,
-                       nil];
-    
-    if(start > 0 && end > 0) {
-        NSMutableDictionary* httpParams = [params objectAtIndex:kSGHTTPRequestParameter_Params];
-        [httpParams setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
-        [httpParams setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
-    }    
-    
-    [self _pushInvocationWithArgs:params];
-    
-    return responseId;        
-}
-
-#pragma mark -
-#pragma mark Features
-
 
 - (NSString*) reverseGeocode:(CLLocationCoordinate2D)coord
 {

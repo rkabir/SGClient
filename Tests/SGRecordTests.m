@@ -184,62 +184,13 @@
     [record release];    
 }
 
-- (void) testNearbyRecords
-{
-    SGRecord* r1 = [self createRandomRecord];
-    SGRecord* r2 = [self createRandomRecord];
-    
-    r1.latitude = 20.01;
-    r1.longitude = 20.01;
-    r2.latitude = 20.011;
-    r2.longitude = 20.011;
-    
-    NSArray* records = [NSArray arrayWithObjects:r1, r2, nil];
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
-    
-    SGGeohash region = SGGeohashMake(r1.latitude, r1.longitude, 2);
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForGeohash:region
-                                                                                   layer:r1.layer
-                                                                                    types:[NSArray arrayWithObjects:r1.type, r2.type, nil]
-                                                                                    limit:10]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-    NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
-
-    STAssertNotNil(geoJSONObject, @"Return object should be valid");
-    NSArray* features = [geoJSONObject features];
-    STAssertNotNil(features, @"The GeoJSONObject should define features.");
-    int returnAmount = [features count];
-    STAssertTrue(returnAmount != 0, [@"Should return two records but was " stringByAppendingFormat:@"%i", returnAmount]);
-    
-    recentReturnObject = nil;
-    
-    CLLocationCoordinate2D coord = {20.01, 20.01};
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                       radius:1000 
-                                                                                       layer:r1.layer
-                                                                                        types:[NSArray arrayWithObjects:r1.type, r2.type, nil]
-                                                                                        limit:25]];
-
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-    
-    geoJSONObject = (NSDictionary*)recentReturnObject;
-    STAssertNotNil(geoJSONObject, @"Return object should be valid");
-    features = [geoJSONObject features];
-    STAssertNotNil(features, @"The GeoJSONObject should define features.");
-    returnAmount = [features count];
-    STAssertTrue(returnAmount != 0, [@"Should return two records but was " stringByAppendingFormat:@"%i", returnAmount]);
-        
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
-}
-
 - (void) testRepeatedUpdated
 {
     SGRecord* r1 = [self createRandomRecord];
     [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];    
     [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];        
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
     
     [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotation:r1]];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];

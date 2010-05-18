@@ -31,6 +31,7 @@
 //
 #import "SGLocationServiceTests.h"
 #import "SGClient.h"
+#import "SGLatLonNearbyQuery.h"
 
 static NSString* testingLayer = kSGTesting_Layer;
 
@@ -170,12 +171,14 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    [self retrieveRecordResponseId:[layer retrieveRecordsForCoordinate:coords
-                                                                radius:10
-                                                                 types:nil
-                                                                 limit:25
-                                                                 start:currentTime
-                                                                   end:weekLater]];     
+    SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:testingLayer];
+    query.coordinate = coords;
+    query.radius = 10.0;
+    query.limit = 25;
+    query.start = currentTime;
+    query.end = weekLater;
+    
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
@@ -184,12 +187,10 @@ static NSString* testingLayer = kSGTesting_Layer;
     amount = [features count];
     STAssertTrue(amount >= 1, @"%i records were returnded but was expecting more than 1.", amount);
     
-    [self retrieveRecordResponseId:[layer retrieveRecordsForCoordinate:coords
-                                                                radius:10
-                                                                 types:nil
-                                                                 limit:25
-                                                                 start:currentTime*2.0
-                                                                   end:weekLater*2.0]];     
+    query.start = currentTime * 2.0;
+    query.end = weekLater * 2.0;
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
+
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     features = [recentReturnObject features];
     STAssertTrue([features count] == 0, @"No features should be returned");

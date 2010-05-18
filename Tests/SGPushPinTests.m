@@ -41,7 +41,6 @@
 
 @end
 
-
 @implementation SGPushPinTests
 
 - (void) testContains

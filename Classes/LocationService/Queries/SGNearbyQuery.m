@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGNearbyQuery.m
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,65 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import "SGNearbyQuery.h"
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
+@implementation SGNearbyQuery
+@synthesize cursor, layer, types, start, end, limit;
+
+- (id) initWithLayer:(NSString*)newLayer
+{
+    if(self = [super init]) {
+        self.layer = newLayer;
+        types = nil;
+        cursor = nil;
+
+        start = -1;
+        end= -1;
+        
+        limit = 25;
+    }
+    
+    return self;
 }
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
+- (NSMutableDictionary*) params
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionary];
+    
+    if(cursor)
+        [params setObject:cursor forKey:@"cursor"];
+    
+    if(start > 0 && end > 0) {
+        [params setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
+        [params setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
+    }
+    
+    if(types && [types count])
+        [params setObject:[types componentsJoinedByString:@","] forKey:@"types"];
+    
+    if(limit > 0)
+        [params setObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    
+    return params;
 }
 
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
+- (NSString*) uri
+{
+    return [NSString stringWithFormat:@"/records/%@", layer];
 }
 
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
+- (void) dealloc
+{
+    if(cursor)
+        [cursor release];
+    
+    if(layer)
+        [layer release];
+    
+    if(types)
+        [types release];
+ 
+    [super dealloc];
 }
+
+@end

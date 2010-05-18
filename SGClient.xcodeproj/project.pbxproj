@@ -8,11 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
-		4A40D92D1193669B0096BE6A /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
-		4A40D92E1193669C0096BE6A /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		4A40D92F1193669C0096BE6A /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4A40D9301193669D0096BE6A /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
-		4A40D9311193669E0096BE6A /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */; };
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
@@ -83,8 +78,21 @@
 		4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A409112095BE00D4E22D /* NSDictionary_JSONExtensions.m */; };
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
-		4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */; };
-		4A9067EB118A57AF00129851 /* SGPushPinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */; };
+		4A748CD111A1FC3C000AA9DD /* SGQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CCF11A1FC3C000AA9DD /* SGQuery.h */; };
+		4A748CD911A1FD55000AA9DD /* SGNearbyQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */; };
+		4A748CDA11A1FD55000AA9DD /* SGNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CD811A1FD55000AA9DD /* SGNearbyQuery.m */; };
+		4A748CDD11A1FD60000AA9DD /* SGGeohashNearbyQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CDB11A1FD60000AA9DD /* SGGeohashNearbyQuery.h */; };
+		4A748CDE11A1FD60000AA9DD /* SGGeohashNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */; };
+		4A748CE111A1FD6A000AA9DD /* SGLatLonNearbyQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CDF11A1FD6A000AA9DD /* SGLatLonNearbyQuery.h */; };
+		4A748CE211A1FD6A000AA9DD /* SGLatLonNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */; };
+		4A748CE511A1FDD7000AA9DD /* SGHistoryQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */; };
+		4A748CE611A1FDD7000AA9DD /* SGHistoryQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */; };
+		4A748D5011A20C5A000AA9DD /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
+		4A748D7011A20DDF000AA9DD /* SGNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CD811A1FD55000AA9DD /* SGNearbyQuery.m */; };
+		4A748D7111A20DE3000AA9DD /* SGLatLonNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */; };
+		4A748D7211A20DE4000AA9DD /* SGHistoryQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */; };
+		4A748D7311A20DE4000AA9DD /* SGGeohashNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */; };
+		4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A930FAC119DF50E0034828D /* SenTestingKit.framework */; };
 		4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -149,9 +157,18 @@
 		4A64B4D31120A78200D4E22D /* SGAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAdditions.h; sourceTree = "<group>"; };
 		4A64B52D1120B9CF00D4E22D /* SGClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGClient.h; sourceTree = "<group>"; };
 		4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGTestingMacros.h; sourceTree = "<group>"; };
-		4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		4A64B5F41120D54C00D4E22D /* build_client */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_client; sourceTree = "<group>"; };
 		4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPushPinTests.m; sourceTree = "<group>"; };
+		4A748CCF11A1FC3C000AA9DD /* SGQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQuery.h; sourceTree = "<group>"; };
+		4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGNearbyQuery.h; sourceTree = "<group>"; };
+		4A748CD811A1FD55000AA9DD /* SGNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGNearbyQuery.m; sourceTree = "<group>"; };
+		4A748CDB11A1FD60000AA9DD /* SGGeohashNearbyQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGGeohashNearbyQuery.h; sourceTree = "<group>"; };
+		4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGeohashNearbyQuery.m; sourceTree = "<group>"; };
+		4A748CDF11A1FD6A000AA9DD /* SGLatLonNearbyQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLatLonNearbyQuery.h; sourceTree = "<group>"; };
+		4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLatLonNearbyQuery.m; sourceTree = "<group>"; };
+		4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGHistoryQuery.h; sourceTree = "<group>"; };
+		4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHistoryQuery.m; sourceTree = "<group>"; };
+		4A930FAC119DF50E0034828D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = SDKROOT; };
 		4AEDCAAE11223A80003C1949 /* MyTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTestingMacros.h; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libSGClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSGClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,7 +181,7 @@
 			files = (
 				4A64B5141120B99800D4E22D /* Foundation.framework in Frameworks */,
 				4A64B5151120B99800D4E22D /* CoreLocation.framework in Frameworks */,
-				4A64B56B1120BC8200D4E22D /* SenTestingKit.framework in Frameworks */,
+				4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +226,7 @@
 			children = (
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
 				4A64A51E1120978F00D4E22D /* CoreLocation.framework */,
-				4A64B56A1120BC8200D4E22D /* SenTestingKit.framework */,
+				4A930FAC119DF50E0034828D /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -244,6 +261,7 @@
 		4A64A3B6112095BE00D4E22D /* LocationService */ = {
 			isa = PBXGroup;
 			children = (
+				4A748CCB11A1F8BE000AA9DD /* Queries */,
 				4A64A3B7112095BE00D4E22D /* SGAuthorization.h */,
 				4A64A3B8112095BE00D4E22D /* SGGeoJSONEncoder.h */,
 				4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */,
@@ -363,6 +381,22 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		4A748CCB11A1F8BE000AA9DD /* Queries */ = {
+			isa = PBXGroup;
+			children = (
+				4A748CCF11A1FC3C000AA9DD /* SGQuery.h */,
+				4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */,
+				4A748CD811A1FD55000AA9DD /* SGNearbyQuery.m */,
+				4A748CDB11A1FD60000AA9DD /* SGGeohashNearbyQuery.h */,
+				4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */,
+				4A748CDF11A1FD6A000AA9DD /* SGLatLonNearbyQuery.h */,
+				4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */,
+				4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */,
+				4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */,
+			);
+			path = Queries;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -397,6 +431,11 @@
 				4A64B4D41120A78200D4E22D /* SGAdditions.h in Headers */,
 				4A64B52E1120B9CF00D4E22D /* SGClient.h in Headers */,
 				4A64B5481120BB0C00D4E22D /* SGTestingMacros.h in Headers */,
+				4A748CD111A1FC3C000AA9DD /* SGQuery.h in Headers */,
+				4A748CD911A1FD55000AA9DD /* SGNearbyQuery.h in Headers */,
+				4A748CDD11A1FD60000AA9DD /* SGGeohashNearbyQuery.h in Headers */,
+				4A748CE111A1FD6A000AA9DD /* SGLatLonNearbyQuery.h in Headers */,
+				4A748CE511A1FDD7000AA9DD /* SGHistoryQuery.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,6 +482,9 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = SimpleGeo;
+			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "SGClient" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
@@ -509,13 +551,12 @@
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
 				4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */,
 				4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */,
-				4A9067EB118A57AF00129851 /* SGPushPinTests.m in Sources */,
 				4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */,
-				4A40D92D1193669B0096BE6A /* SGGeoJSONEncoderTests.m in Sources */,
-				4A40D92E1193669C0096BE6A /* SGLayerTest.m in Sources */,
-				4A40D92F1193669C0096BE6A /* SGNearbyTests.m in Sources */,
-				4A40D9301193669D0096BE6A /* SGSpotRankTests.m in Sources */,
-				4A40D9311193669E0096BE6A /* SGRecordTests.m in Sources */,
+				4A748D5011A20C5A000AA9DD /* SGNearbyTests.m in Sources */,
+				4A748D7011A20DDF000AA9DD /* SGNearbyQuery.m in Sources */,
+				4A748D7111A20DE3000AA9DD /* SGLatLonNearbyQuery.m in Sources */,
+				4A748D7211A20DE4000AA9DD /* SGHistoryQuery.m in Sources */,
+				4A748D7311A20DE4000AA9DD /* SGGeohashNearbyQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +585,10 @@
 				4A64A445112095BE00D4E22D /* CJSONDeserializer.m in Sources */,
 				4A64A447112095BE00D4E22D /* CJSONScanner.m in Sources */,
 				4A64A449112095BE00D4E22D /* CJSONSerializer.m in Sources */,
+				4A748CDA11A1FD55000AA9DD /* SGNearbyQuery.m in Sources */,
+				4A748CDE11A1FD60000AA9DD /* SGGeohashNearbyQuery.m in Sources */,
+				4A748CE211A1FD6A000AA9DD /* SGLatLonNearbyQuery.m in Sources */,
+				4A748CE611A1FDD7000AA9DD /* SGHistoryQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -567,7 +612,7 @@
 				HEADER_SEARCH_PATHS = Classes;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Debug;
 		};
@@ -582,7 +627,7 @@
 				GCC_PREFIX_HEADER = Resources/SGClient_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Release;
 		};
@@ -622,6 +667,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SDKROOT)$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -636,6 +682,7 @@
 					"Resources/3rd-Party/**",
 				);
 				INFOPLIST_FILE = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -644,7 +691,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos3.2;
 				VERSION_INFO_PREFIX = "";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -660,6 +707,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SDKROOT)$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -674,7 +722,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos3.2;
 				VERSION_INFO_PREFIX = Resources/SGClient_Prefix.pch;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;

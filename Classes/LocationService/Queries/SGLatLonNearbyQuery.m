@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGLatLonNearbyQuery.m
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,35 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import "SGLatLonNearbyQuery.h"
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
+@implementation SGLatLonNearbyQuery
+@synthesize coordinate, radius;
+
+- (id) initWithLayer:(NSString*)newLayer
+{
+    if(self = [super initWithLayer:newLayer]) { 
+        
+        CLLocationCoordinate2D coord = {0.0, 0.0};
+        coordinate = coord;
+        radius = 0.0;
+    }
+    
+    return self;
 }
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
+- (NSString*) uri
+{
+    return [NSString stringWithFormat:@"%@/nearby/%f,%f.json", [super uri], coordinate.latitude, coordinate.longitude];
 }
 
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
+- (NSMutableDictionary*) params
+{
+    NSMutableDictionary* params = [super params];
+    if(radius > 0)
+        [params setObject:[NSString stringWithFormat:@"%f", radius] forKey:@"radius"];
+    
+    return params;
 }
 
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
-}
+@end

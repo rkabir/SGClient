@@ -1,4 +1,4 @@
-SGClient v0.3.7
+SGClient v0.3.8
 
 ================================================================================
 ABSTRACT:
@@ -90,6 +90,8 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
+Version 0.3.8
+- Added pagination to both the nearby and history endpoints
 
 Version 0.3.7
 - Fixed a bug where the type of a record wasn't being properly stored, in some

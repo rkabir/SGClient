@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGHistoryQuery.m
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,49 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import "SGHistoryQuery.h"
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
+@implementation SGHistoryQuery
+@synthesize recordId, layer, cursor, limit;
+
+- (id) init
+{
+    if(self = [super init]) {
+        recordId = nil;
+        layer = nil;
+        cursor = nil;
+        limit = 10;
+    }
+    
+    return self;
 }
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
+- (NSMutableDictionary*) params
+{
+    NSMutableDictionary* params = [NSMutableDictionary dictionary];
+    if(cursor)
+        [params setObject:cursor forKey:@"cursor"];
+    
+    if(limit > 0)
+        [params setObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    
+    return params; 
 }
 
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
+- (NSString*) uri
+{
+    return [NSString stringWithFormat:@"/records/%@/history/%@.json", layer, recordId];
 }
 
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
+- (void) dealloc
+{
+    [recordId release];
+    [layer release];
+    
+    if(cursor)
+        [cursor release];
+    
+    [super dealloc];
 }
+
+@end

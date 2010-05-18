@@ -32,6 +32,7 @@
 //
 
 #import "SGLocationServiceTests.h"
+#import "SGLatLonNearbyQuery.h"
 
 @interface SGNearbyTests : SGLocationServiceTests
 {
@@ -42,7 +43,7 @@
 
 @implementation SGNearbyTests
 
-- (void) testNearbyResponseTime
+- (void) testNearbyDistanceSort
 {
     CLLocationCoordinate2D coord = {10.0, 10.0};
     NSMutableArray* records = [NSMutableArray array];
@@ -59,14 +60,15 @@
     WAIT_FOR_WRITE();
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    for(int i = 0; i < 10; i++) {
+    SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
+    query.coordinate = coord;
+    query.radius = 10.0;
+    query.layer = kSGTesting_Layer;
+    query.limit = 100;
     
+    for(int i = 0; i < 10; i++) {
         recentReturnObject = nil;
-        [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                                  radius:10
-                                                                                   layer:kSGTesting_Layer
-                                                                                   types:nil
-                                                                                   limit:100]];     
+        [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
         [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
         STAssertNotNil(recentReturnObject, @"Return object should not be nil");
         
@@ -97,8 +99,7 @@
     CLLocationCoordinate2D coord = {10.0, 10.0};
     NSMutableArray* records = [NSMutableArray array];
     SGRecord* record = nil;
-    for(int i = 0; i < 10; i++) 
-    {
+    for(int i = 0; i < 10; i++) {
         record = [self createRandomRecord];
         record.latitude = coord.latitude;
         record.longitude = coord.longitude;
@@ -109,43 +110,79 @@
     WAIT_FOR_WRITE();
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                              radius:10
-                                                                               layer:kSGTesting_Layer
-                                                                               types:nil
-                                                                               limit:100
-                                                                               start:currentTime
-                                                                                 end:weekLater]];     
+    SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
+    query.coordinate = coord;
+    query.radius = 10.0;
+    query.limit = 100;
+    query.start = currentTime;
+    query.end = weekLater;
+    
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     NSArray* features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
+     
+    query.start = currentTime * 2.0;
+    query.end = weekLater * 2.0;
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                              radius:10
-                                                                               layer:kSGTesting_Layer
-                                                                               types:nil
-                                                                               limit:100
-                                                                               start:currentTime*2.0
-                                                                                 end:weekLater*2.0]];     
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     features = [recentReturnObject features];
     STAssertTrue([features count] == 0, @"No features should be returned");
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordsForCoordinate:coord
-                                                                              radius:10
-                                                                               layer:kSGTesting_Layer
-                                                                               types:nil
-                                                                               limit:100
-                                                                               start:currentTime
-                                                                                 end:currentTime+120]];     
+    query.start = currentTime;
+    query.end = weekLater + 120;
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
     
+    [query release];
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+}
+
+- (void) testNearbyPagination
+{
+    CLLocationCoordinate2D coord = {10.0, 10.0};
+    NSMutableArray* records = [NSMutableArray array];
+    SGRecord* record = nil;
+    for(int i = 0; i < 10; i++) {
+        record = [self createRandomRecord];
+        record.latitude = coord.latitude;
+        record.longitude = coord.longitude;
+        [records addObject:record];
+    }    
+    
+    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
+    
+    SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
+    query.coordinate = coord;
+    query.radius = 1.0;
+    query.limit = 1;
+    
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[recentReturnObject features] count] == 1, @"A single record should be returned.");
+    
+    NSString* cursor = [recentReturnObject objectForKey:@"next_cursor"];
+    STAssertNotNil(cursor, @"A cursor should be returned to enable pagination.");
+    
+    query.cursor = cursor;
+    query.limit = 9;
+    
+    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[recentReturnObject features] count] == 9, @"Another 9 records should be returned.");
+    
+    [query release];
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
 }
 

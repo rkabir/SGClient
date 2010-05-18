@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGGeohashNearbyQuery.m
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,14 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import "SGGeohashNearbyQuery.h"
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
+@implementation SGGeohashNearbyQuery
+@synthesize geohash;
+
+- (NSString*) uri
+{
+    return [NSString stringWithFormat:@"%@/nearby/%@.json", [super uri], SGGeohashToString(geohash)];
 }
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
-}
-
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
-}
-
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
-}
+@end

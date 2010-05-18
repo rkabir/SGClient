@@ -1,6 +1,5 @@
 //
-
-//  SGLocationTypes.m
+//  SGHistoryQuery.h
 //  SGClient
 //
 //  Copyright (c) 2009-2010, SimpleGeo
@@ -33,25 +32,48 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
-#import "geohash.h"
+#import <Foundation/Foundation.h>
+#import "SGQuery.h"
 
-NSString* SGGeohashToString(SGGeohash geohash) {
-    char* str = geohash_encode(geohash.latitude, geohash.longitude, geohash.precision);
-    return [NSString stringWithFormat:@"%s", str];
+/*!
+* @class SGHistoryQuery 
+* @abstract A query object that defines common properties in
+* order to provide all search filters for a history request.
+*/
+@interface SGHistoryQuery : NSObject <SGQuery> {
+
+    NSString* cursor;
+    NSString* recordId;
+    NSString* layer;
+    
+    int limit;
 }
 
-SGGeohash SGGeohashMake(double latitude, double longitude, int precision) {
-    SGGeohash region = {latitude, longitude, precision};    
-    return region;
-}
+/*!
+* @property
+* @abstract The cursor that is obtained from a previous nearby query.
+* @discussion This property is not required in order to fulfill a
+* successful query. It is only used for paginiation.
+*/
+@property (nonatomic, retain) NSString* cursor;
 
-SGEnvelope SGEnvelopeMake(CLLocationDegrees south, CLLocationDegrees west, CLLocationDegrees north, CLLocationDegrees east) {
-    SGEnvelope envelope = {south, west, north, east};
-    return envelope;
-}
+/*!
+* @property
+* @abstract The record id to obtain the history from.
+*/
+@property (nonatomic, retain) NSString* recordId;
 
-NSString* SGEnvelopeGetString(SGEnvelope polygon) {
-    return [NSString stringWithFormat:@"%f,%f,%f,%f",
-            polygon.south, polygon.west, polygon.north, polygon.east];
-}
+/*!
+* @property
+* @abstract The layer where the record lives.
+*/
+@property (nonatomic, retain) NSString* layer;
+
+/*!
+* @property
+* @abstract The amount of historical events to be returned.
+* The default is 10.
+*/
+@property (nonatomic, assign) int limit;
+
+@end

@@ -167,72 +167,14 @@
     return responseId;
 }
 
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)region types:(NSArray*)types limit:(NSInteger)limit
+- (NSString*) nearby:(SGNearbyQuery*)query
 {
-    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForGeohash:region
-                                                                                       layer:layerId
-                                                                                        types:types
-                                                                                        limit:limit];
+    query.layer = layerId;
+    NSString* responseId = [[SGLocationService sharedLocationService] nearby:query];
     if(responseId)
         [_layerResponseIds addObject:responseId];
     
     return responseId;
-}
-
-- (NSString*) retrieveRecordsForGeohash:(SGGeohash)region 
-                                  types:(NSArray*)types
-                                  limit:(NSInteger)limit
-                                  start:(double)start
-                                    end:(double)end;
-{
-    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForGeohash:region
-                                                                                         layer:layerId
-                                                                                          types:types
-                                                                                          limit:limit
-                                                                                          start:start
-                                                                                            end:end];
-    
-    if(responseId)
-        [_layerResponseIds addObject:responseId];
-    
-    return responseId;
-}
-
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord 
-                                    radius:(double)radius
-                                     types:(NSArray*)types
-                                     limit:(NSInteger)limit
-{
-    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForCoordinate:coord
-                                                                                            radius:radius
-                                                                                            layer:layerId
-                                                                                             types:types
-                                                                                             limit:limit];
-    if(responseId)
-        [_layerResponseIds addObject:responseId];
-    
-    return responseId;
-}
-
-- (NSString*) retrieveRecordsForCoordinate:(CLLocationCoordinate2D)coord 
-                                    radius:(double)radius
-                                     types:(NSArray*)types
-                                     limit:(NSInteger)limit
-                                     start:(double)start
-                                       end:(double)end
-{
-    NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordsForCoordinate:coord
-                                                                                            radius:radius
-                                                                                            layer:layerId
-                                                                                             types:types
-                                                                                             limit:limit
-                                                                                             start:start
-                                                                                               end:end];
-    
-    if(responseId)
-        [_layerResponseIds addObject:responseId];
-    
-    return responseId;    
 }
 
 #pragma mark -
