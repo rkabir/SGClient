@@ -36,6 +36,7 @@
 
 #import "SGLocationTypes.h"
 
+#import "SGGeoJSONEncoder.h"
 #import "GeoJSON+NSArray.h"
 #import "GeoJSON+NSDictionary.h"
 
@@ -63,7 +64,7 @@
         layerLink = nil;
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
-        layer = [[[NSBundle mainBundle] bundleIdentifier] retain];
+        layer = nil;
         
         if(!layer)
             layer = @"missing";
@@ -141,6 +142,7 @@
         [self setCreated:[geoJSONObject created]];
         [self setRecordId:[geoJSONObject id]];
 
+        [self setLayer:[SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]]];
     }
 }
 

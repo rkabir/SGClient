@@ -35,7 +35,7 @@
 #import "SGNearbyQuery.h"
 
 @implementation SGNearbyQuery
-@synthesize cursor, layer, types, start, end, limit;
+@synthesize cursor, layer, types, start, end, limit, requestId;
 
 - (id) initWithLayer:(NSString*)newLayer
 {
@@ -48,6 +48,8 @@
         end= -1;
         
         limit = 25;
+        
+        requestId = nil;
     }
     
     return self;

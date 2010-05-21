@@ -43,32 +43,22 @@
 
 - (NSString*) getNextResponseId;
 
-- (void) updateRecords:(NSDictionary *)requestObject;
-- (void) retrieveRecords:(NSDictionary *)requestObject;
+- (void) updateRecords:(NSDictionary*)requestObject;
+- (void) retrieveRecords:(NSDictionary*)requestObject;
 
 @end
 
-
 @implementation SGLayer
-
-@synthesize layerId;
+@synthesize layerId, recentNearbyQuery, storeRetrievedRecords;
 
 - (id) initWithLayerName:(NSString*)newLayer
 {
     if(self = [super init]) {
-        
-        if(!newLayer) {
-         
-            NSBundle* bundle = [NSBundle mainBundle];
-            newLayer = [bundle bundleIdentifier];
-            
-        }
-
-        _layerResponseIds = [[NSMutableArray alloc] init];
-        
+        recentNearbyQuery = nil;
+        layerResponseIds = [[NSMutableArray alloc] init];
         layerId = [newLayer retain];
-        
-        _sgRecords = [[NSMutableDictionary alloc] init];
+        sgRecords = [[NSMutableDictionary alloc] init];
+        storeRetrievedRecords = NO;
     } 
     
     return self;
@@ -91,25 +81,23 @@
 
 - (NSArray*) recordAnnotations
 {
-    return [_sgRecords allValues];
+    return [sgRecords allValues];
 }
 
 - (void) removeAllRecordAnnotations
 {
-    [_sgRecords removeAllObjects];
+    [sgRecords removeAllObjects];
 }
 
 - (void) addRecordAnnotation:(id<SGRecordAnnotation>)record
 {
     if(record) {
-        
         if([record respondsToSelector:@selector(setLayer:)])
            [record setLayer:layerId];
         else
             SGLog(@"SGLayer - Error, cannot change layer for record %@ because the selector is not defined.", record);
            
-        [_sgRecords setObject:record forKey:record.recordId];
-        
+        [sgRecords setObject:record forKey:record.recordId];
     }
 }
 
@@ -128,12 +116,12 @@
 
 - (void) removeRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
 {
-    [_sgRecords removeObjectForKey:recordAnnotation.recordId];
+    [sgRecords removeObjectForKey:recordAnnotation.recordId];
 }
 
 - (NSInteger) recordAnnotationCount
 {
-    return [_sgRecords count];
+    return [sgRecords count];
 }
 
 #pragma mark -
@@ -153,7 +141,7 @@
 {    
     NSString* responseId = [[SGLocationService sharedLocationService] updateRecordAnnotations:recordAnnotations];
     if(responseId)
-        [_layerResponseIds addObject:responseId];
+        [layerResponseIds addObject:responseId];
     
     return responseId;
 }
@@ -162,19 +150,32 @@
 {
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordAnnotations:recordAnnoations];
     if(responseId)
-        [_layerResponseIds addObject:responseId];
+        [layerResponseIds addObject:responseId];
     
     return responseId;
 }
 
 - (NSString*) nearby:(SGNearbyQuery*)query
 {
+    [[SGLocationService sharedLocationService] addDelegate:self];
+    
     query.layer = layerId;
     NSString* responseId = [[SGLocationService sharedLocationService] nearby:query];
-    if(responseId)
-        [_layerResponseIds addObject:responseId];
+    if(responseId) {
+        [layerResponseIds addObject:responseId];
+        self.recentNearbyQuery = query;
+    }
     
     return responseId;
+}
+
+- (NSString*) nextNearby
+{
+    NSString* requestId = nil;
+    if(recentNearbyQuery && recentNearbyQuery.cursor)
+        requestId = [self nearby:recentNearbyQuery];
+    
+    return requestId;
 }
 
 #pragma mark -
@@ -182,63 +183,48 @@
 
 - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
 {
-    [_layerResponseIds removeObject:requestId];
+    [layerResponseIds removeObject:requestId];
 }
 
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {   
-    if([_layerResponseIds containsObject:requestId]) {
-
-        NSDictionary* geoJSONObject = (NSDictionary*)responseObject;
-        NSArray* features = [geoJSONObject features];
+    if([layerResponseIds containsObject:requestId]) {
+        NSDictionary* geoJSONObject = (NSDictionary*)responseObject;        
+        // Check to see if request matches our nearby query.
+        // If it does, then we can append the cursor and get
+        // ready for a possible pagination.
+        if(recentNearbyQuery && recentNearbyQuery.requestId && [recentNearbyQuery.requestId isEqualToString:requestId])
+            recentNearbyQuery.cursor = [geoJSONObject objectForKey:@"next_cursor"];
         
-        if(features && [features count])
-            SGLog(@"SGLayer - updating %i record(s) for %@", [features count], [self description]);
-        else if(responseObject) 
-            features = [NSArray arrayWithObject:geoJSONObject];
+        if(storeRetrievedRecords) {
+            NSArray* features = nil;
+            if([geoJSONObject isFeature])
+                features = [NSArray arrayWithObject:geoJSONObject];
+            else 
+                features = [geoJSONObject features];
             
-        NSString* recordId = nil;
-        id<SGRecordAnnotation> annotation = nil;
-        for(NSDictionary* feature in features) {
-        
-            recordId = [feature id];
-            
-            if(recordId) {
-            
-                annotation = [_sgRecords objectForKey:recordId];
-                
-                if(annotation) {
-                
-                    if([annotation respondsToSelector:@selector(updateRecordWithGeoJSONObject:)])
-                        [annotation updateRecordWithGeoJSONObject:feature];
-                
-                } else {
-             
-                    annotation = [self recordAnnotationFromGeoJSONObject:feature];
-
-                    if(annotation)
-                        [_sgRecords setObject:annotation forKey:annotation.recordId];
-                }
-            
-            }
-        
+            for(NSDictionary* feature in features)
+                [self addRecordAnnotation:[self recordAnnotationFromGeoJSONObject:feature]];
         }
         
-        [_layerResponseIds removeObject:requestId];
+        [layerResponseIds removeObject:requestId];
     }
 }
 
 - (NSString*) description
 {
-    return [NSString stringWithFormat:@"<SGLayer %@, count: %i>", self.layerId, [_sgRecords count]];
+    return [NSString stringWithFormat:@"<SGLayer %@, count: %i>", self.layerId, [sgRecords count]];
 }
 
 - (void) dealloc
 {
-    [_sgRecords release];
+    [sgRecords release];
     [layerId release];
     [[SGLocationService sharedLocationService] removeDelegate:self];
-    [_layerResponseIds release];
+    [layerResponseIds release];
+    
+    if(recentNearbyQuery)
+        [recentNearbyQuery release];
     
     [super dealloc];
 }

@@ -58,11 +58,12 @@
 @interface SGLayer : NSObject <SGLocationServiceDelegate> {
  
     NSString* layerId;
+    SGNearbyQuery* recentNearbyQuery;
+    BOOL storeRetrievedRecords;
     
     @private
-    NSMutableDictionary* _sgRecords;
-    NSMutableArray* _layerResponseIds;
- 
+    NSMutableDictionary* sgRecords;
+    NSMutableArray* layerResponseIds;
 }
 
 /*!
@@ -71,6 +72,22 @@
 * used in naming a layer is a reverse URL. (e.g. "com.simplegeo.spatula").
 */
 @property (nonatomic, readonly) NSString* layerId;
+
+/*!
+* @property
+* @abstract The most recent nearby request that was used.
+* @discussion This property is used by @link nextNearby nextNearby @/link to generate
+* the next, paginated nearby request if one is available.
+*/
+@property (nonatomic, retain) SGNearbyQuery* recentNearbyQuery;
+
+/*!
+* @protocol
+* @abstract If a @link nearby: nearby: @/link request is sent this
+* value is set to YES, then retrieved records will be added to this
+* object. If NO, then records will be ignored.
+*/
+@property (nonatomic, assign) BOOL storeRetrievedRecords;
 
 /*!
 * @method initWithLayerName:
@@ -140,7 +157,6 @@
 */
 - (void) removeRecordAnnotations:(NSArray*)recordAnnotations;
 
-
 /*!
 * @method recordAnnotationCount
 * @abstract ￼ Get the amount of @link //simplegeo/ooc/intf/SGRecordAnnotation SGRecordAnnotations @/link registered with the SGLayer object.
@@ -205,6 +221,25 @@
 */
 - (NSString*) retrieveRecordAnnotations:(NSArray*)recordAnnoations;
 
+/*!
+* @method nearby:
+* @abstract ￼Retieves records based on the @link //simplegeo/ooc/cl/SGNearbyQuery SGNearbyQuery @/link
+* properties that are set.
+* @discussion The layer property of the query will be set to @link layerId layerId @/link.
+* @param nearby ￼The @link //simplegeo/ooc/cl/SGNearbyQuery SGNearbyQuery @/link object
+* that will be used to produce the proper request.
+* @result ￼A request identifier that can be used to analyze the response object returned to
+* the @link //simplegeo/ooc/cl/SGLocationServiceDelegate SGLocationServiceDelegate @/link
+*/
 - (NSString*) nearby:(SGNearbyQuery*)nearby;
+
+/*!
+* @method nextNearby
+* @abstract ￼Fires off the the @link recentNearbyQuery recentNearbyQuery @/link
+* if the cursor property is set.
+* @result ￼A request identifier that can be used to analyze the response object returned to
+* the @link //simplegeo/ooc/cl/SGLocationServiceDelegate SGLocationServiceDelegate @/link
+*/
+- (NSString*) nextNearby;
 
 @end

@@ -50,6 +50,8 @@
     double end;
     
     int limit;
+    
+    NSString* requestId;
 }
 
 /*!
@@ -107,5 +109,14 @@
 * successful query. The default is 25.
 */
 @property (nonatomic, assign) int limit;
+
+/*!
+* @property
+* @abstract The request identifier that was used to iniate
+* this request.
+* @discussion This value is set when the nearby request
+* is sent through the @link //simplegeo/ooc/cl/SGLocationService SGLocationService @/link.
+*/
+@property (nonatomic, assign) NSString* requestId;
 
 @end

@@ -1,4 +1,4 @@
-SGClient v0.3.8
+SGClient v0.3.9
 
 ================================================================================
 ABSTRACT:
@@ -18,7 +18,7 @@ inform the linker to load the categories from the static library.
 ================================================================================
 BUILD REQUIREMENTS:
 
-iPhone SDK 3.2
+iPhone SDK 3.1
 
 Frameworks
 - CoreLocation
@@ -90,6 +90,9 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
+Version 0.3.9
+- SGLayer objects can use pagination automatically
+
 Version 0.3.8
 - Added pagination to both the nearby and history endpoints
 

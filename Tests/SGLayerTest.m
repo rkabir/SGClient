@@ -185,7 +185,7 @@ static NSString* testingLayer = kSGTesting_Layer;
     NSArray* features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     amount = [features count];
-    STAssertTrue(amount >= 1, @"%i records were returnded but was expecting more than 1.", amount);
+    STAssertTrue(amount >= 1, @"%i records were returned but was expecting more than 1.", amount);
     
     query.start = currentTime * 2.0;
     query.end = weekLater * 2.0;
@@ -197,6 +197,45 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [layer release];
+}
+
+- (void) testNextNearby
+{
+    CLLocationCoordinate2D coord = {10.0, 10.0};
+    NSMutableArray* records = [NSMutableArray array];
+    SGRecord* record = nil;
+    for(int i = 0; i < 10; i++) {
+        record = [self createRandomRecord];
+        record.latitude = coord.latitude;
+        record.longitude = coord.longitude;
+        [records addObject:record];
+    }    
+     SGLayer* layer = [[SGLayer alloc] initWithLayerName:testingLayer];
+    
+    [self addRecordResponseId:[layer updateRecordAnnotations:records]];    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
+    
+    SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
+    query.coordinate = coord;
+    query.radius = 1.0;
+    query.limit = 1;
+    
+    [self retrieveRecordResponseId:[layer nearby:query]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[recentReturnObject features] count] == 1, @"A single record should be returned.");
+    
+    STAssertNotNil(layer.recentNearbyQuery.cursor, @"A new cursor should have been applied to the layer object.");
+    
+    layer.recentNearbyQuery.limit = 9;
+    [self retrieveRecordResponseId:[layer nextNearby]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[recentReturnObject features] count] == 9, @"Another 9 records should be returned.");
+    
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [query release];
+    [layer release];
 }
 
 @end

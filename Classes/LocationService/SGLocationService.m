@@ -454,6 +454,8 @@ static NSString* apiVersion = @"0.1";
                               nil];
     [self _pushInvocationWithArgs:params];
     
+    query.requestId = requestId;
+    
     return requestId;
 }
 
@@ -647,17 +649,13 @@ static NSString* apiVersion = @"0.1";
     // If the response is not equal to the amount of requests sent,
     // then there was an error and the delegate should be notified.
     if([responses count] != [requestList count]) {
-        
         [responseObject setObject:[response objectForKey:@"error"] forKey:@"error"];
                         
         if(callbackOnMainThread)
             [self performSelectorOnMainThread:@selector(failed:) withObject:responseObject waitUntilDone:NO];
         else
             [self failed:responseObject];
-        
-        
     } else {
-        
         [responseObject setObject:responses forKey:@"responseObject"];
         
         if(callbackOnMainThread)
