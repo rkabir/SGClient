@@ -44,6 +44,13 @@
 
 @required
 
+/*!
+* @method username
+* @abstract A unique identifier for the user making the request.
+* @result ￼A unique identifier for the user making the request.
+*/
+- (NSString*) username;
+
 - (NSDictionary*) dataAtURL:(NSString*)url 
                        file:(NSString*)file
                        body:(NSData*)body

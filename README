@@ -23,6 +23,7 @@ iPhone SDK 3.1
 Frameworks
 - CoreLocation
 - Foundation
+- UIKit
 
 ================================================================================
 PACKAGING LIST:
@@ -76,6 +77,10 @@ Headers
     GeoJSON+NSArray.h
     A category to help access GeoJSON keys.
     
+    SGGeoJSON+NSDictionary
+    A category to help access the SimpleGeo specific
+    keys of a GeoJSON object.
+    
     CLLocationAdditions.h
     A category for the CLLocation class.
     
@@ -87,6 +92,13 @@ Headers
     
     SGAddititons.h
     All categories used by the client.
+    
+    SGCacheHandler
+    Handles manipulations of cached files.
+    
+    SGCommitLog
+    An attempt at creating a commit log that can be used
+    to replay committed data.
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:

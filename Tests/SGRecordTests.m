@@ -83,7 +83,7 @@
     [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId layer:record.layer]];    
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-    NSInteger recordId = [[(NSDictionary*)recentReturnObject id] intValue];
+    NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];

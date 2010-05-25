@@ -37,6 +37,7 @@
 #import "SGLocationTypes.h"
 #import "SGAuthorization.h"
 #import "SGNearbyQuery.h"
+#import "SGCommitLog.h"
 
 @protocol SGLocationServiceDelegate;
 
@@ -73,9 +74,17 @@
     id<SGAuthorization> HTTPAuthorizer;
  
     @private
-    NSMutableArray* _requestIds;
-    NSMutableArray* _delegates;
- 
+    NSMutableArray* requestIds;
+    NSMutableArray* delegates;
+    
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+    UIBackgroundTaskIdentifier backgroundTask;
+    CLLocationManager* locationManager;
+    SGCommitLog* commitLog;
+
+#endif
+
 }
 
 /*!
@@ -89,6 +98,14 @@
 * @abstract The type of authorization to apply to all HTTP requests.
 */
 @property (nonatomic, assign) id<SGAuthorization> HTTPAuthorizer;
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void) becameActive;
+- (void) enterBackground;
+- (void) leaveBackground;
+
+#endif
 
 /*!
 * @method sharedLocationService
@@ -126,10 +143,8 @@
 */
 - (void) removeDelegate:(id<SGLocationServiceDelegate>)delegate;
 
-
 #pragma mark -
 #pragma mark Record Information 
- 
 
 /*!
 * @method retrieveRecordAnnotation:
@@ -441,5 +456,14 @@
 * @param error The error that was generated.
 */
 - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error;
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+@optional
+
+- (NSArray*) locationService:(SGLocationService*)service recordsForBackgroundLocationUpdate:(CLLocation*)newLocation;
+- (BOOL) locationService:(SGLocationService*)service shouldCacheRecord:(id<SGRecordAnnotation>)record;
+
+#endif
 
 @end

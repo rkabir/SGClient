@@ -34,14 +34,13 @@
 
 #import "GeoJSON+NSDictionary.h"
 
-@interface NSDictionary (SGGeoJSONObejctPrivate)
+@interface NSDictionary (GeoJSONObejctPrivate)
 
 - (BOOL) isType:(NSString *)type;
 
 @end
 
-
-@implementation NSDictionary (SGGeoJSONObject)
+@implementation NSDictionary (GeoJSONObject)
 
 - (NSString*) type
 {
@@ -84,42 +83,6 @@
     return geometries;
 }
 
-- (double) created
-{
-    double created = -1.0;
-
-    if([self isFeature]) {
-        NSNumber* num = [self objectForKey:@"created"];
-        if(num)
-            created = [num doubleValue];
-    }
-    
-    return created;
-}
-
-- (double) expires
-{
-    double created = -1.0;
-    if([self isFeature]) {
-            
-        NSNumber* num = [self objectForKey:@"expires"];
-        if(num)
-            created = [num doubleValue];
-    }
-    
-    return created;    
-}
-
-- (NSString*) id
-{
-    NSString* objectId = nil;
-
-    if([self isFeature])
-        objectId = [self objectForKey:@"id"];
-    
-    return objectId;
-}
-
 - (NSArray*) features
 {
     NSArray* features = nil;
@@ -127,24 +90,6 @@
         features = [self objectForKey:@"features"];
     
     return features;
-}
-
-- (NSString*) layerLink
-{
-    NSString* layerLink = nil;
-    if([self isFeature])
-        layerLink = [[self objectForKey:@"layerLink"] objectForKey:@"href"];
-    
-    return layerLink;
-}
-
-- (NSString*) selfLink
-{
-    NSString* selfLink = nil;
-    if([self isFeature])
-        selfLink = [[self objectForKey:@"selfLink"] objectForKey:@"href"];
-    
-    return selfLink;
 }
 
 - (BOOL) isFeature
@@ -185,7 +130,7 @@
 
 @end
 
-@implementation NSMutableDictionary (SGGeoJSONObject)
+@implementation NSMutableDictionary (GeoJSONObject)
 
 - (void) setType:(NSString*)type
 {
@@ -205,23 +150,6 @@
 - (void) setProperties:(NSDictionary*)properties
 {
     [self setObject:properties forKey:@"properties"];
-}
-
-- (void) setCreated:(double)created
-{
-    [self setObject:[NSNumber numberWithDouble:created]
-             forKey:@"created"];
-}
-
-- (void) setExpires:(double)expires
-{
-    [self setObject:[NSNumber numberWithDouble:expires]
-             forKey:@"expires"];
-}
-
-- (void) setId:(NSString*)id
-{
-    [self setObject:id forKey:@"id"];
 }
 
 - (void) setFeatures:(NSArray*)features

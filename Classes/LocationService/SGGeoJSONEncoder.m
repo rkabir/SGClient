@@ -33,9 +33,7 @@
 //
 
 #import "SGGeoJSONEncoder.h"
-
 #import "SGLocationTypes.h"
-
 #import "SGRecord.h"
 
 @implementation SGGeoJSONEncoder
@@ -45,22 +43,18 @@
     NSMutableArray* records = [NSMutableArray array];
     NSArray* features = [geojsonObject features];
     for(NSDictionary* feature in features) {
-     
         SGRecord* record = [SGGeoJSONEncoder recordForGeoJSONObject:feature];
-        
         if(record)
             [records addObject:record];
-        
     }
     
     return records;
 }
 
-+ (SGRecord*) recordForGeoJSONObject:(NSDictionary *)geojsonObject
++ (SGRecord*) recordForGeoJSONObject:(NSDictionary*)geojsonObject
 {
     SGRecord* record = nil;
     if(!record) {
-        
         record = [[[SGRecord alloc] init] autorelease];
         [record updateRecordWithGeoJSONObject:geojsonObject];
     }
@@ -68,7 +62,7 @@
     return record;
 }
 
-+ (NSDictionary*) geoJSONObjectForRecordAnnotations:(NSArray*)recordAnnotations
++ (NSMutableDictionary*) geoJSONObjectForRecordAnnotations:(NSArray*)recordAnnotations
 {
     NSMutableDictionary* geoJSONObject = nil;
     if(recordAnnotations && [recordAnnotations count]) {
@@ -78,7 +72,6 @@
         
         NSMutableArray* features = [NSMutableArray array];
         for(id<SGRecordAnnotation> recordAnnotation in recordAnnotations) {
-            
             NSDictionary* feature = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotation:recordAnnotation];
             if(feature)
                 [features addObject:feature];
@@ -90,10 +83,9 @@
     return geoJSONObject;
 }
 
-+ (NSDictionary*) geoJSONObjectForRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
++ (NSMutableDictionary*) geoJSONObjectForRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
 {
     NSMutableDictionary* feature = nil;
-    
     if(recordAnnotation) {
         feature = [NSMutableDictionary dictionary];
         [feature setType:@"Feature"];
@@ -111,7 +103,7 @@
         [geometry setCoordinates:coordinates];
         [feature setValue:geometry forKey:@"geometry"];
     
-        [feature setId:[recordAnnotation recordId]];
+        [feature setRecordId:[recordAnnotation recordId]];
         [feature setExpires:[recordAnnotation expires]];
         [feature setCreated:[recordAnnotation created]];
     }
@@ -129,11 +121,9 @@
 {
     NSString* endpoint = nil;
     if(layerLink) {
-        
         // This is realllly bad.
         NSArray* components = [layerLink componentsSeparatedByString:@"/"];
         endpoint = [[components lastObject] stringByDeletingPathExtension];
-        
     }
     
     return endpoint;

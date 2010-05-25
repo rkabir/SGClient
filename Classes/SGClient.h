@@ -16,6 +16,9 @@
 #import "SGGeohashNearbyQuery.h"
 #import "SGHistoryQuery.h"
 
+#import "SGCacheHandler.h"
+#import "SGCommitLog.h"
+
 #import "SGAuthorization.h"
 #import "SGGeoJSONEncoder.h"
 #import "SGLocationService.h"

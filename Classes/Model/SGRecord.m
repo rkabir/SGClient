@@ -39,6 +39,7 @@
 #import "SGGeoJSONEncoder.h"
 #import "GeoJSON+NSArray.h"
 #import "GeoJSON+NSDictionary.h"
+#import "SGGeoJSON+NSDictionary.h"
 
 @interface SGRecord (Private)
 
@@ -140,7 +141,7 @@
         
         [self setExpires:[geoJSONObject expires]];
         [self setCreated:[geoJSONObject created]];
-        [self setRecordId:[geoJSONObject id]];
+        [self setRecordId:[geoJSONObject recordId]];
 
         [self setLayer:[SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]]];
     }

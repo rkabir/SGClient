@@ -8,5 +8,6 @@
 
 #import "GeoJSON+NSArray.h"
 #import "GeoJSON+NSDictionary.h"
+#import "SGGeoJSON+NSDictionary.h"
 #import "NSArrayAdditions.h"
 #import "NSStringAdditions.h"
