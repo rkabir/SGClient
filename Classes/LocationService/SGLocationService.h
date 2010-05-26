@@ -82,6 +82,7 @@
     UIBackgroundTaskIdentifier backgroundTask;
     CLLocationManager* locationManager;
     SGCommitLog* commitLog;
+    NSMutableArray* cachedResponseIds;
 
 #endif
 

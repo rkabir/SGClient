@@ -123,6 +123,7 @@ static NSString* apiVersion = @"0.1";
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
         
         commitLog = nil;
+        cachedResponseIds = [[NSMutableArray alloc] init];
         
 #endif
         
@@ -296,18 +297,21 @@ static NSString* apiVersion = @"0.1";
     // We can only update records in sets of 100
     NSMutableArray* records = [NSMutableArray arrayWithArray:backgroundRecords];
     int amountOfRecords = [records count];
+    NSString* responseId = nil;
     while(amountOfRecords) {
         if(amountOfRecords <= 100) {
-            [self updateRecordAnnotations:records];
+            responseId = [self updateRecordAnnotations:records];
             [records removeAllObjects];
         } else {
             NSRange range;
             range.location = 0;
             range.length = 100;
-            [self updateRecordAnnotations:[records subarrayWithRange:range]];
+            responseId = [self updateRecordAnnotations:[records subarrayWithRange:range]];
             range.length = amountOfRecords;
             records = [NSMutableArray arrayWithArray:[records subarrayWithRange:range]];
         }
+        if(responseId)
+            [cachedResponseIds addObject:responseId];
         amountOfRecords = [records count];
     }
     
@@ -366,11 +370,19 @@ static NSString* apiVersion = @"0.1";
 
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {
+    if([cachedResponseIds containsObject:requestId]) {
+        SGLog(@"SGLocationService - Cached request successfully sent");
+        [cachedResponseIds removeObject:requestId];
+    }
 }
 
  - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
 {
-    
+    if([cachedResponseIds containsObject:requestId]) {
+        SGLog(@"SGLocationService - Cached request was unsuccessfully (%@)", [error description]);
+        // We might want to recommit the bad request
+        [cachedResponseIds removeObject:requestId];
+    }
 }
 
 #endif
@@ -1012,7 +1024,7 @@ static NSString* apiVersion = @"0.1";
     
     if(commitLog)
         [commitLog release];
-    
+    [cachedResponseIds release];
 #endif
     
     [super dealloc];
