@@ -104,9 +104,14 @@ static NSString* apiVersion = @"0.1";
 @end
 
 @implementation SGLocationService
-
 @synthesize operationQueue;
 @dynamic HTTPAuthorizer;
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+@synthesize useGPS, useWiFiTowers;
+
+#endif
 
 - (id) init
 {
@@ -124,7 +129,9 @@ static NSString* apiVersion = @"0.1";
         
         commitLog = nil;
         cachedResponseIds = [[NSMutableArray alloc] init];
-        
+      
+        useGPS = NO;
+        useWiFiTowers = YES;
 #endif
         
         callbackOnMainThread = YES;
@@ -274,7 +281,12 @@ static NSString* apiVersion = @"0.1";
         
         locationManager = [[CLLocationManager alloc] init];
         locationManager.delegate = self;    
-        [locationManager startMonitoringSignificantLocationChanges];        
+        
+        if(useWiFiTowers)
+            [locationManager startMonitoringSignificantLocationChanges];        
+        
+        if(useGPS)
+            [locationManager startUpdatingLocation];
     }
 }
 

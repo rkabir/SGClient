@@ -72,7 +72,14 @@
     NSOperationQueue* operationQueue;
  
     id<SGAuthorization> HTTPAuthorizer;
- 
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
+    BOOL useGPS;
+    BOOL useWiFiTowers;
+
+#endif
+
     @private
     NSMutableArray* requestIds;
     NSMutableArray* delegates;
@@ -83,7 +90,7 @@
     CLLocationManager* locationManager;
     SGCommitLog* commitLog;
     NSMutableArray* cachedResponseIds;
-
+    
 #endif
 
 }
@@ -101,6 +108,9 @@
 @property (nonatomic, assign) id<SGAuthorization> HTTPAuthorizer;
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+@property (nonatomic, assign) BOOL useGPS;
+@property (nonatomic, assign) BOOL useWiFiTower;
 
 - (void) becameActive;
 - (void) enterBackground;
