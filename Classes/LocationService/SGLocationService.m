@@ -109,7 +109,7 @@ static NSString* apiVersion = @"0.1";
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
-@synthesize useGPS, useWiFiTowers;
+@synthesize useGPS, useWiFiTowers, backgroundRecords;
 
 #endif
 
@@ -132,6 +132,8 @@ static NSString* apiVersion = @"0.1";
       
         useGPS = NO;
         useWiFiTowers = YES;
+        
+        backgroundRecords = nil;
 #endif
         
         callbackOnMainThread = YES;
@@ -262,19 +264,19 @@ static NSString* apiVersion = @"0.1";
             UIApplication* application = [UIApplication sharedApplication];
             self->backgroundTask = [application beginBackgroundTaskWithExpirationHandler:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if(self->backgroundTask != UIInvalidBackgroundTask) {
+                    if(self->backgroundTask != UIBackgroundTaskInvalid) {
                         [application endBackgroundTask:self->backgroundTask];
-                        self->backgroundTask = UIInvalidBackgroundTask;
+                        self->backgroundTask = UIBackgroundTaskInvalid;
                     }
                 });
             }];            
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 SGLog(@"SGLocationService - Waiting for NSOperationQueue to empty");
-                if(self->backgroundTask != UIInvalidBackgroundTask) {
+                if(self->backgroundTask != UIBackgroundTaskInvalid) {
                     [self->operationQueue waitUntilAllOperationsAreFinished];                    
                     [application endBackgroundTask:self->backgroundTask];
-                    self->backgroundTask = UIInvalidBackgroundTask;
+                    self->backgroundTask = UIBackgroundTaskInvalid;
                 }
             });
         }
@@ -304,30 +306,30 @@ static NSString* apiVersion = @"0.1";
     [self removeDelegate:self];
 }
 
-- (void) updateBackgroundRecords:(NSArray*)backgroundRecords
+- (void) updateBackgroundRecords:(NSArray*)records
 {
     // We can only update records in sets of 100
-    NSMutableArray* records = [NSMutableArray arrayWithArray:backgroundRecords];
+    NSMutableArray* updatableRecords = [NSMutableArray arrayWithArray:records];
     int amountOfRecords = [records count];
     NSString* responseId = nil;
     while(amountOfRecords) {
         if(amountOfRecords <= 100) {
-            responseId = [self updateRecordAnnotations:records];
-            [records removeAllObjects];
+            responseId = [self updateRecordAnnotations:updatableRecords];
+            [updatableRecords removeAllObjects];
         } else {
             NSRange range;
             range.location = 0;
             range.length = 100;
-            responseId = [self updateRecordAnnotations:[records subarrayWithRange:range]];
+            responseId = [self updateRecordAnnotations:[updatableRecords subarrayWithRange:range]];
             range.length = amountOfRecords;
-            records = [NSMutableArray arrayWithArray:[records subarrayWithRange:range]];
+            records = [NSMutableArray arrayWithArray:[updatableRecords subarrayWithRange:range]];
         }
         if(responseId)
             [cachedResponseIds addObject:responseId];
-        amountOfRecords = [records count];
+        amountOfRecords = [updatableRecords count];
     }
     
-    SGLog(@"SGLocationService - Updated %i records that were updated in the background", [backgroundRecords count]);
+    SGLog(@"SGLocationService - Updated %i records that were updated in the background", [updatableRecords count]);
 }
 
 #pragma mark -
@@ -338,9 +340,12 @@ static NSString* apiVersion = @"0.1";
     /* 
      * The only time this object should be registered to recieve location updates
      * is when the surrounding application enters the background state. 
-     */
+     */    
     NSMutableArray* totalCachedRecords = [NSMutableArray array];
     NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
+    if(backgroundRecords && [backgroundRecords count])
+        [totalUpdatedRecords addObject:backgroundRecords];
+
     NSArray* records = nil;
     for(id<SGLocationServiceDelegate> delegate in delegates) {
         if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
@@ -609,35 +614,19 @@ static NSString* apiVersion = @"0.1";
     return push ? requestId : (NSObject*)params;
 }
 
-
-- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record limit:(int)limit
+- (NSString*) history:(SGHistoryQuery*)query
 {
-    return [self retrieveRecordHistory:record.recordId layer:record.layer limit:limit];
-}
-
-- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer limit:(int)limit
-{
-    NSString* requestId = nil;
+    NSString* requestId = [self getNextResponseId];
     
-    if(recordId && ![recordId isKindOfClass:[NSNull class]] &&
-       layer && ![layer isKindOfClass:[NSNull class]]) {
-        
-        requestId = [self getNextResponseId];
-        
-        NSObject* limitParam = [NSNull null];
-        if(limit > 0)
-            limitParam = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [query uri],
+                       [NSNull null],
+                       [query params],
+                       requestId,
+                       nil];
 
-        NSArray* params = [NSArray arrayWithObjects:
-                           @"GET",
-                           [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId],
-                           [NSNull null],
-                           limitParam,
-                           requestId,
-                           nil];
-
-        [self pushInvocationWithArgs:params];
-    }
+    [self pushInvocationWithArgs:params];
 
     return requestId;
 }

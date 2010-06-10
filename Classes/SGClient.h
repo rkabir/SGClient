@@ -10,6 +10,7 @@
 
 #import "SGLayer.h"
 #import "SGRecord.h"
+#import "SGMultiPointRecord.h"
 #import "SGRecordAnnotation.h"
 
 #import "SGLatLonNearbyQuery.h"

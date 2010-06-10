@@ -63,7 +63,7 @@
 
 - (NSString*) uri
 {
-    return [NSString stringWithFormat:@"/records/%@/history/%@.json", layer, recordId];
+    return [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId];
 }
 
 - (void) dealloc

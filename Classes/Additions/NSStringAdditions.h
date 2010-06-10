@@ -34,7 +34,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface NSString (SimpleGeo) 
 
 - (NSString *)URLEncodedString;
