@@ -41,15 +41,16 @@
 #import "GeoJSON+NSDictionary.h"
 #import "SGGeoJSON+NSDictionary.h"
 
-@interface SGRecord (Private)
+#import "SGLocationService.h"
+
+@interface SGRecord (Private) <SGLocationServiceDelegate>
 
 - (BOOL) _isValid:(NSObject *)object;
 
 @end
 
-@implementation SGRecord 
-
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink;
+@implementation SGRecord
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history;
 @dynamic type;
 
 - (id) init
@@ -66,6 +67,7 @@
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
         layer = nil;
+        historyQuery = nil;
         
         if(!layer)
             layer = @"missing";
@@ -142,7 +144,6 @@
         [self setExpires:[geoJSONObject expires]];
         [self setCreated:[geoJSONObject created]];
         [self setRecordId:[geoJSONObject recordId]];
-
         [self setLayer:[SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]]];
     }
 }
@@ -151,6 +152,42 @@
 {
     return [NSString stringWithFormat:@"<%@: type=%@, layer=%@, lat=%f, long=%f, expires=%i, created=%i>", self.recordId, self.type,
             self.layer, self.latitude, self.longitude, (int)self.expires, (int)self.created];
+}
+
+- (NSString*) getHistory:(int)limit
+{
+    SGLocationService* sharedLocationService = [SGLocationService sharedLocationService];
+    if(!historyQuery) {
+        historyQuery = [[SGHistoryQuery alloc] init];
+        [sharedLocationService addDelegate:self];
+    }
+
+    historyQuery.recordId = recordId;
+    historyQuery.layer = layer;
+    historyQuery.cursor = nil;
+    historyQuery.limit = limit;
+    
+    return [sharedLocationService history:historyQuery];
+}
+
+#pragma mark -
+#pragma mark SGLocationService delegate methods 
+
+- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
+{
+    if(historyQuery && [historyQuery.requestId isEqualToString:requestId]) {
+        
+        NSDictionary* newHistory = (NSDictionary*)responseObject;
+        history = [newHistory retain];
+     
+        SGLocationService* sharedLocationService = [SGLocationService sharedLocationService];
+        [sharedLocationService removeDelegate:self];
+    }
+}
+
+- (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
+{
+    ;
 }
 
 #pragma mark -
@@ -169,6 +206,11 @@
     [properties release];
     [layerLink release];
     [selfLink release];
+
+    [historyQuery release];
+    [history release];
+    
+    [[SGLocationService sharedLocationService] removeDelegate:self];
     
     [super dealloc];
 }

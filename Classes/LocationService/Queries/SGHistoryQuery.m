@@ -35,7 +35,7 @@
 #import "SGHistoryQuery.h"
 
 @implementation SGHistoryQuery
-@synthesize recordId, layer, cursor, limit;
+@synthesize recordId, layer, cursor, limit, requestId;
 
 - (id) init
 {
@@ -44,6 +44,7 @@
         layer = nil;
         cursor = nil;
         limit = 10;
+        requestId = nil;
     }
     
     return self;
@@ -73,6 +74,8 @@
     
     if(cursor)
         [cursor release];
+    
+    [requestId release];
     
     [super dealloc];
 }

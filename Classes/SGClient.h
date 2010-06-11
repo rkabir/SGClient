@@ -10,7 +10,6 @@
 
 #import "SGLayer.h"
 #import "SGRecord.h"
-#import "SGMultiPointRecord.h"
 #import "SGRecordAnnotation.h"
 
 #import "SGLatLonNearbyQuery.h"
@@ -19,6 +18,7 @@
 
 #import "SGCacheHandler.h"
 #import "SGCommitLog.h"
+#import "SGPointHelper.h"
 
 #import "SGAuthorization.h"
 #import "SGGeoJSONEncoder.h"

@@ -36,6 +36,7 @@
 #import <MapKit/MapKit.h>
 
 #import "SGRecordAnnotation.h"
+#import "SGHistoryQuery.h"
 
 /*!
 * @class SGRecord
@@ -65,6 +66,12 @@
     NSString* selfLink;
     
     NSMutableDictionary* properties;
+    NSArray* history;
+    
+    @private
+    SGHistoryQuery* historyQuery;
+    
+    NSMutableArray* historyResults;
 }
 
 /*!
@@ -134,12 +141,16 @@
 */
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
+@property (nonatomic, retain) NSArray* history;
+
 /*!
 * @method updateRecordWithGeoJSONObject:
 * @abstract Updates the record using the GeoJSONOBject. 
 * See @link //simplegeo/ooc/instm/SGRecordAnnotation/updateRecordWithGeoJSONObject: updateRecordWithGeoJSONObject: @/link. 
 */
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)dictionary;
+
+- (NSString*) getHistory:(int)limit;
 
 @end
 

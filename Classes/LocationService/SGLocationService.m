@@ -337,6 +337,8 @@ static NSString* apiVersion = @"0.1";
 
 - (void) locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation
 {
+    SGLog(@"SGLocationService - Location changed to %f, %f", newLocation.coordinate.latitude, newLocation.coordinate.longitude);
+    
     /* 
      * The only time this object should be registered to recieve location updates
      * is when the surrounding application enters the background state. 

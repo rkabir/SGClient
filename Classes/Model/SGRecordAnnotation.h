@@ -110,11 +110,3 @@
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)dictionary;
 
 @end
-
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
-@protocol SGMultiPointAnnotation <SGRecordAnnotation, MKOverlay>
-
-@end
-
-#endif
