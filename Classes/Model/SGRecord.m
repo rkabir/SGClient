@@ -144,7 +144,11 @@
         [self setExpires:[geoJSONObject expires]];
         [self setCreated:[geoJSONObject created]];
         [self setRecordId:[geoJSONObject recordId]];
-        [self setLayer:[SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]]];
+        
+        NSString* jsonLayer = [geoJSONObject layer];
+        if(!jsonLayer)
+            jsonLayer = [SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]];
+        [self setLayer:jsonLayer];
     }
 }
 

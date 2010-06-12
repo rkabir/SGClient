@@ -41,13 +41,18 @@
 + (NSArray*) recordsForGeoJSONObject:(NSDictionary*)geojsonObject
 {
     NSMutableArray* records = [NSMutableArray array];
-    NSArray* features = [geojsonObject features];
+    NSMutableArray* features = [NSMutableArray array];
+    if([geojsonObject isFeatureCollection])
+        [features addObjectsFromArray:[geojsonObject features]];
+    else
+        [features addObject:geojsonObject];
+
     for(NSDictionary* feature in features) {
         SGRecord* record = [SGGeoJSONEncoder recordForGeoJSONObject:feature];
         if(record)
             [records addObject:record];
     }
-    
+
     return records;
 }
 
@@ -72,9 +77,12 @@
         
         NSMutableArray* features = [NSMutableArray array];
         for(id<SGRecordAnnotation> recordAnnotation in recordAnnotations) {
-            NSDictionary* feature = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotation:recordAnnotation];
-            if(feature)
-                [features addObject:feature];
+            NSDictionary* geoJSON = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotation:recordAnnotation];
+            if(geoJSON)
+                if([geoJSON isFeatureCollection])
+                    [features addObjectsFromArray:[geoJSON features]];
+                else
+                    [features addObject:geoJSON];
         }
         
         [geoJSONObject setFeatures:features];
@@ -86,7 +94,6 @@
 + (NSMutableDictionary*) geoJSONObjectForRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
 {
     NSMutableDictionary* feature = nil;
-    
     if([recordAnnotation isKindOfClass:[NSDictionary class]])
         feature = [NSMutableDictionary dictionaryWithDictionary:(NSDictionary*)recordAnnotation];
     else if(recordAnnotation) {

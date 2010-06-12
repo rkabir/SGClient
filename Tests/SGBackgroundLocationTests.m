@@ -14,11 +14,13 @@
 
 @interface SGBackgroundLocationTests : SGLocationServiceTests
 {
-    
+    @private
+    SGRecord* cachedRecord;
 }
 
 - (NSArray*) getLocations;
 - (void) updateLocationManager;
+- (void) validateHistory:(SGRecord*)record;
 
 @end
 
@@ -31,6 +33,8 @@
     locatorService.useGPS = NO;
     locatorService.useWiFiTowers = NO;
     locatorService.backgroundRecords = nil;
+    
+    cachedRecord = nil;
 }
 
 - (NSArray*) getLocations
@@ -58,7 +62,7 @@
     }    
 }
 
-- (void) testCachedBackgroundUpdates
+- (void) testRecordPropertyBackgroundUpdates
 {
     SGRecord* r1 = [self createRandomRecord];
     r1.recordId = @"history_record_1";
@@ -75,15 +79,43 @@
     [self updateLocationManager];
     [locatorService leaveBackground];
     [locatorService becameActive];
+ 
+    [self validateHistory:r1];
+}
+
+- (void) testCachedBackgroundUpdates
+{
+    cachedRecord = [self createRandomRecord];
+    cachedRecord.recordId = @"cached_history_record_1";
+    
+    // Make sure the record has a clean history
+    [self.locatorService deleteRecordAnnotation:cachedRecord];
+    WAIT_FOR_WRITE();
+    
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add record."]
+                        forKey:[self.locatorService updateRecordAnnotation:cachedRecord]];
+
         
-    NSInteger expectedId = [r1.recordId intValue];
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:r1.recordId layer:r1.layer]];    
+    [locatorService enterBackground];   
+    [self updateLocationManager];
+    [locatorService leaveBackground];
+    [locatorService becameActive];
+    
+    WAIT_FOR_WRITE();
+    
+    [self validateHistory:cachedRecord];
+}
+
+- (void) validateHistory:(SGRecord*)record
+{
+    NSInteger expectedId = [record.recordId intValue];
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId layer:record.layer]];    
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[r1 getHistory:100]];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[record getHistory:100]];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
@@ -110,7 +142,25 @@
         STAssertTrue(locationLon == historyLon, @"Locaiton lon was %f, but history was %f.", locationLon, historyLon);
     }
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];
+    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];    
+}
+
+- (NSArray*) locationService:(SGLocationService*)service recordsForBackgroundLocationUpdate:(CLLocation*)newLocation
+{
+    NSArray* records = nil;
+    if(cachedRecord) {
+        cachedRecord.latitude = newLocation.coordinate.latitude;
+        cachedRecord.longitude = newLocation.coordinate.longitude;
+        cachedRecord.created = [[NSDate date] timeIntervalSince1970];
+        records = [NSArray arrayWithObject:cachedRecord];
+    }
+    
+    return records;
+}
+
+- (BOOL) locationService:(SGLocationService*)service shouldCacheRecord:(id<SGRecordAnnotation>)record
+{
+    return cachedRecord != nil;
 }
 
 @end

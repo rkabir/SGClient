@@ -57,6 +57,7 @@
 - (id) initWithName:(NSString*)name
 {
     if(self = [super init]) {
+        SGLog(@"SGCommitLog - Creating commit log for %@", name);
         cacheHandler = [[SGCacheHandler alloc] initWithDirectory:name];
         
         commitLogLock = [[NSLock alloc] init];
@@ -101,6 +102,7 @@ NSComparisonResult dateSort(NSString *s1, NSString *s2, void *context) {
     [commitLogLock lock];
     [cacheHandler changeToTopLevelPath];
     NSDictionary* logs, *logValues = nil;
+    SGLog(@"SGCommitLog - flushing %i values", [[commitLog allKeys] count]);
     for(NSString* username in commitLog) {
         [cacheHandler changeDirectory:username];
 
@@ -145,6 +147,7 @@ NSComparisonResult dateSort(NSString *s1, NSString *s2, void *context) {
         [cacheHandler changeToParentDirectory];
     }
     [commitLogLock unlock];
+    SGLog(@"SGCommitLog - Reloaded %i keys from disk", [[commitLog allKeys] count]);
 }
 
 - (void) replay:(NSString*)username

@@ -97,7 +97,8 @@ static NSString* apiVersion = @"0.1";
 
 - (void) initializeCommitLog;
 - (void) replayCommitLog;
-- (void) updateBackgroundRecords:(NSArray*)backgroundRecords;
+- (void) updateBackgroundRecords:(NSArray*)records;
+- (void) cacheBackgroundRecords:(NSArray*)records;
 
 #endif
 
@@ -210,27 +211,31 @@ static NSString* apiVersion = @"0.1";
     SGLog(@"SGLocationService - Replaying the commit log");
     if(!commitLog)
         [self initializeCommitLog];
+
+    [commitLog reload];
     
     if(HTTPAuthorizer) {
         NSString* username = [HTTPAuthorizer username];
-        NSString* key = @"update_records";
+        NSString* key = @"record_updates";
         NSDictionary* updateCommits = [[commitLog getCommitsForUsername:username key:key] retain];
-        
         NSMutableArray* features = [NSMutableArray array];
-        NSDictionary* feature = nil;
+        NSDictionary* featureCollection = nil;
         NSError* error = nil;
         for(NSString* commitKey in updateCommits) {
-            feature = [NSDictionary dictionaryWithJSONData:[updateCommits objectForKey:commitKey] error:&error];
-            if(feature && !error)
-                [features addObject:feature];
+            featureCollection = [NSDictionary dictionaryWithJSONData:[updateCommits objectForKey:commitKey] error:&error];
+            if(featureCollection && !error)
+                [features addObjectsFromArray:[featureCollection features]];
             error = nil;
         }
         
+        SGLog(@"SGLocationService - Discovered %i cached records.", [features count]);
+        
         // Create a proper GeoJSON object with the given features.
-        NSDictionary* featureCollection = [NSDictionary dictionaryWithObjectsAndKeys:
-                                           @"FeatureCollection", @"type",
+        featureCollection = [NSDictionary dictionaryWithObjectsAndKeys:
+                                          @"FeatureCollection", @"type",
                                            features, @"features",
                                            nil];
+
         [self updateBackgroundRecords:[SGGeoJSONEncoder recordsForGeoJSONObject:featureCollection]];
         
         // Remove the commits because they are no longer needed.
@@ -328,9 +333,23 @@ static NSString* apiVersion = @"0.1";
         if(responseId)
             [cachedResponseIds addObject:responseId];
         amountOfRecords = [updatableRecords count];
+        
+        SGLog(@"SGLocationService - Updated %i records that were created in the background", [records count]);
     }
-    
-    SGLog(@"SGLocationService - Updated %i records that were created in the background", [records count]);
+}
+
+- (void) cacheBackgroundRecords:(NSArray*)records
+{
+    if([records count]) {
+        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:records];        
+        NSData* featureCollectionData = [[[CJSONSerializer serializer] serializeObject:featureCollection] dataUsingEncoding:NSASCIIStringEncoding];
+        if(commitLog && HTTPAuthorizer) {
+            NSString* username = [HTTPAuthorizer username];
+            [commitLog addCommit:featureCollectionData forUsername:username andKey:@"record_updates"];
+        }
+        
+        SGLog(@"SGLocationService - Cached %i records that were created in the background", [records count]);
+    }       
 }
 
 #pragma mark -
@@ -378,15 +397,7 @@ static NSString* apiVersion = @"0.1";
         }
     }
     
-    if([totalCachedRecords count]) {
-        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:totalCachedRecords];        
-        NSData* featureCollectionData = [[[CJSONSerializer serializer] serializeObject:featureCollection] dataUsingEncoding:NSASCIIStringEncoding];
-        if(commitLog && HTTPAuthorizer) {
-            NSString* username = [HTTPAuthorizer username];
-            [commitLog addCommit:featureCollectionData forUsername:username andKey:@"record_updates"];
-        }
-    }   
-
+    [self cacheBackgroundRecords:totalCachedRecords];
     [self updateBackgroundRecords:totalUpdatedRecords];
 }
 
