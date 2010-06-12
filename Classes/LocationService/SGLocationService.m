@@ -67,7 +67,7 @@ static id<SGAuthorization> dummyAuthorizer = nil;
 static NSString* mainURL = @"http://api.simplegeo.com";
 static NSString* apiVersion = @"0.1";
 
-@interface SGLocationService (Private) <SGAuthorization, CLLocationManagerDelegate, SGLocationServiceDelegate>
+@interface SGLocationService (Private) <SGLocationServiceDelegate>
 
 - (NSString*) getNextResponseId;
 
@@ -109,7 +109,7 @@ static NSString* apiVersion = @"0.1";
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
-@synthesize useGPS, useWiFiTowers, backgroundRecords;
+@synthesize useGPS, useWiFiTowers, backgroundRecords, locationManager;
 
 #endif
 
@@ -134,6 +134,7 @@ static NSString* apiVersion = @"0.1";
         useWiFiTowers = YES;
         
         backgroundRecords = nil;
+        locationManager = nil;
 #endif
         
         callbackOnMainThread = YES;
@@ -314,7 +315,7 @@ static NSString* apiVersion = @"0.1";
     NSString* responseId = nil;
     while(amountOfRecords) {
         if(amountOfRecords <= 100) {
-            responseId = [self updateRecordAnnotations:updatableRecords];
+            responseId = [self updateRecordAnnotations:[NSArray arrayWithArray:updatableRecords]];
             [updatableRecords removeAllObjects];
         } else {
             NSRange range;
@@ -329,7 +330,7 @@ static NSString* apiVersion = @"0.1";
         amountOfRecords = [updatableRecords count];
     }
     
-    SGLog(@"SGLocationService - Updated %i records that were updated in the background", [updatableRecords count]);
+    SGLog(@"SGLocationService - Updated %i records that were created in the background", [records count]);
 }
 
 #pragma mark -
@@ -337,17 +338,29 @@ static NSString* apiVersion = @"0.1";
 
 - (void) locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation
 {
-    SGLog(@"SGLocationService - Location changed to %f, %f", newLocation.coordinate.latitude, newLocation.coordinate.longitude);
-    
+    double newLat = newLocation.coordinate.latitude;
+    double newLon = newLocation.coordinate.longitude;
+
+    SGLog(@"SGLocationService - Location changed to %f, %f", newLat, newLon);
+
     /* 
      * The only time this object should be registered to recieve location updates
      * is when the surrounding application enters the background state. 
      */    
     NSMutableArray* totalCachedRecords = [NSMutableArray array];
     NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
-    if(backgroundRecords && [backgroundRecords count])
-        [totalUpdatedRecords addObject:backgroundRecords];
-
+    if(backgroundRecords && [backgroundRecords count]) {
+        NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
+        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:backgroundRecords];
+        for(NSMutableDictionary* feature in [featureCollection features]) {
+            [((NSMutableDictionary*)[feature geometry]) setCoordinates:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%f", newLon],
+                                                              [NSString stringWithFormat:@"%f", newLat],
+                                                               nil]];
+            [feature setCreated:created];
+            [totalUpdatedRecords addObject:feature];
+        }
+    }
+    
     NSArray* records = nil;
     for(id<SGLocationServiceDelegate> delegate in delegates) {
         if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
@@ -366,7 +379,7 @@ static NSString* apiVersion = @"0.1";
     }
     
     if([totalCachedRecords count]) {
-        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:totalCachedRecords];
+        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:totalCachedRecords];        
         NSData* featureCollectionData = [[[CJSONSerializer serializer] serializeObject:featureCollection] dataUsingEncoding:NSASCIIStringEncoding];
         if(commitLog && HTTPAuthorizer) {
             NSString* username = [HTTPAuthorizer username];
@@ -546,7 +559,7 @@ static NSString* apiVersion = @"0.1";
     // Bail if we have nothing.
     if(!records || (records && ![records count]))
         return nil;
-    
+
     NSDictionary* geoJSONDictionary = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:records];
 
     NSString* responseId = nil;
@@ -564,7 +577,6 @@ static NSString* apiVersion = @"0.1";
                                                   [NSNull null],
                                                   responseId,
                                                   nil];
-                                
         [self pushInvocationWithArgs:params];
     }
     
@@ -887,10 +899,7 @@ static NSString* apiVersion = @"0.1";
                          callback:(NSNumber*)callback
 {
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
-    
-    if(!HTTPAuthorizer)
-        HTTPAuthorizer = self;
-    
+        
     if(params && [params isKindOfClass:[NSNull class]])
         params = nil;
     
@@ -1028,6 +1037,8 @@ static NSString* apiVersion = @"0.1";
     if(commitLog)
         [commitLog release];
     [cachedResponseIds release];
+    
+    [locationManager release];
 #endif
     
     [super dealloc];

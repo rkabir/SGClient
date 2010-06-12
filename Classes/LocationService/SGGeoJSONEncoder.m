@@ -79,14 +79,17 @@
         
         [geoJSONObject setFeatures:features];
     }
-    
+
     return geoJSONObject;
 }
 
 + (NSMutableDictionary*) geoJSONObjectForRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
 {
     NSMutableDictionary* feature = nil;
-    if(recordAnnotation) {
+    
+    if([recordAnnotation isKindOfClass:[NSDictionary class]])
+        feature = [NSMutableDictionary dictionaryWithDictionary:(NSDictionary*)recordAnnotation];
+    else if(recordAnnotation) {
         feature = [NSMutableDictionary dictionary];
         [feature setType:@"Feature"];
     
@@ -106,7 +109,9 @@
         [feature setRecordId:[recordAnnotation recordId]];
         [feature setExpires:[recordAnnotation expires]];
         [feature setCreated:[recordAnnotation created]];
+        [feature setLayer:[recordAnnotation layer]];
     }
+               
     
     return feature;
 }

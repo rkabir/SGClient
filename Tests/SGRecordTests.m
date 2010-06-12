@@ -214,8 +214,7 @@
         WAIT_FOR_WRITE();
     }
     
-    NSString* responseId = [self.locatorService retrieveRecordAnnotationHistory:r1 limit:5];
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:responseId];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[r1 getHistory:5]];
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;

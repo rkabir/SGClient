@@ -70,7 +70,7 @@
 * the delegate can use the responseObject that is passed in via @link locationService:succeededForResponseId:responseObject: locationService:succeededForResponseId:responseObject: @/link
 * to update the SGRecord by calling @link //simplegeo/ooc/instm/SGRecord/updateRecordWithGeoJSONObject: updateRecordWithGeoJSONObject: @/link.
 */
-@interface SGLocationService : NSObject {
+@interface SGLocationService : NSObject <CLLocationManagerDelegate> {
 
     NSOperationQueue* operationQueue;
  
@@ -80,6 +80,7 @@
     
     BOOL useGPS;
     BOOL useWiFiTowers;
+    CLLocationManager* locationManager;
 
 #endif
 
@@ -90,7 +91,6 @@
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
     UIBackgroundTaskIdentifier backgroundTask;
-    CLLocationManager* locationManager;
     SGCommitLog* commitLog;
     NSMutableArray* cachedResponseIds;
     
@@ -117,6 +117,7 @@
 @property (nonatomic, assign) BOOL useGPS;
 @property (nonatomic, assign) BOOL useWiFiTowers;
 @property (nonatomic, retain) NSArray* backgroundRecords;
+@property (nonatomic, readonly) CLLocationManager* locationManager;
 
 - (void) becameActive;
 - (void) enterBackground;
