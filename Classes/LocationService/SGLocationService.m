@@ -231,12 +231,14 @@ static NSString* apiVersion = @"0.1";
         SGLog(@"SGLocationService - Discovered %i cached records.", [features count]);
         
         // Create a proper GeoJSON object with the given features.
-        featureCollection = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"FeatureCollection", @"type",
-                                           features, @"features",
-                                           nil];
+        if(features && [features count]) {
+            featureCollection = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              @"FeatureCollection", @"type",
+                                               features, @"features",
+                                               nil];
 
-        [self updateBackgroundRecords:[SGGeoJSONEncoder recordsForGeoJSONObject:featureCollection]];
+            [self updateBackgroundRecords:[SGGeoJSONEncoder recordsForGeoJSONObject:featureCollection]];
+        }
         
         // Remove the commits because they are no longer needed.
         [commitLog deleteUsername:username key:key];
@@ -295,6 +297,13 @@ static NSString* apiVersion = @"0.1";
         
         if(useGPS)
             [locationManager startUpdatingLocation];
+        
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"start_timestamp"];
+        [userDefaults removeObjectForKey:@"stop_timestamp"];
+        [userDefaults removeObjectForKey:@"duration"];
+        [userDefaults removeObjectForKey:@"records_updated"];
+        [userDefaults removeObjectForKey:@"records_cached"];
     }
 }
 
@@ -310,6 +319,30 @@ static NSString* apiVersion = @"0.1";
         [commitLog flush];
 
     [self removeDelegate:self];
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"stop_timestamp"];
+}
+
+- (NSDictionary*) getBackgroundActivityInformation
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    double startTimestamp = [defaults doubleForKey:@"start_timestamp"];
+    double stopTimestamp = [defaults doubleForKey:@"stop_timestamp"];
+    int recordsCached = [defaults integerForKey:@"records_cached"];
+    int recordsUpdated = [defaults integerForKey:@"record_updated"];
+    
+    NSMutableDictionary* dictionary = nil;
+    if(startTimestamp && stopTimestamp) {
+        dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[NSDate dateWithTimeIntervalSince1970:startTimestamp] forKey:@"start"];
+        [dictionary setObject:[NSDate dateWithTimeIntervalSince1970:stopTimestamp] forKey:@"end"];
+        [dictionary setObject:[NSNumber numberWithDouble:(stopTimestamp - startTimestamp)] forKey:@"duration"];
+        [dictionary setObject:[NSNumber numberWithInt:recordsCached] forKey:@"records_cached"];
+        [dictionary setObject:[NSNumber numberWithInt:recordsUpdated] forKey:@"records_updated"];
+    }
+    
+    return dictionary;
 }
 
 - (void) updateBackgroundRecords:(NSArray*)records
@@ -335,6 +368,9 @@ static NSString* apiVersion = @"0.1";
         amountOfRecords = [updatableRecords count];
         
         SGLog(@"SGLocationService - Updated %i records that were created in the background", [records count]);
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        int amount = [userDefaults integerForKey:@"records_updated"];
+        [userDefaults setInteger:amount + [records count] forKey:@"records_updated"];
     }
 }
 
@@ -349,6 +385,9 @@ static NSString* apiVersion = @"0.1";
         }
         
         SGLog(@"SGLocationService - Cached %i records that were created in the background", [records count]);
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        int amount = [userDefaults integerForKey:@"records_cached"];
+        [userDefaults setInteger:amount + [records count] forKey:@"records_cached"];        
     }       
 }
 

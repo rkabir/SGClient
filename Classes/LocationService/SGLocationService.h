@@ -122,6 +122,7 @@
 - (void) becameActive;
 - (void) enterBackground;
 - (void) leaveBackground;
+- (NSDictionary*) getBackgroundActivityInformation;
 
 #endif
 

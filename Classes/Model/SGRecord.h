@@ -152,6 +152,11 @@
 
 - (NSString*) getHistory:(int)limit;
 
+
+- (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord;
+
+- (MKPolyline*) historyPolyline;
+
 @end
 
 

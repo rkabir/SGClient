@@ -174,6 +174,44 @@
     return [sharedLocationService history:historyQuery];
 }
 
+- (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
+{    
+    NSMutableDictionary* point = [NSMutableDictionary dictionary];
+    [point setCoordinates:[NSArray arrayWithObjects:
+                           [NSNumber numberWithDouble:longitude],
+                           [NSNumber numberWithDouble:latitude],
+                           nil]];
+    [point setType:@"Point"];
+    
+    if(!history)
+        history = [[NSMutableArray alloc] initWithObjects:point, nil];
+    else {
+        history = [[NSMutableArray alloc] initWithArray:history];
+        [(NSMutableArray*)history insertObject:point atIndex:0];
+    }
+
+    latitude = coord.latitude;
+    longitude = coord.longitude;
+    created = [[NSDate date] timeIntervalSince1970];
+    
+    return [[SGLocationService sharedLocationService] updateRecordAnnotation:self];    
+}
+
+- (MKPolyline*) historyPolyline
+{
+    MKPolyline* polyline = nil;
+    if(history) {
+        NSMutableArray* coords = [NSMutableArray array];
+        for(NSDictionary* geometry in history)
+            [coords addObject:[geometry coordinates]];
+        
+        polyline = [[MKPolyline polylineWithCoordinates:SGLonLatArrayToCLLocationCoordArray(coords) 
+                                                  count:[coords count]] retain];
+    }
+    
+    return polyline;
+}
+
 #pragma mark -
 #pragma mark SGLocationService delegate methods 
 
