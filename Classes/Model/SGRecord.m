@@ -50,7 +50,7 @@
 @end
 
 @implementation SGRecord
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history;
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history, historyQuery;
 @dynamic type;
 
 - (id) init
@@ -177,17 +177,19 @@
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
 {    
     NSMutableDictionary* point = [NSMutableDictionary dictionary];
-    [point setCoordinates:[NSArray arrayWithObjects:
-                           [NSNumber numberWithDouble:longitude],
-                           [NSNumber numberWithDouble:latitude],
-                           nil]];
-    [point setType:@"Point"];
+    if(longitude && latitude) {
+        [point setCoordinates:[NSArray arrayWithObjects:
+                               [NSNumber numberWithDouble:longitude],
+                               [NSNumber numberWithDouble:latitude],
+                               nil]];
+        [point setType:@"Point"];
     
-    if(!history)
-        history = [[NSMutableArray alloc] initWithObjects:point, nil];
-    else {
-        history = [[NSMutableArray alloc] initWithArray:history];
-        [(NSMutableArray*)history insertObject:point atIndex:0];
+        if(!history)
+            history = [[NSMutableArray alloc] initWithObjects:point, nil];
+        else {
+            history = [[NSMutableArray alloc] initWithArray:history];
+            [(NSMutableArray*)history insertObject:point atIndex:0];
+        }
     }
 
     latitude = coord.latitude;

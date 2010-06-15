@@ -399,45 +399,47 @@ static NSString* apiVersion = @"0.1";
     double newLat = newLocation.coordinate.latitude;
     double newLon = newLocation.coordinate.longitude;
 
-    SGLog(@"SGLocationService - Location changed to %f, %f", newLat, newLon);
+    if(!oldLocation || oldLocation.coordinate.latitude != newLat ||  oldLocation.coordinate.longitude != newLon) {
+        SGLog(@"SGLocationService - Location changed to %f, %f", newLat, newLon);
 
-    /* 
-     * The only time this object should be registered to recieve location updates
-     * is when the surrounding application enters the background state. 
-     */    
-    NSMutableArray* totalCachedRecords = [NSMutableArray array];
-    NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
-    if(backgroundRecords && [backgroundRecords count]) {
-        NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
-        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:backgroundRecords];
-        for(NSMutableDictionary* feature in [featureCollection features]) {
-            [((NSMutableDictionary*)[feature geometry]) setCoordinates:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%f", newLon],
-                                                              [NSString stringWithFormat:@"%f", newLat],
-                                                               nil]];
-            [feature setCreated:created];
-            [totalUpdatedRecords addObject:feature];
-        }
-    }
-    
-    NSArray* records = nil;
-    for(id<SGLocationServiceDelegate> delegate in delegates) {
-        if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
-            records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
-            if(records) {
-                if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
-                    for(id<SGRecordAnnotation> record in records)
-                        if([delegate locationService:self shouldCacheRecord:record])
-                            [totalCachedRecords addObject:record];
-                        else
-                            [totalUpdatedRecords addObject:record];
-                } else
-                    [totalCachedRecords addObjectsFromArray:records];
+        /* 
+         * The only time this object should be registered to recieve location updates
+         * is when the surrounding application enters the background state. 
+         */    
+        NSMutableArray* totalCachedRecords = [NSMutableArray array];
+        NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
+        if(backgroundRecords && [backgroundRecords count]) {
+            NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
+            NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:backgroundRecords];
+            for(NSMutableDictionary* feature in [featureCollection features]) {
+                [((NSMutableDictionary*)[feature geometry]) setCoordinates:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%f", newLon],
+                                                                  [NSString stringWithFormat:@"%f", newLat],
+                                                                   nil]];
+                [feature setCreated:created];
+                [totalUpdatedRecords addObject:feature];
             }
         }
+        
+        NSArray* records = nil;
+        for(id<SGLocationServiceDelegate> delegate in delegates) {
+            if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
+                records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
+                if(records) {
+                    if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
+                        for(id<SGRecordAnnotation> record in records)
+                            if([delegate locationService:self shouldCacheRecord:record])
+                                [totalCachedRecords addObject:record];
+                            else
+                                [totalUpdatedRecords addObject:record];
+                    } else
+                        [totalCachedRecords addObjectsFromArray:records];
+                }
+            }
+        }
+        
+        [self cacheBackgroundRecords:totalCachedRecords];
+        [self updateBackgroundRecords:totalUpdatedRecords];
     }
-    
-    [self cacheBackgroundRecords:totalCachedRecords];
-    [self updateBackgroundRecords:totalUpdatedRecords];
 }
 
 - (void)locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error

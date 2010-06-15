@@ -66,10 +66,10 @@
     NSString* selfLink;
     
     NSMutableDictionary* properties;
-    NSArray* history;
     
-    @private
+    NSArray* history;
     SGHistoryQuery* historyQuery;
+    @private
     
     NSMutableArray* historyResults;
 }
@@ -142,6 +142,7 @@
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
 @property (nonatomic, retain) NSArray* history;
+@property (nonatomic, readonly) SGHistoryQuery* historyQuery;
 
 /*!
 * @method updateRecordWithGeoJSONObject:
