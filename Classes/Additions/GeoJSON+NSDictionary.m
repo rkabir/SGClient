@@ -179,8 +179,8 @@
 
 - (BOOL) isType:(NSString*)type
 {
-    NSString* featureType = [self type];
-    return type && [featureType isEqualToString:type];
+    NSString* featureType = [self objectForKey:@"type"];
+    return featureType && [featureType isEqualToString:type];
 }
 
 @end
