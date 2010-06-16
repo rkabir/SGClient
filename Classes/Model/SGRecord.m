@@ -70,7 +70,7 @@
         historyQuery = nil;
         
         if(!layer)
-            layer = @"missing";
+            layer = @"";
     }
     
     return self;

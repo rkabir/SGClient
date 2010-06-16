@@ -84,39 +84,49 @@
     return [sgRecords allValues];
 }
 
-- (void) removeAllRecordAnnotations
+- (NSString*) removeAllRecordAnnotations:(BOOL)update
 {
-    [sgRecords removeAllObjects];
+    return [self removeRecordAnnotations:[sgRecords allValues] update:update];
 }
 
-- (void) addRecordAnnotation:(id<SGRecordAnnotation>)record
+- (NSString*) addRecordAnnotation:(id<SGRecordAnnotation>)record update:(BOOL)update
 {
-    if(record) {
-        if([record respondsToSelector:@selector(setLayer:)])
-           [record setLayer:layerId];
-        else
-            SGLog(@"SGLayer - Error, cannot change layer for record %@ because the selector is not defined.", record);
-           
-        [sgRecords setObject:record forKey:record.recordId];
+    return [self addRecordAnnotations:[NSArray arrayWithObject:record] update:update];
+}
+
+- (NSString*) addRecordAnnotations:(NSArray*)records update:(BOOL)update
+{
+    NSString* requestId = nil;    
+    for(id<SGRecordAnnotation> recordAnnotation in records) {
+        if([recordAnnotation respondsToSelector:@selector(setLayer:)])
+            [recordAnnotation setLayer:layerId];
+        [sgRecords setObject:recordAnnotation forKey:[recordAnnotation recordId]];
     }
+    
+    if(update)
+        requestId = [[SGLocationService sharedLocationService] updateRecordAnnotations:records];
+    
+    return requestId;    
 }
 
-- (void) addRecordAnnotations:(NSArray*)records
+- (NSString*) removeRecordAnnotations:(NSArray*)records update:(BOOL)update
 {
-    if(records && [records count]) 
-        for(id<SGRecordAnnotation> record in records)
-            [self addRecordAnnotation:record];
+    NSString* requestId = nil;
+    if(update)
+        requestId = [[SGLocationService sharedLocationService] deleteRecordAnnotations:records];
+    
+    NSMutableArray* recordIds = [NSMutableArray array];
+    for(id<SGRecordAnnotation> recordAnnotation in records)
+        [recordIds addObject:[recordAnnotation recordId]];
+    
+    [sgRecords removeObjectsForKeys:recordIds];
+    
+    return requestId;    
 }
 
-- (void) removeRecordAnnotations:(NSArray*)array
-{
-    for(id<SGRecordAnnotation> recordAnnotation in array)
-        [self removeRecordAnnotation:recordAnnotation];
-}
-
-- (void) removeRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation
-{
-    [sgRecords removeObjectForKey:recordAnnotation.recordId];
+- (NSString*) removeRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation update:(BOOL)update
+{ 
+    return [self removeRecordAnnotation:[NSArray arrayWithObject:recordAnnotation] update:update];
 }
 
 - (NSInteger) recordAnnotationCount
@@ -148,6 +158,8 @@
 
 - (NSString*) retrieveRecordAnnotations:(NSArray*)recordAnnoations
 {
+    [[SGLocationService sharedLocationService] addDelegate:self];
+
     NSString* responseId = [[SGLocationService sharedLocationService] retrieveRecordAnnotations:recordAnnoations];
     if(responseId)
         [layerResponseIds addObject:responseId];
@@ -190,21 +202,29 @@
 {   
     if([layerResponseIds containsObject:requestId]) {
         NSDictionary* geoJSONObject = (NSDictionary*)responseObject;        
+        
+        NSArray* features = nil;
+        if([geoJSONObject isFeature])
+            features = [NSArray arrayWithObject:geoJSONObject];
+        else 
+            features = [geoJSONObject features];
+        
         // Check to see if request matches our nearby query.
         // If it does, then we can append the cursor and get
         // ready for a possible pagination.
-        if(recentNearbyQuery && recentNearbyQuery.requestId && [recentNearbyQuery.requestId isEqualToString:requestId])
+        if(recentNearbyQuery && recentNearbyQuery.requestId && [recentNearbyQuery.requestId isEqualToString:requestId]) {
             recentNearbyQuery.cursor = [geoJSONObject objectForKey:@"next_cursor"];
-        
-        if(storeRetrievedRecords) {
-            NSArray* features = nil;
-            if([geoJSONObject isFeature])
-                features = [NSArray arrayWithObject:geoJSONObject];
-            else 
-                features = [geoJSONObject features];
-            
-            for(NSDictionary* feature in features)
-                [self addRecordAnnotation:[self recordAnnotationFromGeoJSONObject:feature]];
+            if(storeRetrievedRecords)
+                for(NSDictionary* feature in features)
+                    [self addRecordAnnotation:[self recordAnnotationFromGeoJSONObject:feature] update:NO];
+        } else {
+            SGLog(@"SGLayer - Updating %i records", [features count]);
+            id<SGRecordAnnotation> recordAnnotation = nil;
+            for(NSDictionary* feature in features) {
+                recordAnnotation = [sgRecords objectForKey:[feature recordId]];
+                if(recordAnnotation)
+                    [recordAnnotation updateRecordWithGeoJSONObject:feature];
+            }
         }
         
         [layerResponseIds removeObject:requestId];
