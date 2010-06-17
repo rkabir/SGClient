@@ -37,9 +37,8 @@
 #import "SGLocationTypes.h"
 
 #import "SGGeoJSONEncoder.h"
-#import "GeoJSON+NSArray.h"
-#import "GeoJSON+NSDictionary.h"
-#import "SGGeoJSON+NSDictionary.h"
+
+#import "SGGeoJSON.h"
 
 #import "SGLocationService.h"
 
@@ -71,6 +70,8 @@
         
         if(!layer)
             layer = @"";
+        
+        historyChanged = NO;
     }
     
     return self;
@@ -95,6 +96,15 @@
         recordType = [properties objectForKey:@"type"];
     
     return recordType;
+}
+
+- (void) setHistory:(NSArray*)newHistory
+{
+    historyChanged = YES;
+    if(history)
+        [history release];
+    
+    history = [newHistory retain];
 }
 
 #pragma mark -
@@ -175,21 +185,14 @@
 }
 
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
-{    
-    NSMutableDictionary* point = [NSMutableDictionary dictionary];
+{
     if(longitude && latitude) {
-        [point setCoordinates:[NSArray arrayWithObjects:
-                               [NSNumber numberWithDouble:longitude],
-                               [NSNumber numberWithDouble:latitude],
-                               nil]];
-        [point setType:@"Point"];
-    
-        if(!history)
-            history = [[NSMutableArray alloc] initWithObjects:point, nil];
-        else {
-            history = [[NSMutableArray alloc] initWithArray:history];
-            [(NSMutableArray*)history insertObject:point atIndex:0];
-        }
+        if(!history) {
+            NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
+            history = [geometryCollection retain];
+        } 
+        
+        [history addGeometry:SGCreatePoint(latitude, longitude)];        
     }
 
     latitude = coord.latitude;
@@ -201,14 +204,16 @@
 
 - (MKPolyline*) historyPolyline
 {
-    MKPolyline* polyline = nil;
-    if(history) {
+    if(history && historyChanged) {
         NSMutableArray* coords = [NSMutableArray array];
         for(NSDictionary* geometry in history)
             [coords addObject:[geometry coordinates]];
         
+        if(polyline)
+            [polyline release];
+
         polyline = [[MKPolyline polylineWithCoordinates:SGLonLatArrayToCLLocationCoordArray(coords) 
-                                                  count:[coords count]] retain];
+                                                 count:[coords count]] retain];
     }
     
     return polyline;
@@ -220,12 +225,8 @@
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {
     if(historyQuery && [historyQuery.requestId isEqualToString:requestId]) {
-        
         NSDictionary* newHistory = (NSDictionary*)responseObject;
-        history = [newHistory retain];
-     
-        SGLocationService* sharedLocationService = [SGLocationService sharedLocationService];
-        [sharedLocationService removeDelegate:self];
+        self.history = newHistory;     
     }
 }
 
