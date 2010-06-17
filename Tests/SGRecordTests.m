@@ -222,7 +222,8 @@
     STAssertTrue([geoJSONObject isGeometryCollection], @"The history endpoint should return a collection of geometries.");
     
     NSArray* geometries = [geoJSONObject geometries];
-    STAssertTrue([geometries count] == 5, @"The history endpoint should return the proper limit.");
+    int amount = [geometries count];
+    STAssertTrue(amount == 5, @"The history endpoint should return 5 but was %i.", amount);
     
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];
 }
