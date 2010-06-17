@@ -162,4 +162,11 @@
     [self setObject:geometries forKey:@"geometries"];
 }
 
+- (void) addGeometry:(NSDictionary*)geometry
+{
+    NSMutableArray* geometries = [NSMutableArray arrayWithObject:geometry];
+    [geometries addObjectsFromArray:[self geometries]];
+    [self setGeometries:geometries];
+}
+
 @end

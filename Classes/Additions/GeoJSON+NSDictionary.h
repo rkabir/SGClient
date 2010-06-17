@@ -180,5 +180,7 @@
  */
 - (void) setGeometries:(NSArray*)geometries;
 
+- (void) addGeometry:(NSDictionary*)geometry;
+
 @end
 
