@@ -33,23 +33,21 @@
 //
 
 #import "SGRecord.h"
-
-#import "SGLocationTypes.h"
-
-#import "SGGeoJSONEncoder.h"
-
-#import "SGGeoJSON.h"
-
+#import "SGPointHelper.h"
 #import "SGLocationService.h"
+#import "SGLocationTypes.h"
+#import "SGGeoJSONEncoder.h"
+#import "SGGeoJSON.h"
+#import "GeoJSON+NSDictionary.h"
 
-@interface SGRecord (Private) <SGLocationServiceDelegate>
+@interface SGRecord (Private)
 
 - (BOOL) _isValid:(NSObject *)object;
 
 @end
 
 @implementation SGRecord
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history, historyQuery;
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history;
 @dynamic type;
 
 - (id) init
@@ -66,7 +64,6 @@
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
         layer = nil;
-        historyQuery = nil;
         
         if(!layer)
             layer = @"";
@@ -98,7 +95,7 @@
     return recordType;
 }
 
-- (void) setHistory:(NSArray*)newHistory
+- (void) setHistory:(NSDictionary*)newHistory
 {
     historyChanged = YES;
     if(history)
@@ -170,18 +167,14 @@
 
 - (NSString*) getHistory:(int)limit
 {
-    SGLocationService* sharedLocationService = [SGLocationService sharedLocationService];
-    if(!historyQuery) {
-        historyQuery = [[SGHistoryQuery alloc] init];
-        [sharedLocationService addDelegate:self];
-    }
-
+    
+    SGHistoryQuery* historyQuery = [[[SGHistoryQuery alloc] init] autorelease];
     historyQuery.recordId = recordId;
     historyQuery.layer = layer;
     historyQuery.cursor = nil;
     historyQuery.limit = limit;
     
-    return [sharedLocationService history:historyQuery];
+    return [[SGLocationService sharedLocationService] history:historyQuery];
 }
 
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
@@ -191,8 +184,7 @@
             NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
             history = [geometryCollection retain];
         } 
-        
-        [history addGeometry:SGCreatePoint(latitude, longitude)];        
+        [(NSMutableDictionary*)history addGeometry:SGPointCreate(latitude, longitude)];        
     }
 
     latitude = coord.latitude;
@@ -220,22 +212,6 @@
 }
 
 #pragma mark -
-#pragma mark SGLocationService delegate methods 
-
-- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
-{
-    if(historyQuery && [historyQuery.requestId isEqualToString:requestId]) {
-        NSDictionary* newHistory = (NSDictionary*)responseObject;
-        self.history = newHistory;     
-    }
-}
-
-- (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
-{
-    ;
-}
-
-#pragma mark -
 #pragma mark Helper methods 
  
 - (BOOL) _isValid:(NSObject*)object
@@ -251,11 +227,7 @@
     [properties release];
     [layerLink release];
     [selfLink release];
-
-    [historyQuery release];
     [history release];
-    
-    [[SGLocationService sharedLocationService] removeDelegate:self];
     
     [super dealloc];
 }

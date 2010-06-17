@@ -126,7 +126,7 @@
 
 - (NSString*) removeRecordAnnotation:(id<SGRecordAnnotation>)recordAnnotation update:(BOOL)update
 { 
-    return [self removeRecordAnnotation:[NSArray arrayWithObject:recordAnnotation] update:update];
+    return [self removeRecordAnnotations:[NSArray arrayWithObject:recordAnnotation] update:update];
 }
 
 - (NSInteger) recordAnnotationCount

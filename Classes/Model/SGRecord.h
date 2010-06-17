@@ -68,10 +68,8 @@
     NSMutableDictionary* properties;
     
     NSDictionary* history;
-    SGHistoryQuery* historyQuery;
 
     @private
-    NSMutableArray* historyResults;
     BOOL historyChanged;
     MKPolyline* polyline;
 }
@@ -144,7 +142,6 @@
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
 @property (nonatomic, retain) NSDictionary* history;
-@property (nonatomic, readonly) SGHistoryQuery* historyQuery;
 
 /*!
 * @method updateRecordWithGeoJSONObject:
