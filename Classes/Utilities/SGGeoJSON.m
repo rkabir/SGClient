@@ -15,7 +15,7 @@ NSMutableDictionary* SGGeometryCollectionCreate() {
     return geometryCollection;
 }
 
-NSDictionary* SGCreatePoint(double lat, double lon) {
+NSDictionary* SGPointCreate(double lat, double lon) {
     NSDictionary* point = [NSDictionary dictionaryWithObjectsAndKeys:
                            @"Point", @"type",
                            [NSArray arrayWithObjects:
