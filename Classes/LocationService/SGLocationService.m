@@ -64,7 +64,7 @@ static BOOL callbackOnMainThread = NO;
 
 static id<SGAuthorization> dummyAuthorizer = nil;
 
-static NSString* mainURL = @"http://api.simplegeo.com";
+static NSString* mainURL = @"http://ec2-204-236-158-42.us-west-1.compute.amazonaws.com";
 static NSString* apiVersion = @"0.1";
 
 @interface SGLocationService (Private) <SGLocationServiceDelegate>
@@ -110,7 +110,7 @@ static NSString* apiVersion = @"0.1";
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
-@synthesize useGPS, useWiFiTowers, backgroundRecords, locationManager;
+@synthesize useGPS, useWiFiTowers, trackRecords, locationManager, accuracy;
 
 #endif
 
@@ -134,8 +134,10 @@ static NSString* apiVersion = @"0.1";
         useGPS = NO;
         useWiFiTowers = YES;
         
-        backgroundRecords = nil;
+        trackRecords = nil;
         locationManager = nil;
+        
+        accuracy = kCLLocationAccuracyBest;
 #endif
         
         callbackOnMainThread = YES;
@@ -289,15 +291,8 @@ static NSString* apiVersion = @"0.1";
             });
         }
         
-        locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;    
-        
-        if(useWiFiTowers)
-            [locationManager startMonitoringSignificantLocationChanges];        
-        
-        if(useGPS)
-            [locationManager startUpdatingLocation];
-        
+        [self startTrackingRecords];
+                
         NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"start_timestamp"];
         [userDefaults removeObjectForKey:@"stop_timestamp"];
@@ -309,12 +304,6 @@ static NSString* apiVersion = @"0.1";
 
 - (void) leaveBackground
 {
-    if(locationManager) {
-        [locationManager stopMonitoringSignificantLocationChanges];
-        locationManager.delegate = nil;
-        [locationManager release];
-        locationManager = nil;
-    }
     if(commitLog)
         [commitLog flush];
 
@@ -391,6 +380,37 @@ static NSString* apiVersion = @"0.1";
     }       
 }
 
+- (void) startTrackingRecords
+{
+    if(!locationManager) {
+        locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;    
+    }
+    
+    if(useWiFiTowers)
+        [locationManager startMonitoringSignificantLocationChanges];        
+    else
+        [locationManager stopMonitoringSignificantLocationChanges];
+
+    
+    if(useGPS)
+        [locationManager startUpdatingLocation];
+    else
+        [locationManager stopUpdatingHeading];
+    
+    locationManager.desiredAccuracy = accuracy;
+}
+
+- (void) stopTrackingRecords
+{
+    if(locationManager) {
+        [locationManager stopMonitoringSignificantLocationChanges];
+        locationManager.delegate = nil;
+        [locationManager release];
+        locationManager = nil;
+    }    
+}
+
 #pragma mark -
 #pragma mark CLLocationManager delegate methods 
 
@@ -408,9 +428,9 @@ static NSString* apiVersion = @"0.1";
          */    
         NSMutableArray* totalCachedRecords = [NSMutableArray array];
         NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
-        if(backgroundRecords && [backgroundRecords count]) {
+        if(trackRecords && [trackRecords count]) {
             NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
-            NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:backgroundRecords];
+            NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:trackRecords];
             for(NSMutableDictionary* feature in [featureCollection features]) {
                 [((NSMutableDictionary*)[feature geometry]) setCoordinates:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%f", newLon],
                                                                   [NSString stringWithFormat:@"%f", newLat],
@@ -873,8 +893,8 @@ static NSString* apiVersion = @"0.1";
     NSObject* responseObject = [[responseDictionary objectForKey:@"responseObject"] retain];
 
     SGLog(@"SGLocationService - Request %@ succeeded with %i queued operations", requestId, [self.operationQueue.operations count]);
-    
-    for(id<SGLocationServiceDelegate> delegate in delegates)
+    NSArray* currentDelegates = [NSArray arrayWithArray:delegates];
+    for(id<SGLocationServiceDelegate> delegate in currentDelegates)
         [delegate locationService:self succeededForResponseId:requestId responseObject:responseObject];
     
     [requestId release];
@@ -887,8 +907,8 @@ static NSString* apiVersion = @"0.1";
     NSError* error = [[responseDictionary objectForKey:@"error"] retain];
     
     SGLog(@"SGLocationService - Request failed: %@ Error: %@", requestId, [error description]);
-
-    for(id<SGLocationServiceDelegate> delegate in delegates)
+    NSArray* currentDelegates = [NSArray arrayWithArray:delegates];
+    for(id<SGLocationServiceDelegate> delegate in currentDelegates)
         [delegate locationService:self failedForResponseId:requestId error:error];
     
     [requestId release];

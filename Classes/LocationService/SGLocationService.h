@@ -94,7 +94,9 @@
     SGCommitLog* commitLog;
     NSMutableArray* cachedResponseIds;
     
-    NSArray* backgroundRecords;
+    NSArray* trackRecords;
+    
+    CLLocationAccuracy accuracy;
     
 #endif
 
@@ -116,13 +118,16 @@
 
 @property (nonatomic, assign) BOOL useGPS;
 @property (nonatomic, assign) BOOL useWiFiTowers;
-@property (nonatomic, retain) NSArray* backgroundRecords;
+@property (nonatomic, retain) NSArray* trackRecords;
 @property (nonatomic, readonly) CLLocationManager* locationManager;
+@property (nonatomic, assign) CLLocationAccuracy accuracy;
 
 - (void) becameActive;
 - (void) enterBackground;
 - (void) leaveBackground;
 - (NSDictionary*) getBackgroundActivityInformation;
+- (void) startTrackingRecords;
+- (void) stopTrackingRecords;
 
 #endif
 

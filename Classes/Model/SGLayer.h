@@ -39,7 +39,6 @@
 
 @protocol SGRecordAnnotation;
 
-
 /*!
 * @class SGLayer 
 * @abstract Updates and retrieves records that are within a layer.

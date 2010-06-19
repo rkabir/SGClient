@@ -95,20 +95,12 @@
 		4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
 		4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A930FAC119DF50E0034828D /* SenTestingKit.framework */; };
 		4A9868D711CA4D620043ABB3 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
-		4A9868D811CA4D620043ABB3 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
 		4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
 		4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */; };
 		4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
 		4AA8487E11C691D60023735E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA8487D11C691D60023735E /* MapKit.framework */; };
 		4AC0150E11C41636002E6C32 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
 		4AC016A411C43E1E002E6C32 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
-		4AC016A511C43E1F002E6C32 /* SGPushPinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */; };
-		4AC016A611C43E20002E6C32 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
-		4AC016A711C43E20002E6C32 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
-		4AC016A811C43E21002E6C32 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
-		4AC016A911C43E21002E6C32 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
-		4AC016AA11C43E22002E6C32 /* SGCommitLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA57711AB3B8F003BEED6 /* SGCommitLogTests.m */; };
-		4AC016AB11C43E22002E6C32 /* SGCacheHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA46811AB0B89003BEED6 /* SGCacheHandlerTests.m */; };
 		4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F06811C5553900EDD585 /* SGLocationTypes.m */; };
 		4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F06811C5553900EDD585 /* SGLocationTypes.m */; };
 		4AC4F07611C5553900EDD585 /* SGLocationTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AC4F06911C5553900EDD585 /* SGLocationTypes.h */; };
@@ -641,17 +633,9 @@
 				4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */,
 				4AC0150E11C41636002E6C32 /* SGLocationServiceTests.m in Sources */,
 				4AC016A411C43E1E002E6C32 /* SGRecordTests.m in Sources */,
-				4AC016A511C43E1F002E6C32 /* SGPushPinTests.m in Sources */,
-				4AC016A611C43E20002E6C32 /* SGSpotRankTests.m in Sources */,
-				4AC016A711C43E20002E6C32 /* SGNearbyTests.m in Sources */,
-				4AC016A811C43E21002E6C32 /* SGLayerTest.m in Sources */,
-				4AC016A911C43E21002E6C32 /* SGGeoJSONEncoderTests.m in Sources */,
-				4AC016AA11C43E22002E6C32 /* SGCommitLogTests.m in Sources */,
-				4AC016AB11C43E22002E6C32 /* SGCacheHandlerTests.m in Sources */,
 				4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07B11C5556400EDD585 /* SGLocationManager.m in Sources */,
 				4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */,
-				4A9868D811CA4D620043ABB3 /* SGLocationManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

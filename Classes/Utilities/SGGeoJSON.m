@@ -15,6 +15,14 @@ NSMutableDictionary* SGGeometryCollectionCreate() {
     return geometryCollection;
 }
 
+NSDictionary* SGGeometryCollectionAppend(NSDictionary* collection1, NSDictionary* collection2) {
+    NSMutableArray* geometries = [NSMutableArray arrayWithArray:[collection1 geometries]];
+    [geometries addObjectsFromArray:[collection2 geometries]];
+    NSMutableDictionary* geometryCollection = [NSMutableDictionary dictionaryWithDictionary:collection1];
+    [geometryCollection setGeometries:geometries];
+    return geometryCollection;
+}
+
 NSDictionary* SGPointCreate(double lat, double lon) {
     NSDictionary* point = [NSDictionary dictionaryWithObjectsAndKeys:
                            @"Point", @"type",

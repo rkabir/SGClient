@@ -68,6 +68,7 @@
     NSMutableDictionary* properties;
     
     NSDictionary* history;
+    SGHistoryQuery* historyQuery;
 
     @private
     BOOL historyChanged;
@@ -142,6 +143,7 @@
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
 @property (nonatomic, retain) NSDictionary* history;
+@property (nonatomic, readonly) SGHistoryQuery* historyQuery;
 
 /*!
 * @method updateRecordWithGeoJSONObject:
@@ -150,8 +152,8 @@
 */
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)dictionary;
 
-- (NSString*) getHistory:(int)limit;
-
+- (NSString*) getHistory:(int)limit cursor:(NSString*)cursor;
+- (void) updateHistory:(NSDictionary*)newHistory;
 
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord;
 

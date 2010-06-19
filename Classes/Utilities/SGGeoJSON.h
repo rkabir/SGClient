@@ -10,5 +10,6 @@
 #import "GeoJSON+NSDictionary.h"
 
 extern NSMutableDictionary* SGGeometryCollectionCreate();
+extern NSDictionary* SGGeometryCollectionAppend(NSDictionary* collection1, NSDictionary* collection2);
 
 extern NSDictionary* SGPointCreate(double lat, double lon);

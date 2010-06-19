@@ -47,7 +47,7 @@
 @end
 
 @implementation SGRecord
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history;
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history, historyQuery;
 @dynamic type;
 
 - (id) init
@@ -64,6 +64,8 @@
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
         layer = nil;
+        history = nil;
+        historyQuery = nil;
         
         if(!layer)
             layer = @"";
@@ -95,11 +97,11 @@
     return recordType;
 }
 
-- (void) setHistory:(NSDictionary*)newHistory
+- (void) updateHistory:(NSDictionary*)newHistory
 {
     historyChanged = YES;
     if(history)
-        [history release];
+        newHistory = SGGeometryCollectionAppend(history, newHistory);
     
     history = [newHistory retain];
 }
@@ -110,7 +112,6 @@
 - (CLLocationCoordinate2D) coordinate
 {    
     CLLocationCoordinate2D myCoordinate = {[self latitude], [self longitude]};
-    
     return myCoordinate;
 }
 
@@ -130,18 +131,13 @@
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)geoJSONObject
 {
     if(geoJSONObject) {
-        
         NSDictionary* geometry = [geoJSONObject geometry];
-        
         if(geometry) {
-            
             NSArray* coordinates = [geometry coordinates];        
             if([self _isValid:coordinates]) {
-     
                 [self setLatitude:[coordinates latitude]];
                 [self setLongitude:[coordinates longitude]];
             }
-            
         }
         
         NSDictionary* prop = [geoJSONObject properties];
@@ -165,40 +161,45 @@
             self.layer, self.latitude, self.longitude, (int)self.expires, (int)self.created];
 }
 
-- (NSString*) getHistory:(int)limit
+- (NSString*) getHistory:(int)limit cursor:(NSString*)cursor
 {
-    
-    SGHistoryQuery* historyQuery = [[[SGHistoryQuery alloc] init] autorelease];
+    historyQuery = [[SGHistoryQuery alloc] init];
     historyQuery.recordId = recordId;
     historyQuery.layer = layer;
-    historyQuery.cursor = nil;
+    historyQuery.cursor = cursor;
     historyQuery.limit = limit;
-    
-    return [[SGLocationService sharedLocationService] history:historyQuery];
+    historyQuery.requestId = [[SGLocationService sharedLocationService] history:historyQuery];
+    return historyQuery.requestId;
 }
 
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
 {
-    if(longitude && latitude) {
+    NSString* updateResponseId = nil;
+    double newLatitude = coord.latitude;
+    double newLongitude = coord.longitude;
+    if(longitude && latitude && (newLatitude != latitude && newLongitude != longitude)) {
+        SGLog(@"SGRecord - Updating record coordinates to %f,%f from %f,%f", newLatitude, newLongitude, latitude, longitude);
         if(!history) {
             NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
             history = [geometryCollection retain];
         } 
         [(NSMutableDictionary*)history addGeometry:SGPointCreate(latitude, longitude)];        
+        
+        latitude = coord.latitude;
+        longitude = coord.longitude;
+        created = [[NSDate date] timeIntervalSince1970];        
+        
+        updateResponseId = [[SGLocationService sharedLocationService] updateRecordAnnotation:self];
     }
-
-    latitude = coord.latitude;
-    longitude = coord.longitude;
-    created = [[NSDate date] timeIntervalSince1970];
     
-    return [[SGLocationService sharedLocationService] updateRecordAnnotation:self];    
+    return updateResponseId;
 }
 
 - (MKPolyline*) historyPolyline
 {
     if(history && historyChanged) {
         NSMutableArray* coords = [NSMutableArray array];
-        for(NSDictionary* geometry in history)
+        for(NSDictionary* geometry in [history geometries])
             [coords addObject:[geometry coordinates]];
         
         if(polyline)
