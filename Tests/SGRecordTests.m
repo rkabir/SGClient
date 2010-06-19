@@ -135,6 +135,32 @@
     [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotations:records]];    
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
+    STAssertTrue([recentReturnObject  isFeatureCollection], @"Return object should be a FeatureCollection");
+    NSArray* features = [recentReturnObject features];
+    STAssertTrue([features count] == 5, @"There should be 5 features, but was %i.", [features count]);
+    
+    SGRecord* record = [records objectAtIndex:0];
+    [((NSMutableDictionary*)[record properties]) setObject:@"hi" forKey:@"there"];
+    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    WAIT_FOR_WRITE();
+
+    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotations:records]];    
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+
+    STAssertTrue([recentReturnObject  isFeatureCollection], @"Return object should be a FeatureCollection");
+    features = [recentReturnObject features];
+    STAssertTrue([features count] == 5, @"There should be 5 features, but was %i.", [features count]);
+    
+    NSDictionary* match = nil;
+    for(NSDictionary* feature in features)
+        if([[feature recordId] isEqualToString:record.recordId])
+            match = feature;
+    
+    STAssertNotNil(match, @"The feature with %@ id should be found.", record.recordId);
+    NSString* value = [[match properties] objectForKey:@"there"];
+    STAssertTrue([value isEqualToString:@"hi"], @"Properties field was not updated.");
+    
     [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
 }
 

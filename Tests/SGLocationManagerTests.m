@@ -6,10 +6,12 @@
 //  Copyright 2010 SimpleGeo. All rights reserved.
 //
 
+#import <SenTestingKit/SenTestingKit.h>
+
 #import "SGLocationManager.h"
 #import "SGLocationService.h"
 
-@interface SGLocationManagerTests : SGLocationServiceTests <SGLocationManagerDelegate>
+@interface SGLocationManagerTests : SenTestCase <SGLocationManagerDelegate>
 {
     @private
     SGLocationManager* locationManager;
@@ -65,7 +67,7 @@
 
 - (NSArray*) getTotalRegions:(NSArray*)region
 {
-    return [rgion objectAtIndex:1];
+    return [region objectAtIndex:1];
 }
 
 - (void) setStage:(NSArray*)newStage

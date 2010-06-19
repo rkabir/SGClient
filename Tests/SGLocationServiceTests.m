@@ -125,7 +125,7 @@
     record.created = [[NSDate date] timeIntervalSince1970]; 
     record.longitude = rand() % 50 * (0.1231) + (double)(rand() % 50);
     record.latitude = rand() % 50 * (0.1721) + (double)(rand() % 50);
-    record.recordId = [NSString stringWithFormat:@"%i", rand() % 10000000000];
+    record.recordId = [NSString stringWithFormat:@"SGTest-%i", rand() % 10000000000];
 
     return record;
 }
