@@ -168,8 +168,7 @@
     historyQuery.layer = layer;
     historyQuery.cursor = cursor;
     historyQuery.limit = limit;
-    historyQuery.requestId = [[SGLocationService sharedLocationService] history:historyQuery];
-    return historyQuery.requestId;
+    return [[SGLocationService sharedLocationService] history:historyQuery];
 }
 
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord

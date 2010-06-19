@@ -429,6 +429,8 @@ static NSString* apiVersion = @"0.1";
         NSMutableArray* totalCachedRecords = [NSMutableArray array];
         NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
         if(trackRecords && [trackRecords count]) {
+            // We can't assume that the objects are SGRecords so we have to create
+            // our own history update
             NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
             NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:trackRecords];
             for(NSMutableDictionary* feature in [featureCollection features]) {
@@ -440,24 +442,28 @@ static NSString* apiVersion = @"0.1";
             }
         }
         
-        NSArray* records = nil;
-        for(id<SGLocationServiceDelegate> delegate in delegates) {
-            if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
-                records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
-                if(records) {
-                    if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
-                        for(id<SGRecordAnnotation> record in records)
-                            if([delegate locationService:self shouldCacheRecord:record])
-                                [totalCachedRecords addObject:record];
-                            else
-                                [totalUpdatedRecords addObject:record];
-                    } else
-                        [totalCachedRecords addObjectsFromArray:records];
+        if(backgroundTask) {
+            NSArray* records = nil;
+            for(id<SGLocationServiceDelegate> delegate in delegates) {
+                if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
+                    records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
+                    if(records)
+                        [totalUpdatedRecords addObjectsFromArray:records];
                 }
             }
+            
+            for(id<SGLocationServiceDelegate> delegate in delegates) {
+                if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
+                    for(id<SGRecordAnnotation> record in totalUpdatedRecords)
+                        if([delegate locationService:self shouldCacheRecord:record])
+                            [totalCachedRecords addObject:record];
+                }
+            }
+
+            [totalUpdatedRecords removeObjectsInArray:totalCachedRecords];
+            [self cacheBackgroundRecords:totalCachedRecords];
         }
         
-        [self cacheBackgroundRecords:totalCachedRecords];
         [self updateBackgroundRecords:totalUpdatedRecords];
     }
 }
@@ -712,6 +718,7 @@ static NSString* apiVersion = @"0.1";
                        requestId,
                        nil];
 
+    query.requestId = requestId;
     [self pushInvocationWithArgs:params];
 
     return requestId;
