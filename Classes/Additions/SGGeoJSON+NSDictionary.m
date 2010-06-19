@@ -39,7 +39,7 @@
 - (double) created
 {
     double created = -1.0;
-    if([self isFeature]) {
+    if([self isFeature] || [self isPoint]) {
         NSNumber* num = [self objectForKey:@"created"];
         if(num)
             created = [num doubleValue];
