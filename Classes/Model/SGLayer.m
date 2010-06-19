@@ -111,16 +111,16 @@
 
 - (NSString*) removeRecordAnnotations:(NSArray*)records update:(BOOL)update
 {
-    NSString* requestId = nil;
-    if(update)
-        requestId = [[SGLocationService sharedLocationService] deleteRecordAnnotations:records];
-    
     NSMutableArray* recordIds = [NSMutableArray array];
     for(id<SGRecordAnnotation> recordAnnotation in records)
         [recordIds addObject:[recordAnnotation recordId]];
     
     [sgRecords removeObjectsForKeys:recordIds];
     
+    NSString* requestId = nil;
+    if(update)
+        requestId = [[SGLocationService sharedLocationService] deleteRecordAnnotations:records];
+        
     return requestId;    
 }
 

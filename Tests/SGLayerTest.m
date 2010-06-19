@@ -99,25 +99,25 @@ static NSString* testingLayer = kSGTesting_Layer;
     WAIT_FOR_WRITE();
     [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
     
-//    [layer removeAllRecordAnnotations:NO];
-//    
-//    [self retrieveRecordResponseId:[layer retrieveRecordAnnotations:records]];
-//    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
-//    
-//    NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
-//    STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
-//    
-//    NSArray* features = [geoJSONObject features];
-//    STAssertNotNil(features, @"Features should be defined.");
-//    STAssertTrue([records count] == 20, @"There should be 20 records returned.");
-//    
-//    STAssertFalse([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
-//    [layer removeRecordAnnotation:[records lastObject] update:YES];
-//    STAssertTrue([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
-//    
-//    [layer removeAllRecordAnnotations:YES];
-//    STAssertTrue([[layer recordAnnotations] count] == 0, @"There should be no records.");
-//    STAssertNil([layer updateAllRecords], @"No records means no response id");
+    [layer removeAllRecordAnnotations:NO];
+    
+    [self retrieveRecordResponseId:[layer retrieveRecordAnnotations:records]];
+    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    
+    NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
+    STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
+    
+    NSArray* features = [geoJSONObject features];
+    STAssertNotNil(features, @"Features should be defined.");
+    STAssertTrue([records count] == 20, @"There should be 20 records returned.");
+    
+    STAssertFalse([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
+    [layer removeRecordAnnotation:[records lastObject] update:YES];
+    STAssertTrue([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
+    
+    [layer removeAllRecordAnnotations:YES];
+    STAssertTrue([[layer recordAnnotations] count] == 0, @"There should be no records.");
+    STAssertNil([layer updateAllRecords], @"No records means no response id");
 }
 
 - (void) testLayerInformation
