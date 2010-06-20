@@ -51,6 +51,16 @@
 */
 - (NSString*) username;
 
+/*!
+* @method dataAtURL:file:body:parameters:httpMethod:
+* @abstract Initializes and sends a HTTP request
+* @param url ￼
+* @param file ￼
+* @param body ￼
+* @param params ￼
+* @param method ￼
+* @result ￼The payload.
+*/
 - (NSDictionary*) dataAtURL:(NSString*)url 
                        file:(NSString*)file
                        body:(NSData*)body

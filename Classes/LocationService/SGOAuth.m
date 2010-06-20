@@ -35,9 +35,7 @@
 #import "SGOAuth.h"
 
 #import "SGLocationService.h"
-
 #import "SGAdditions.h"
-
 #import "hmac.h"
 #import "Base64Transcoder.h"
 

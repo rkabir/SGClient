@@ -34,8 +34,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SGCacheHandler.h"
-
+@class SGCacheHandler;
 @protocol SGCommitLogReplayDelegate;
 
 /*!

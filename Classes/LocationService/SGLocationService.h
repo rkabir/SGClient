@@ -33,14 +33,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SGRecordAnnotation.h"
 
 #import "SGLocationTypes.h"
-#import "SGNearbyQuery.h"
-#import "SGHistoryQuery.h"
-
+#import "SGRecordAnnotation.h"
 #import "SGAuthorization.h"
-#import "SGCommitLog.h"
+
+@class SGCommitLog, SGHistoryQuery, SGNearbyQuery;
 
 @protocol SGLocationServiceDelegate;
 
@@ -114,20 +112,85 @@
 */
 @property (nonatomic, assign) id<SGAuthorization> HTTPAuthorizer;
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
+/*!
+* @property
+* @abstract Use the GPS unit when tracking records or asking for
+* notificaitons in the background.
+*/
 @property (nonatomic, assign) BOOL useGPS;
+
+/*!
+* @property
+* @abstract Use WiFi triangulation when tracking records or asking
+* for notifications in the background.
+*/
 @property (nonatomic, assign) BOOL useWiFiTowers;
+
+/*!
+* @property
+* @abstract The array of records that are updated when @link startTracking startTracking @/link
+* is called.
+*/
 @property (nonatomic, retain) NSArray* trackRecords;
+
+/*!
+* @property
+* @abstract The CLLocationManager used to generate location updates.
+*/
 @property (nonatomic, readonly) CLLocationManager* locationManager;
+
+/*!
+* @property
+* @abstract The accuracy that is specified for the @link locationManager locationManager @/link.
+*/
 @property (nonatomic, assign) CLLocationAccuracy accuracy;
 
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+/*!
+* @method becameActive
+* @abstract Replays the @link //simplegeo/ooc/intf/SGCommitLog SGCommitLog @/link to allow any
+* cached updates to take effect service-side.
+* @discussion When the UIApplicationDelegate recieves the @link applicationDidBecomeActive: applicationDidBecomeActive: @/link
+* callback notification, this method should also be called to allow the location service to cleanup/send whatever data it
+* has collected while running in the background. 
+*/
 - (void) becameActive;
+
+/*!
+* @method enterBackground
+* @abstract Notifies the location service that it has entered as a background process.
+* @discussion When the UIApplicationDelegate recieves the @link applicationDidEnterBackground: applicationDidEnterBackground: @/link
+* this method should be called to setup the location service to properly run on in the background. The location service
+* first attempts to ask for more time to empty out its NSOperationQueue and then begins listening for
+* location updates.
+*/
 - (void) enterBackground;
+
+/*!
+* @method leaveBackground
+* @abstract ￼Notifies the location service that it has entered the foreground.
+* @discussion ￼When the UIApplicationDelegate recieves the @link applicationWillEnterForeground: applicationWillEnterForeground: @/link
+* this method should be to allow the location service to cleanup and commit anything in its managed memory space to disk.
+*/
 - (void) leaveBackground;
+
+/*!
+* @method willBeTerminated
+* @abstract Notifies the location service that it will be terminated. ￼
+* @discussion ￼When the UIApplicationDelegate recieves the @link applicationWillTerminate: applicationWillTerminate: @/link
+* notification, this method should be called to allow the location service to cleanup and commit anything in its managed
+* memory to disk.
+*/
+- (void) willBeTerminated;
+
+/*!
+* @method getBackgroundActivityInformation
+* @abstract ￼Returns a few metrics that provide information about
+* a background processes actions. (e.g duration, number of records cached).
+* @result ￼
+*/
 - (NSDictionary*) getBackgroundActivityInformation;
-- (void) startTrackingRecords;
-- (void) stopTrackingRecords;
 
 #endif
 
@@ -166,6 +229,23 @@
 * @param delegate The delegate to remove.
 */
 - (void) removeDelegate:(id<SGLocationServiceDelegate>)delegate;
+
+#pragma mark -
+#pragma mark Tracking 
+
+/*!
+* @method  startTrackingRecords
+* @abstract Starts updating records that are registeredd with @link trackRecords trackRecords @/link.
+* Anytime a location update is recieved, the records will be updated and the proper request will
+* be pushed out to SimpleGeo.
+*/
+- (void) startTrackingRecords;
+
+/*!
+* @method stopTrackingRecords
+* @abstract ￼Stop updated records that are registered with @link trackRecords trackRecords @/link.
+*/
+- (void) stopTrackingRecords;
 
 #pragma mark -
 #pragma mark Record Information 
@@ -291,12 +371,12 @@
 #pragma mark Layer
 
 /*!
- * @method layerInformation:
- * @abstract ￼Retrieves information for a given layer.
- * @param layerName ￼The layer.
- * @result A response id that is used to identify the return value from SimpleGeo. 
- * You can use this value in @link SGLocationServiceDelegate delegate @/link. 
- */
+* @method layerInformation:
+* @abstract ￼Retrieves information for a given layer.
+* @param layerName ￼The layer.
+* @result A response id that is used to identify the return value from SimpleGeo. 
+* You can use this value in @link SGLocationServiceDelegate delegate @/link. 
+*/
 - (NSString*) layerInformation:(NSString*)layerName;
 
 #pragma mark -
@@ -472,7 +552,24 @@
 
 @optional
 
+/*!
+* @method locationService:recordsForBackgroundLocationUpdate:
+* @abstract ￼Asks the delegate for all the records for the new location. The location service will not update
+* the records with the new location. It assumes that the returned records have already been properly modified.
+* @param service ￼The @link SGLocationService SGLocationService @/link
+* @param newLocation ￼
+* @result ￼
+*/
 - (NSArray*) locationService:(SGLocationService*)service recordsForBackgroundLocationUpdate:(CLLocation*)newLocation;
+
+/*!
+* @method locationService:shouldCacheRecord:
+* @abstract After collecting all the @link SGRecordAnnotation SGRecordAnnotations @/link for a new location,
+* this callback asks whether or not the subsequent request should be saved for a later time.
+* @param service ￼The @link SGLocationService SGLocationService @/link
+* @param record
+* @result ￼
+*/
 - (BOOL) locationService:(SGLocationService*)service shouldCacheRecord:(id<SGRecordAnnotation>)record;
 
 #endif

@@ -34,6 +34,9 @@
 
 #import "SGGeoJSONEncoder.h"
 #import "SGLocationTypes.h"
+#import "GeoJSON+NSArray.h"
+#import "GeoJSON+NSDictionary.h"
+#import "SGGeoJSON+NSDictionary.h"
 #import "SGRecord.h"
 
 @implementation SGGeoJSONEncoder
@@ -123,12 +126,10 @@
     return feature;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Utilities 
-//////////////////////////////////////////////////////////////////////////////////////////////// 
 
-// http://api.simplegeo.com/layer/com.simplegeo.global.brightkite.json
+// Example: http://api.simplegeo.com/layer/com.simplegeo.global.brightkite.json
 + (NSString*) layerNameFromLayerLink:(NSString*)layerLink
 {
     NSString* endpoint = nil;

@@ -33,16 +33,12 @@
 //
 
 #import "SGLayer.h"
-
 #import "SGGeoJSONEncoder.h"
-
-#import "SGRecordAnnotation.h"
 #import "SGRecord.h"
 
 @interface SGLayer (Private)
 
 - (NSString*) getNextResponseId;
-
 - (void) updateRecords:(NSDictionary*)requestObject;
 - (void) retrieveRecords:(NSDictionary*)requestObject;
 

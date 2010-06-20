@@ -32,13 +32,16 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
 #import "SGLocationService.h"
+#import "SGAdditions.h"
 
+#import "SGLocationTypes.h"
+#import "SGHistoryQuery.h"
+#import "SGNearbyQuery.h"
 #import "SGOAuth.h"
 #import "SGRecord.h"
 
-#import "SGAdditions.h"
+#import "SGCommitLog.h"
 #import "SGCacheHandler.h"
 
 #import "geohash.h"
@@ -62,9 +65,7 @@ static SGLocationService* sharedLocationService = nil;
 static int requestIdNumber = 0;
 static BOOL callbackOnMainThread = NO;
 
-static id<SGAuthorization> dummyAuthorizer = nil;
-
-static NSString* mainURL = @"http://ec2-204-236-158-42.us-west-1.compute.amazonaws.com";
+static NSString* mainURL = @"http://api.simplegeo.com";
 static NSString* apiVersion = @"0.1";
 
 @interface SGLocationService (Private) <SGLocationServiceDelegate>
@@ -105,14 +106,8 @@ static NSString* apiVersion = @"0.1";
 @end
 
 @implementation SGLocationService
-@synthesize operationQueue;
+@synthesize operationQueue, useGPS, useWiFiTowers, trackRecords, locationManager, accuracy;
 @dynamic HTTPAuthorizer;
-
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
-@synthesize useGPS, useWiFiTowers, trackRecords, locationManager, accuracy;
-
-#endif
 
 - (id) init
 {
@@ -121,23 +116,21 @@ static NSString* apiVersion = @"0.1";
         
         delegates = [[NSMutableArray alloc] init];
         
-        if(!dummyAuthorizer)
-            dummyAuthorizer = [[SGOAuth alloc] initWithKey:@"key" secret:@"secret"];
+        [self setHTTPAuthorizer:[[SGOAuth alloc] initWithKey:@"key" secret:@"secret"]];
         
-        [self setHTTPAuthorizer:dummyAuthorizer];
-        
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-        
-        commitLog = nil;
-        cachedResponseIds = [[NSMutableArray alloc] init];
-      
         useGPS = NO;
         useWiFiTowers = YES;
         
         trackRecords = nil;
         locationManager = nil;
         
-        accuracy = kCLLocationAccuracyBest;
+        accuracy = kCLLocationAccuracyBest;        
+        
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+        
+        commitLog = nil;
+        cachedResponseIds = [[NSMutableArray alloc] init];
+      
 #endif
         
         callbackOnMainThread = YES;
@@ -254,6 +247,11 @@ static NSString* apiVersion = @"0.1";
 - (void) becameActive
 {
     [self replayCommitLog];
+}
+
+- (void) willBeTerminated
+{
+    [self leaveBackground];
 }
 
 - (void) enterBackground
@@ -380,6 +378,9 @@ static NSString* apiVersion = @"0.1";
     }       
 }
 
+#pragma mark -
+#pragma mark Tracker methods 
+
 - (void) startTrackingRecords
 {
     if(!locationManager) {
@@ -441,7 +442,9 @@ static NSString* apiVersion = @"0.1";
                 [totalUpdatedRecords addObject:feature];
             }
         }
-        
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
         if(backgroundTask) {
             NSArray* records = nil;
             for(id<SGLocationServiceDelegate> delegate in delegates) {
@@ -463,20 +466,20 @@ static NSString* apiVersion = @"0.1";
             [totalUpdatedRecords removeObjectsInArray:totalCachedRecords];
             [self cacheBackgroundRecords:totalCachedRecords];
         }
+
+#endif
         
         [self updateBackgroundRecords:totalUpdatedRecords];
     }
 }
 
-- (void)locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
+- (void) locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
 {
-    SGLog(@"SGLocationService - %@", [error description]);
+    SGLog(@"SGLocationService - Error obtaining lcoation (%@)", [error description]);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark SGLocationService delegate methods 
-//////////////////////////////////////////////////////////////////////////////////////////////// 
 
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {

@@ -35,9 +35,6 @@
 #import <Foundation/Foundation.h>
 
 #import "SGRecordAnnotation.h"
-#import "GeoJSON+NSArray.h"
-#import "GeoJSON+NSDictionary.h"
-#import "SGGeoJSON+NSDictionary.h"
 
 /*!
 * @class SGGeoJSONEncoder 

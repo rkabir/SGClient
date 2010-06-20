@@ -14,8 +14,6 @@
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
 		4A64A41F112095BE00D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
-		4A64A420112095BE00D4E22D /* NSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */; };
-		4A64A421112095BE00D4E22D /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */; };
 		4A64A422112095BE00D4E22D /* NSStringAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */; };
 		4A64A423112095BE00D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64A424112095BE00D4E22D /* SGAuthorization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B7112095BE00D4E22D /* SGAuthorization.h */; };
@@ -56,7 +54,6 @@
 		4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
 		4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
-		4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */; };
 		4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BF112095BE00D4E22D /* SGOAuth.m */; };
 		4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BB112095BE00D4E22D /* SGLocationService.m */; };
@@ -127,8 +124,6 @@
 		4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GeoJSON+NSArray.m"; sourceTree = "<group>"; };
 		4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GeoJSON+NSDictionary.h"; sourceTree = "<group>"; };
 		4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GeoJSON+NSDictionary.m"; sourceTree = "<group>"; };
-		4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayAdditions.h; sourceTree = "<group>"; };
-		4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayAdditions.m; sourceTree = "<group>"; };
 		4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		4A64A3B7112095BE00D4E22D /* SGAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAuthorization.h; sourceTree = "<group>"; };
@@ -293,8 +288,6 @@
 				4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */,
 				4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */,
 				4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */,
-				4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */,
-				4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */,
 				4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */,
 				4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */,
 				4A64B4D31120A78200D4E22D /* SGAdditions.h */,
@@ -473,7 +466,6 @@
 			files = (
 				4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */,
 				4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */,
-				4A64A420112095BE00D4E22D /* NSArrayAdditions.h in Headers */,
 				4A64A422112095BE00D4E22D /* NSStringAdditions.h in Headers */,
 				4A64A424112095BE00D4E22D /* SGAuthorization.h in Headers */,
 				4A64A425112095BE00D4E22D /* SGGeoJSONEncoder.h in Headers */,
@@ -605,7 +597,6 @@
 			files = (
 				4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */,
-				4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */,
 				4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */,
 				4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */,
 				4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */,
@@ -645,7 +636,6 @@
 			files = (
 				4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64A41F112095BE00D4E22D /* GeoJSON+NSDictionary.m in Sources */,
-				4A64A421112095BE00D4E22D /* NSArrayAdditions.m in Sources */,
 				4A64A423112095BE00D4E22D /* NSStringAdditions.m in Sources */,
 				4A64A426112095BE00D4E22D /* SGGeoJSONEncoder.m in Sources */,
 				4A64A428112095BE00D4E22D /* SGLocationService.m in Sources */,

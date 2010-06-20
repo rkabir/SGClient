@@ -33,11 +33,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "SGLocationTypes.h"
 #import "SGLocationService.h"
+#import "SGRecordAnnotation.h"
+#import "SGLocationTypes.h"
 
-@protocol SGRecordAnnotation;
+@class SGNearbyQuery;
 
 /*!
 * @class SGLayer 

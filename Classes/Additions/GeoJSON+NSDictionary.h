@@ -180,6 +180,11 @@
  */
 - (void) setGeometries:(NSArray*)geometries;
 
+/*!
+* @method addGeometry:
+* @abstract ￼Appends a new geometry object to the geometry collection.
+* @param geometry ￼
+*/
 - (void) addGeometry:(NSDictionary*)geometry;
 
 @end

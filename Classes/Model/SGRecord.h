@@ -32,11 +32,10 @@
 //  Created by Derek Smith.
 //
 
-#import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-
 #import "SGRecordAnnotation.h"
-#import "SGHistoryQuery.h"
+
+@class SGHistoryQuery;
 
 /*!
 * @class SGRecord
@@ -72,7 +71,12 @@
 
     @private
     BOOL historyChanged;
+    
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
     MKPolyline* polyline;
+    
+#endif
 }
 
 /*!
@@ -142,7 +146,18 @@
 */
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
+/*!
+* @method 
+* @abstract ￼
+* @discussion ￼
+*/
 @property (nonatomic, retain) NSDictionary* history;
+
+/*!
+* @method 
+* @abstract ￼
+* @discussion ￼
+*/
 @property (nonatomic, readonly) SGHistoryQuery* historyQuery;
 
 /*!
@@ -152,12 +167,44 @@
 */
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)dictionary;
 
+/*!
+* @method getHistory:cursor:
+* @abstract ￼
+* @discussion ￼
+* @param limit ￼
+* @param cursor ￼
+* @result ￼
+*/
 - (NSString*) getHistory:(int)limit cursor:(NSString*)cursor;
+
+/*!
+* @method updateHistory:
+* @abstract ￼
+* @discussion ￼
+* @param newHistory ￼
+*/
 - (void) updateHistory:(NSDictionary*)newHistory;
 
+/*!
+* @method updateCoordinate:
+* @abstract ￼
+* @discussion ￼
+* @param coord ￼
+* @result ￼
+*/
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord;
 
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+/*!
+* @method  historyPolyline
+* @abstract ￼
+* @discussion ￼
+* @result ￼
+*/
 - (MKPolyline*) historyPolyline;
+
+#endif
 
 @end
 
