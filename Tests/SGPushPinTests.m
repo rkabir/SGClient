@@ -46,10 +46,10 @@
 - (void) testContains
 {
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
-    NSString* responseId = [self.locatorService contains:coords];
+    NSString* responseId = [self.locationService contains:coords];
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a collection of polygons."]
                         forKey:responseId];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of json objects.");
     
@@ -69,9 +69,9 @@
         NSString* featureId = [boundary objectAtIndex:0];
         NSString* name = [boundary objectAtIndex:1];
         
-        responseId = [self.locatorService boundary:featureId];
+        responseId = [self.locationService boundary:featureId];
         [self.requestIds setObject:[self expectedResponse:YES message:@"Must return a feature"] forKey:responseId];
-        [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
          
         STAssertTrue([recentReturnObject isFeature], @"Return object should be a feature.");
         
@@ -84,9 +84,9 @@
 - (void) testBadBoundary
 {
     NSString* featureId = @"bad:id:";
-    NSString* responseId = [self.locatorService boundary:featureId];
+    NSString* responseId = [self.locationService boundary:featureId];
     [self.requestIds setObject:[self expectedResponse:NO message:@"No such ID."] forKey:responseId];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
 }
 
@@ -109,9 +109,9 @@
                                              [[bounds objectAtIndex:2] doubleValue],
                                              [[bounds objectAtIndex:3] doubleValue]);
         
-        responseId = [self.locatorService overlapsType:nil inPolygon:envelope withLimit:[abbrs count]];
+        responseId = [self.locationService overlapsType:nil inPolygon:envelope withLimit:[abbrs count]];
         [self.requestIds setObject:[self expectedResponse:YES message:@"Must return a feature collections."] forKey:responseId];
-        [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
         STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of features.");
         STAssertTrue([recentReturnObject count] == [abbrs count], @"Unexpected length of features.");
     }

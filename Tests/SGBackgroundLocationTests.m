@@ -56,9 +56,9 @@
 {
     [super setUp];
     
-    locatorService.useGPS = NO;
-    locatorService.useWiFiTowers = NO;
-    locatorService.backgroundRecords = nil;
+    locationService.useGPS = NO;
+    locationService.useWiFiTowers = NO;
+    locationService.trackRecords = nil;
     
     cachedRecord = nil;
 }
@@ -79,11 +79,11 @@
     NSArray* backgroundLocations = [self getLocations];
     CLLocation* oldLocation = nil;
     for(CLLocation* location in backgroundLocations) {
-        [locatorService locationManager:locatorService.locationManager
+        [locationService locationManager:locationService.locationManager
                     didUpdateToLocation:location
                            fromLocation:oldLocation];
         oldLocation = location;
-        [locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        [locationService.operationQueue waitUntilAllOperationsAreFinished];
         WAIT_FOR_WRITE();
     }    
 }
@@ -94,17 +94,17 @@
     r1.recordId = @"history_record_1";
     
     // Make sure the record has a clean history
-    [self.locatorService deleteRecordAnnotation:r1];
+    [self.locationService deleteRecordAnnotation:r1];
     WAIT_FOR_WRITE();
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add record."]
-                        forKey:[self.locatorService updateRecordAnnotation:r1]];
-    locatorService.backgroundRecords = [NSArray arrayWithObject:r1];
+                        forKey:[self.locationService updateRecordAnnotation:r1]];
+    locationService.trackRecords = [NSArray arrayWithObject:r1];
 
-    [locatorService enterBackground];   
+    [locationService enterBackground];   
     [self updateLocationManager];
-    [locatorService leaveBackground];
-    [locatorService becameActive];
+    [locationService leaveBackground];
+    [locationService becameActive];
  
     [self validateHistory:r1];
 }
@@ -115,17 +115,17 @@
     cachedRecord.recordId = @"cached_history_record_1";
     
     // Make sure the record has a clean history
-    [self.locatorService deleteRecordAnnotation:cachedRecord];
+    [self.locationService deleteRecordAnnotation:cachedRecord];
     WAIT_FOR_WRITE();
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add record."]
-                        forKey:[self.locatorService updateRecordAnnotation:cachedRecord]];
+                        forKey:[self.locationService updateRecordAnnotation:cachedRecord]];
 
         
-    [locatorService enterBackground];   
+    [locationService enterBackground];   
     [self updateLocationManager];
-    [locatorService leaveBackground];
-    [locatorService becameActive];
+    [locationService leaveBackground];
+    [locationService becameActive];
     
     WAIT_FOR_WRITE();
     
@@ -135,14 +135,14 @@
 - (void) validateHistory:(SGRecord*)record
 {
     NSInteger expectedId = [record.recordId intValue];
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId layer:record.layer]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId layer:record.layer]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[record getHistory:100]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[record getHistory:100 cursor:nil]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
     STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
@@ -168,7 +168,7 @@
         STAssertTrue(locationLon == historyLon, @"Locaiton lon was %f, but history was %f.", locationLon, historyLon);
     }
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];    
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];    
 }
 
 - (NSArray*) locationService:(SGLocationService*)service recordsForBackgroundLocationUpdate:(CLLocation*)newLocation

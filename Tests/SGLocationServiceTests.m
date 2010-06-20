@@ -35,17 +35,17 @@
 
 @implementation SGLocationServiceTests
 
-@synthesize locatorService, requestIds, recentReturnObject;
+@synthesize locationService, requestIds, recentReturnObject;
 
 - (void) setUp
 {
-    locatorService = [SGLocationService sharedLocationService];
-    STAssertNotNil(locatorService, @"Shared locator service should be created.");
+    locationService = [SGLocationService sharedLocationService];
+    STAssertNotNil(locationService, @"Shared locator service should be created.");
     
     requestIds = [[NSMutableDictionary alloc] init];
     
-    [locatorService addDelegate:self];
-    [locatorService setHTTPAuthorizer:[[SGOAuth alloc] initWithKey:kSGOAuth_Key secret:kSGOAuth_Secret]];
+    [locationService addDelegate:self];
+    [locationService setHTTPAuthorizer:[[SGOAuth alloc] initWithKey:kSGOAuth_Key secret:kSGOAuth_Secret]];
     [SGLocationService callbackOnMainThread:NO];
 }
 
@@ -163,8 +163,8 @@
 - (void) tearDown
 {
     
-    [locatorService.operationQueue waitUntilAllOperationsAreFinished];
-    STAssertTrue([[locatorService.operationQueue operations] count] == 0, @"There should be 0 operations in the queue");
+    [locationService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[locationService.operationQueue operations] count] == 0, @"There should be 0 operations in the queue");
     
     STAssertTrue([requestIds count] == 0, @"Tearing down tests too soon");
     [requestIds removeAllObjects];

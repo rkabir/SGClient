@@ -7,9 +7,8 @@
 //
 
 #import "SGLocationManager.h"
-#import "SGLocationService.h"
 
-@interface SGLocationManager (Private) <SGLocationManagerDelegate>
+@interface SGLocationManager (Private)
 
 - (BOOL) validResponseId:(NSString*)responseId;
 - (void) updateRegions:(NSArray*)newRegion;
@@ -37,6 +36,9 @@
 {
     conformsToSGDelegate = [newDelegate conformsToProtocol:@protocol(SGLocationManagerDelegate)];
     [super setDelegate:newDelegate];
+    
+    if(conformsToSGDelegate)
+        [[SGLocationService sharedLocationService] addDelegate:self];
 }
 
 #pragma mark -
@@ -44,9 +46,8 @@
 
 - (void) locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation
 {
-    if(conformsToSGDelegate && !regionResponseId) {
+    if(conformsToSGDelegate && !regionResponseId)
         regionResponseId = [[[SGLocationService sharedLocationService] contains:newLocation.coordinate] retain];
-    }
 }
 
 #pragma mark -
@@ -55,9 +56,7 @@
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {
     if([self validResponseId:requestId]) {
-        
         [self updateRegions:(NSArray*)responseObject];
-        
         [regionResponseId release];
         regionResponseId = nil;
     }    
@@ -66,9 +65,7 @@
 - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
 {    
     if([self validResponseId:requestId]) {
-        
-        SGLog(@"SGLocationManager - Unable to retrieve region (%@)", [error description]);
-     
+        SGLog(@"SGLocationManager - Unable to retrieve region (%@)", [error description]);     
         [regionResponseId release];
         regionResponseId = nil;
     }
@@ -84,11 +81,12 @@
 
 - (void) updateRegions:(NSArray*)newRegions
 {
-    if(!regions)
+    NSMutableArray* addedRegions = [NSMutableArray array];
+    NSMutableArray* removedRegions = [NSMutableArray array];
+    if(!regions) {
         regions = [newRegions retain];
-    else {
-        NSMutableArray* addedRegions = [NSMutableArray array];
-        NSMutableArray* removedRegions = [NSMutableArray array];
+        [addedRegions addObjectsFromArray:regions];
+    } else {
 
         for(NSDictionary* region in regions)
             if(![self isRegion:region foundInSet:newRegions])
@@ -97,28 +95,32 @@
         for(NSDictionary* region in newRegions)
             if(![self isRegion:region foundInSet:regions])
                 [addedRegions addObject:region];
-        
-        if(conformsToSGDelegate) {
-            if([addedRegions count])
-                [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didEnterRegions:addedRegions];
-            
-            if([removedRegions count])
-                [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didLeaveRegions:removedRegions];
-        }
-        
+                
         [regions release];
         regions = [newRegions retain];
     }   
+    
+    if(conformsToSGDelegate) {
+        if([addedRegions count])
+            [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didEnterRegions:addedRegions];
+        
+        if([removedRegions count])
+            [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didLeaveRegions:removedRegions];
+    }    
 }
 
-- (BOOL) isRegion:(NSDictionary*)region foundInSet:(NSArray*)regionSet
+- (BOOL) isRegion:(NSDictionary*)newRegion foundInSet:(NSArray*)regionSet
 {
+    for(NSDictionary* region in regionSet)
+        if([self isRegion:newRegion equalToRegion:region])
+            return YES;
+        
     return NO;
 }
 
 - (BOOL) isRegion:(NSDictionary*)regionOne equalToRegion:(NSDictionary*)regionTwo
 {
-    return NO;
+    return [[regionOne objectForKey:@"id"] isEqualToString:[regionTwo objectForKey:@"id"]];
 }
           
 - (void) dealloc

@@ -48,11 +48,11 @@
 - (void) testDayDensity
 {
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
-    NSString* responseId = [self.locatorService densityForCoordinate:coords day:kSpotRank_Monday];
+    NSString* responseId = [self.locationService densityForCoordinate:coords day:kSpotRank_Monday];
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles."]
                         forKey:responseId];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertNotNil(recentReturnObject, @"Reverse geocoder should return an object.");
     STAssertTrue([recentReturnObject isFeatureCollection], @"Return object should be a collection of features");
@@ -66,11 +66,11 @@
 - (void) testDayHourDensity
 {
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
-    NSString* responseId = [self.locatorService densityForCoordinate:coords day:kSpotRank_Thursday hour:4];
+    NSString* responseId = [self.locationService densityForCoordinate:coords day:kSpotRank_Thursday hour:4];
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a colleciton of tiles."]
                         forKey:responseId];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertNotNil(recentReturnObject, @"Reverse geocoder should return an object.");
     STAssertTrue([recentReturnObject isFeature], @"Return object should be a features");

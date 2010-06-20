@@ -44,49 +44,49 @@
 {
     SGRecord* record = [self createRandomRecord];
     record.recordId = @"1";
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:record]];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];
     
     SGRecord* record1 = [self createRandomRecord];
     record1.recordId = @"2";
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:record1]];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:record1]];
     
-    STAssertTrue([[self.locatorService.operationQueue operations] count] == 2, @"There should be 2 operations in the queue");   
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([[self.locationService.operationQueue operations] count] == 2, @"There should be 2 operations in the queue");   
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
-    STAssertTrue([[self.locatorService.operationQueue operations] count] == 0, @"There should be 0 operations in the queue");       
+    STAssertTrue([[self.locationService.operationQueue operations] count] == 0, @"There should be 0 operations in the queue");       
     WAIT_FOR_WRITE();
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record1]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record1]];
     
     SGRecord* dumbRecord = [self createCopyOfRecord:record];
     dumbRecord.recordId = @"6666";
     [self.requestIds setObject:[self expectedResponse:NO message:@"Record should not be present."]
-                    forKey:[self.locatorService deleteRecordAnnotation:dumbRecord]];
+                    forKey:[self.locationService deleteRecordAnnotation:dumbRecord]];
     
     
     [record1 release];
     [record release];
     [dumbRecord release];
     
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
 }
 
 - (void) testRecordFetch
 {
     SGRecord* record = [self createRandomRecord];
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:record]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];     
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];     
     WAIT_FOR_WRITE();
     
     NSInteger expectedId = [record.recordId intValue];
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId layer:record.layer]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId layer:record.layer]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];
     [record release];    
 } 
 
@@ -97,13 +97,13 @@
     NSMutableDictionary* properties = [NSMutableDictionary dictionaryWithDictionary:[record properties]];
     [properties setObject:@"Derek" forKey:@"name"];
 
-    [self addRecordResponseId:[self.locatorService updateRecord:record.recordId layer:record.layer coord:record.coordinate properties:properties]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecord:record.recordId layer:record.layer coord:record.coordinate properties:properties]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     WAIT_FOR_WRITE();
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId layer:record.layer]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId layer:record.layer]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* returnObject = (NSDictionary*)recentReturnObject;
     STAssertNotNil(returnObject, @"Object should be returned");
@@ -114,7 +114,7 @@
     [record updateRecordWithGeoJSONObject:returnObject];
     STAssertTrue([[record.properties objectForKey:@"name"] isEqualToString:@"Derek"], @"The name of the record should be Derek.");
 
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];
     [record release];    
 }
 
@@ -128,12 +128,12 @@
                         [self createRandomRecord],
                         nil];
     
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotations:records]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertTrue([recentReturnObject  isFeatureCollection], @"Return object should be a FeatureCollection");
     NSArray* features = [recentReturnObject features];
@@ -141,12 +141,12 @@
     
     SGRecord* record = [records objectAtIndex:0];
     [((NSMutableDictionary*)[record properties]) setObject:@"hi" forKey:@"there"];
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
 
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotations:records]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
 
     STAssertTrue([recentReturnObject  isFeatureCollection], @"Return object should be a FeatureCollection");
     features = [recentReturnObject features];
@@ -161,27 +161,27 @@
     NSString* value = [[match properties] objectForKey:@"there"];
     STAssertTrue([value isEqualToString:@"hi"], @"Properties field was not updated.");
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
 }
 
 - (void) testUpdateRecord
 {
     SGRecord* record = [self createRandomRecord];
     
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:record]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
     double newLat = 10.01;
     record.latitude = newLat;
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:record]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
     record.latitude = -newLat;
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotation:record]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotation:record]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
 
     STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
     double lat = [[[(NSDictionary*)recentReturnObject geometry] coordinates] latitude];
@@ -190,58 +190,58 @@
     NSString* oldRecordType = record.type;
     record.type = kSGLocationType_Image;
     
-    [self addRecordResponseId:[self.locatorService updateRecord:record.recordId
+    [self addRecordResponseId:[self.locationService updateRecord:record.recordId
                                                           layer:record.layer
                                                           coord:record.coordinate
                                                      properties:record.properties]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
 
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecord:record.recordId
+    [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId
                                                                  layer:record.layer]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
 
     STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
     NSString* newObjectType = [[(NSDictionary*)recentReturnObject properties] objectForKey:@"type"];
     STAssertTrue([newObjectType isEqualToString:record.type], @"The a new type should be registered with the record.");
     STAssertFalse([oldRecordType isEqualToString:record.type], @"The record should not retain its old type.");
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:record]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];
     [record release];    
 }
 
 - (void) testRepeatedUpdated
 {
     SGRecord* r1 = [self createRandomRecord];
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];    
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];        
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];    
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];        
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotation:r1]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotation:r1]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertNotNil(recentReturnObject, @"Record retrieval should return an object.");
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
     STAssertNotNil(geoJSONObject, @"Return object should be valid");
     STAssertTrue([geoJSONObject isFeature], @"Return object should be Feature");
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];    
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:r1]];    
 }
 
 - (void) testHistory
 {
     SGRecord* r1 = [self createRandomRecord];
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];
     for(int i = 0; i < 10; i++) {
         r1.created = r1.created+100;
-        [self addRecordResponseId:[self.locatorService updateRecordAnnotation:r1]];    
-        [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];    
+        [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
         WAIT_FOR_WRITE();
     }
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[r1 getHistory:5]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[r1 getHistory:5 cursor:nil]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
     STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
@@ -251,7 +251,7 @@
     int amount = [geometries count];
     STAssertTrue(amount == 5, @"The history endpoint should return 5 but was %i.", amount);
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r1]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:r1]];
 }
 
 @end

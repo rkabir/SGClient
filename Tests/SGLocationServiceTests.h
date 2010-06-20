@@ -44,12 +44,12 @@
 
 @interface SGLocationServiceTests : SenTestCase <SGLocationServiceDelegate> {
     
-    SGLocationService* locatorService;
+    SGLocationService* locationService;
     NSMutableDictionary* requestIds;
     NSDictionary* recentReturnObject;
 }
 
-@property (nonatomic, retain) SGLocationService* locatorService;
+@property (nonatomic, retain) SGLocationService* locationService;
 @property (nonatomic, retain) NSMutableDictionary* requestIds;
 @property (nonatomic, retain) NSObject* recentReturnObject;
 

@@ -7,6 +7,7 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
+#import "SGLocationService.h"
 
 /*!
 * @class SGLocationManager 
@@ -14,7 +15,7 @@
 * a new location has entered and left a region that is defined by the SimpleGeo PushPin
 * service.
 */
-@interface SGLocationManager : CLLocationManager {
+@interface SGLocationManager : CLLocationManager <CLLocationManagerDelegate, SGLocationServiceDelegate> {
 
     NSArray* regions;
 
