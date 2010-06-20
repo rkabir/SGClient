@@ -39,7 +39,8 @@
 #import "SGLocationTypes.h"
 #import "SGGeoJSONEncoder.h"
 #import "SGGeoJSON.h"
-#import "GeoJSON+NSDictionary.h"
+#import "SGAdditions.h"
+#import "SGHistoryQuery.h"
 
 @interface SGRecord (Private)
 

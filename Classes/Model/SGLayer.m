@@ -35,6 +35,8 @@
 #import "SGLayer.h"
 #import "SGGeoJSONEncoder.h"
 #import "SGRecord.h"
+#import "SGNearbyQuery.h"
+#import "SGAdditions.h"
 
 @interface SGLayer (Private)
 

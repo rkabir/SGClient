@@ -91,7 +91,6 @@
 		4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A859EBD11C13E3300F50676 /* SGPointHelper.h */; };
 		4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
 		4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A930FAC119DF50E0034828D /* SenTestingKit.framework */; };
-		4A9868D711CA4D620043ABB3 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
 		4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
 		4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */; };
 		4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
@@ -664,7 +663,6 @@
 				4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07A11C5556400EDD585 /* SGLocationManager.m in Sources */,
 				4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */,
-				4A9868D711CA4D620043ABB3 /* SGLocationManagerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

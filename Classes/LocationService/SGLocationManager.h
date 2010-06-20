@@ -10,8 +10,9 @@
 
 /*!
 * @class SGLocationManager 
-* @abstract ￼ 
-* @discussion 
+* @abstract A wrapper around the CLLocationManager that provides notifications when
+* a new location has entered and left a region that is defined by the SimpleGeo PushPin
+* service.
 */
 @interface SGLocationManager : CLLocationManager {
 
@@ -24,7 +25,8 @@
 
 /*!
 * @property
-* @abstract
+* @abstract The current array of regions that the device's location
+* resides in.
 */
 @property (nonatomic, readonly) NSArray* regions;
 

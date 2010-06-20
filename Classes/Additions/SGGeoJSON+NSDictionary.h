@@ -107,7 +107,7 @@
 
 @end
 
-@interface NSMutableDictionary (SGGeoJSONObject) <SGRecordAnnotation>
+@interface NSMutableDictionary (SGGeoJSONObject)
 
 /*!
 * @method setCreated:
