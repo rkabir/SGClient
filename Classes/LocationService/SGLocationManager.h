@@ -13,7 +13,7 @@
 * @class SGLocationManager 
 * @abstract A wrapper around the CLLocationManager that provides notifications when
 * a new location has entered and left a region that is defined by the SimpleGeo PushPin
-* service.
+* service. @see http://blog.simplegeo.com/post/620048674/introducing-pushpin-queries
 */
 @interface SGLocationManager : CLLocationManager <CLLocationManagerDelegate, SGLocationServiceDelegate> {
 
@@ -35,24 +35,20 @@
 
 /*!
 * @protocol SGLocationManagerDelegate
-* @abstract ￼
-* @discussion 
+* @abstract ￼An addition to @link CLLocationManagerDelegate CLLocationManagerDelegate @/link
+* that enforces the delegate to handle region notifications.
 */
 @protocol SGLocationManagerDelegate <CLLocationManagerDelegate>
 
 /*!
 * @method locationManager:didEnterRegions:
-* @abstract ￼
-* @discussion ￼
 * @param locationManager ￼
 * @param regions ￼
 */
 - (void) locationManager:(SGLocationManager*)locationManager didEnterRegions:(NSArray*)regions;
 
 /*!
-* @method locationManager:didLeaveRegions:
-* @abstract ￼
-* @discussion ￼
+* @method locationManager:didLeaveRegions: ￼
 * @param locationManager ￼
 * @param regions ￼
 */
