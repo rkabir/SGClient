@@ -37,11 +37,11 @@
 @implementation SGHistoryQuery
 @synthesize recordId, layer, cursor, limit, requestId;
 
-- (id) init
+- (id) initWithRecord:(id<SGRecordAnnotation>)record
 {
     if(self = [super init]) {
-        recordId = nil;
-        layer = nil;
+        recordId = [record recordId];
+        layer = [record layer];
         cursor = nil;
         limit = 10;
         requestId = nil;

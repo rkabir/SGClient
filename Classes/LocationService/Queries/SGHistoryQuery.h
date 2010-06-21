@@ -86,4 +86,12 @@
  */
 @property (nonatomic, retain) NSString* requestId;
 
+/*!
+* @method initWithRecord:
+* @abstract ￼Initializes a history query from a record.
+* @param record ￼
+* @result ￼
+*/
+- (id) initWithRecord:(id<SGRecordAnnotation>)record;
+
 @end
