@@ -8,6 +8,6 @@
 
 // TODO: CHANGE THESE!!
 
-#define kSGOAuth_Key                @"yccpdnDDJnNb5zYKG5T73sRQpa5p4frT"
-#define kSGOAuth_Secret             @"2fZDBTLbFVEd87TAXZUP3KxhA4Xe9g2T"
-#define kSGTesting_Layer            @"com.derek.testing"
+#define kSGOAuth_Key                @"my_key"
+#define kSGOAuth_Secret             @"my_secret"
+#define kSGTesting_Layer            @"com.testing.layer"
