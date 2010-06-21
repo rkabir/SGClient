@@ -47,7 +47,8 @@
     return result;
 }
 
-- (NSString*) MinimalURLEncodedString {
+- (NSString*) minimalURLEncodedString 
+{
     NSString *result = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                            (CFStringRef)self,
                                                                            CFSTR("%"),             

@@ -35,15 +35,16 @@
 #import "SGHistoryQuery.h"
 
 @implementation SGHistoryQuery
-@synthesize recordId, layer, cursor, limit;
+@synthesize recordId, layer, cursor, limit, requestId;
 
-- (id) init
+- (id) initWithRecord:(id<SGRecordAnnotation>)record
 {
     if(self = [super init]) {
-        recordId = nil;
-        layer = nil;
+        recordId = [record recordId];
+        layer = [record layer];
         cursor = nil;
         limit = 10;
+        requestId = nil;
     }
     
     return self;
@@ -63,7 +64,7 @@
 
 - (NSString*) uri
 {
-    return [NSString stringWithFormat:@"/records/%@/history/%@.json", layer, recordId];
+    return [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId];
 }
 
 - (void) dealloc
@@ -73,6 +74,8 @@
     
     if(cursor)
         [cursor release];
+    
+    [requestId release];
     
     [super dealloc];
 }

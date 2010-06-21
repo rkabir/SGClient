@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
+		4A4ABE0D11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A4ABE0B11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h */; };
+		4A4ABE0E11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */; };
+		4A4ABE0F11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */; };
 		4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */; };
 		4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */; };
 		4A64A41F112095BE00D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
-		4A64A420112095BE00D4E22D /* NSArrayAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */; };
-		4A64A421112095BE00D4E22D /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */; };
 		4A64A422112095BE00D4E22D /* NSStringAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */; };
 		4A64A423112095BE00D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64A424112095BE00D4E22D /* SGAuthorization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B7112095BE00D4E22D /* SGAuthorization.h */; };
@@ -21,8 +21,6 @@
 		4A64A426112095BE00D4E22D /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		4A64A427112095BE00D4E22D /* SGLocationService.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3BA112095BE00D4E22D /* SGLocationService.h */; };
 		4A64A428112095BE00D4E22D /* SGLocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BB112095BE00D4E22D /* SGLocationService.m */; };
-		4A64A429112095BE00D4E22D /* SGLocationTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3BC112095BE00D4E22D /* SGLocationTypes.h */; };
-		4A64A42A112095BE00D4E22D /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
 		4A64A42B112095BE00D4E22D /* SGOAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3BE112095BE00D4E22D /* SGOAuth.h */; };
 		4A64A42C112095BE00D4E22D /* SGOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BF112095BE00D4E22D /* SGOAuth.m */; };
 		4A64A42D112095BE00D4E22D /* SGLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3C1112095BE00D4E22D /* SGLayer.h */; };
@@ -56,7 +54,6 @@
 		4A64A51F1120978F00D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
 		4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */; };
 		4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */; };
-		4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */; };
 		4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BF112095BE00D4E22D /* SGOAuth.m */; };
 		4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BB112095BE00D4E22D /* SGLocationService.m */; };
@@ -66,7 +63,6 @@
 		4A64B5141120B99800D4E22D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		4A64B5151120B99800D4E22D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A64A51E1120978F00D4E22D /* CoreLocation.framework */; };
 		4A64B52E1120B9CF00D4E22D /* SGClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B52D1120B9CF00D4E22D /* SGClient.h */; };
-		4A64B5481120BB0C00D4E22D /* SGTestingMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */; };
 		4A64B5571120BB8B00D4E22D /* Base64Transcoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CA112095BE00D4E22D /* Base64Transcoder.c */; };
 		4A64B5581120BB8C00D4E22D /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A402112095BE00D4E22D /* CDataScanner.m */; };
 		4A64B5591120BB8C00D4E22D /* CDataScanner_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A405112095BE00D4E22D /* CDataScanner_Extensions.m */; };
@@ -78,7 +74,8 @@
 		4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A409112095BE00D4E22D /* NSDictionary_JSONExtensions.m */; };
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
-		4A71D8D411A5F5DA005E1588 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A68B8B611CE7BED0090C675 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
+		4A68B92A11CE8A870090C675 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
 		4A748CD111A1FC3C000AA9DD /* SGQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CCF11A1FC3C000AA9DD /* SGQuery.h */; };
 		4A748CD911A1FD55000AA9DD /* SGNearbyQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */; };
 		4A748CDA11A1FD55000AA9DD /* SGNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CD811A1FD55000AA9DD /* SGNearbyQuery.m */; };
@@ -92,8 +89,27 @@
 		4A748D7111A20DE3000AA9DD /* SGLatLonNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */; };
 		4A748D7211A20DE4000AA9DD /* SGHistoryQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */; };
 		4A748D7311A20DE4000AA9DD /* SGGeohashNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */; };
+		4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
+		4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A859EBD11C13E3300F50676 /* SGPointHelper.h */; };
+		4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
 		4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A930FAC119DF50E0034828D /* SenTestingKit.framework */; };
-		4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */; };
+		4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
+		4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */; };
+		4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
+		4AA8487E11C691D60023735E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA8487D11C691D60023735E /* MapKit.framework */; };
+		4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F06811C5553900EDD585 /* SGLocationTypes.m */; };
+		4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F06811C5553900EDD585 /* SGLocationTypes.m */; };
+		4AC4F07611C5553900EDD585 /* SGLocationTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AC4F06911C5553900EDD585 /* SGLocationTypes.h */; };
+		4AC4F07911C5556400EDD585 /* SGLocationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AC4F07711C5556400EDD585 /* SGLocationManager.h */; };
+		4AC4F07A11C5556400EDD585 /* SGLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F07811C5556400EDD585 /* SGLocationManager.m */; };
+		4AC4F07B11C5556400EDD585 /* SGLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AC4F07811C5556400EDD585 /* SGLocationManager.m */; };
+		4ACEA3DD11AAE8CD003BEED6 /* SGCacheHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ACEA3DB11AAE8CD003BEED6 /* SGCacheHandler.h */; };
+		4ACEA3DE11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA3DC11AAE8CD003BEED6 /* SGCacheHandler.m */; };
+		4ACEA3DF11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA3DC11AAE8CD003BEED6 /* SGCacheHandler.m */; };
+		4ACEA49F11AB0D39003BEED6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACEA49E11AB0D39003BEED6 /* UIKit.framework */; };
+		4ACEA56D11AB2848003BEED6 /* SGCommitLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */; };
+		4ACEA56E11AB2848003BEED6 /* SGCommitLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ACEA56B11AB2848003BEED6 /* SGCommitLog.h */; };
+		4ACEA56F11AB2848003BEED6 /* SGCommitLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		4AF85B4311A5E84D00B97ADA /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4AF85B4211A5E84D00B97ADA /* LICENSE */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
@@ -101,12 +117,12 @@
 
 /* Begin PBXFileReference section */
 		4A094381115C028E007E3538 /* SGSpotRankTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGSpotRankTests.m; sourceTree = "<group>"; };
+		4A4ABE0B11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SGGeoJSON+NSDictionary.h"; sourceTree = "<group>"; };
+		4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SGGeoJSON+NSDictionary.m"; sourceTree = "<group>"; };
 		4A64A3AE112095BE00D4E22D /* GeoJSON+NSArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GeoJSON+NSArray.h"; sourceTree = "<group>"; };
 		4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GeoJSON+NSArray.m"; sourceTree = "<group>"; };
 		4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GeoJSON+NSDictionary.h"; sourceTree = "<group>"; };
 		4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GeoJSON+NSDictionary.m"; sourceTree = "<group>"; };
-		4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayAdditions.h; sourceTree = "<group>"; };
-		4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayAdditions.m; sourceTree = "<group>"; };
 		4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		4A64A3B7112095BE00D4E22D /* SGAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAuthorization.h; sourceTree = "<group>"; };
@@ -114,8 +130,6 @@
 		4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGeoJSONEncoder.m; sourceTree = "<group>"; };
 		4A64A3BA112095BE00D4E22D /* SGLocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLocationService.h; sourceTree = "<group>"; };
 		4A64A3BB112095BE00D4E22D /* SGLocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationService.m; sourceTree = "<group>"; };
-		4A64A3BC112095BE00D4E22D /* SGLocationTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLocationTypes.h; sourceTree = "<group>"; };
-		4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationTypes.m; sourceTree = "<group>"; };
 		4A64A3BE112095BE00D4E22D /* SGOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGOAuth.h; sourceTree = "<group>"; };
 		4A64A3BF112095BE00D4E22D /* SGOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGOAuth.m; sourceTree = "<group>"; };
 		4A64A3C1112095BE00D4E22D /* SGLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLayer.h; sourceTree = "<group>"; };
@@ -169,7 +183,26 @@
 		4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLatLonNearbyQuery.m; sourceTree = "<group>"; };
 		4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGHistoryQuery.h; sourceTree = "<group>"; };
 		4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHistoryQuery.m; sourceTree = "<group>"; };
+		4A859EBD11C13E3300F50676 /* SGPointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGPointHelper.h; sourceTree = "<group>"; };
+		4A859EBE11C13E3300F50676 /* SGPointHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPointHelper.m; sourceTree = "<group>"; };
+		4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BACKGROUND_LOCATION.markdown; sourceTree = "<group>"; };
 		4A930FAC119DF50E0034828D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = SDKROOT; };
+		4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationManagerTests.m; sourceTree = "<group>"; };
+		4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGeoJSON.m; sourceTree = "<group>"; };
+		4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGGeoJSON.h; sourceTree = "<group>"; };
+		4AA8487D11C691D60023735E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		4AC4F06811C5553900EDD585 /* SGLocationTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationTypes.m; sourceTree = "<group>"; };
+		4AC4F06911C5553900EDD585 /* SGLocationTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLocationTypes.h; sourceTree = "<group>"; };
+		4AC4F07711C5556400EDD585 /* SGLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGLocationManager.h; sourceTree = "<group>"; };
+		4AC4F07811C5556400EDD585 /* SGLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationManager.m; sourceTree = "<group>"; };
+		4ACEA3DB11AAE8CD003BEED6 /* SGCacheHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGCacheHandler.h; sourceTree = "<group>"; };
+		4ACEA3DC11AAE8CD003BEED6 /* SGCacheHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGCacheHandler.m; sourceTree = "<group>"; };
+		4ACEA46211AB0AD4003BEED6 /* SGBackgroundLocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGBackgroundLocationTests.m; sourceTree = "<group>"; };
+		4ACEA46811AB0B89003BEED6 /* SGCacheHandlerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGCacheHandlerTests.m; sourceTree = "<group>"; };
+		4ACEA49E11AB0D39003BEED6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4ACEA56B11AB2848003BEED6 /* SGCommitLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGCommitLog.h; sourceTree = "<group>"; };
+		4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGCommitLog.m; sourceTree = "<group>"; };
+		4ACEA57711AB3B8F003BEED6 /* SGCommitLogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGCommitLogTests.m; sourceTree = "<group>"; };
 		4AF85B4211A5E84D00B97ADA /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libSGClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSGClient.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,6 +216,8 @@
 				4A64B5141120B99800D4E22D /* Foundation.framework in Frameworks */,
 				4A64B5151120B99800D4E22D /* CoreLocation.framework in Frameworks */,
 				4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */,
+				4ACEA49F11AB0D39003BEED6 /* UIKit.framework in Frameworks */,
+				4AA8487E11C691D60023735E /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +245,7 @@
 		0867D691FE84028FC02AAC07 /* SGClient */ = {
 			isa = PBXGroup;
 			children = (
+				4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */,
 				4A64B5F41120D54C00D4E22D /* build_client */,
 				4A64A3AA112095BE00D4E22D /* Classes */,
 				4A64A3C6112095BE00D4E22D /* README */,
@@ -225,9 +261,11 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4ACEA49E11AB0D39003BEED6 /* UIKit.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
 				4A64A51E1120978F00D4E22D /* CoreLocation.framework */,
 				4A930FAC119DF50E0034828D /* SenTestingKit.framework */,
+				4AA8487D11C691D60023735E /* MapKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -235,6 +273,7 @@
 		4A64A3AA112095BE00D4E22D /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4ACEA3DA11AAE8B2003BEED6 /* Utilities */,
 				4A64A3AB112095BE00D4E22D /* Additions */,
 				4A64A3B6112095BE00D4E22D /* LocationService */,
 				4A64A3C0112095BE00D4E22D /* Model */,
@@ -250,11 +289,11 @@
 				4A64A3AF112095BE00D4E22D /* GeoJSON+NSArray.m */,
 				4A64A3B0112095BE00D4E22D /* GeoJSON+NSDictionary.h */,
 				4A64A3B1112095BE00D4E22D /* GeoJSON+NSDictionary.m */,
-				4A64A3B2112095BE00D4E22D /* NSArrayAdditions.h */,
-				4A64A3B3112095BE00D4E22D /* NSArrayAdditions.m */,
 				4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */,
 				4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */,
 				4A64B4D31120A78200D4E22D /* SGAdditions.h */,
+				4A4ABE0B11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h */,
+				4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */,
 			);
 			path = Additions;
 			sourceTree = "<group>";
@@ -268,10 +307,10 @@
 				4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */,
 				4A64A3BA112095BE00D4E22D /* SGLocationService.h */,
 				4A64A3BB112095BE00D4E22D /* SGLocationService.m */,
-				4A64A3BC112095BE00D4E22D /* SGLocationTypes.h */,
-				4A64A3BD112095BE00D4E22D /* SGLocationTypes.m */,
 				4A64A3BE112095BE00D4E22D /* SGOAuth.h */,
 				4A64A3BF112095BE00D4E22D /* SGOAuth.m */,
+				4AC4F07711C5556400EDD585 /* SGLocationManager.h */,
+				4AC4F07811C5556400EDD585 /* SGLocationManager.m */,
 			);
 			path = LocationService;
 			sourceTree = "<group>";
@@ -279,6 +318,8 @@
 		4A64A3C0112095BE00D4E22D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4AC4F06811C5553900EDD585 /* SGLocationTypes.m */,
+				4AC4F06911C5553900EDD585 /* SGLocationTypes.h */,
 				4A64A3C1112095BE00D4E22D /* SGLayer.h */,
 				4A64A3C2112095BE00D4E22D /* SGLayer.m */,
 				4A64A3C3112095BE00D4E22D /* SGRecord.h */,
@@ -378,6 +419,10 @@
 				4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */,
 				4A094381115C028E007E3538 /* SGSpotRankTests.m */,
 				4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */,
+				4ACEA46211AB0AD4003BEED6 /* SGBackgroundLocationTests.m */,
+				4ACEA46811AB0B89003BEED6 /* SGCacheHandlerTests.m */,
+				4ACEA57711AB3B8F003BEED6 /* SGCommitLogTests.m */,
+				4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -398,6 +443,21 @@
 			path = Queries;
 			sourceTree = "<group>";
 		};
+		4ACEA3DA11AAE8B2003BEED6 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */,
+				4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */,
+				4ACEA3DB11AAE8CD003BEED6 /* SGCacheHandler.h */,
+				4ACEA3DC11AAE8CD003BEED6 /* SGCacheHandler.m */,
+				4ACEA56B11AB2848003BEED6 /* SGCommitLog.h */,
+				4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */,
+				4A859EBD11C13E3300F50676 /* SGPointHelper.h */,
+				4A859EBE11C13E3300F50676 /* SGPointHelper.m */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -407,12 +467,10 @@
 			files = (
 				4A64A41C112095BE00D4E22D /* GeoJSON+NSArray.h in Headers */,
 				4A64A41E112095BE00D4E22D /* GeoJSON+NSDictionary.h in Headers */,
-				4A64A420112095BE00D4E22D /* NSArrayAdditions.h in Headers */,
 				4A64A422112095BE00D4E22D /* NSStringAdditions.h in Headers */,
 				4A64A424112095BE00D4E22D /* SGAuthorization.h in Headers */,
 				4A64A425112095BE00D4E22D /* SGGeoJSONEncoder.h in Headers */,
 				4A64A427112095BE00D4E22D /* SGLocationService.h in Headers */,
-				4A64A429112095BE00D4E22D /* SGLocationTypes.h in Headers */,
 				4A64A42B112095BE00D4E22D /* SGOAuth.h in Headers */,
 				4A64A42D112095BE00D4E22D /* SGLayer.h in Headers */,
 				4A64A42F112095BE00D4E22D /* SGRecord.h in Headers */,
@@ -431,12 +489,18 @@
 				4A64A44A112095BE00D4E22D /* SGClient_Prefix.pch in Headers */,
 				4A64B4D41120A78200D4E22D /* SGAdditions.h in Headers */,
 				4A64B52E1120B9CF00D4E22D /* SGClient.h in Headers */,
-				4A64B5481120BB0C00D4E22D /* SGTestingMacros.h in Headers */,
 				4A748CD111A1FC3C000AA9DD /* SGQuery.h in Headers */,
 				4A748CD911A1FD55000AA9DD /* SGNearbyQuery.h in Headers */,
 				4A748CDD11A1FD60000AA9DD /* SGGeohashNearbyQuery.h in Headers */,
 				4A748CE111A1FD6A000AA9DD /* SGLatLonNearbyQuery.h in Headers */,
 				4A748CE511A1FDD7000AA9DD /* SGHistoryQuery.h in Headers */,
+				4ACEA3DD11AAE8CD003BEED6 /* SGCacheHandler.h in Headers */,
+				4ACEA56E11AB2848003BEED6 /* SGCommitLog.h in Headers */,
+				4A4ABE0D11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h in Headers */,
+				4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */,
+				4AC4F07611C5553900EDD585 /* SGLocationTypes.h in Headers */,
+				4AC4F07911C5556400EDD585 /* SGLocationManager.h in Headers */,
+				4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,7 +598,6 @@
 			files = (
 				4A64B4C11120A6D300D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64B4C21120A6D300D4E22D /* GeoJSON+NSDictionary.m in Sources */,
-				4A64B4C31120A6D400D4E22D /* NSArrayAdditions.m in Sources */,
 				4A64B4C41120A6D500D4E22D /* NSStringAdditions.m in Sources */,
 				4A64B4C51120A6D900D4E22D /* SGOAuth.m in Sources */,
 				4A64B4C71120A6DA00D4E22D /* SGLocationService.m in Sources */,
@@ -551,14 +614,20 @@
 				4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */,
 				4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */,
 				4A64B5611120BB9200D4E22D /* hmac.c in Sources */,
-				4AE03B69115547EC00096B6E /* SGLocationTypes.m in Sources */,
 				4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */,
-				4A40D8BF119341EE0096BE6A /* SGLocationServiceTests.m in Sources */,
 				4A748D7011A20DDF000AA9DD /* SGNearbyQuery.m in Sources */,
 				4A748D7111A20DE3000AA9DD /* SGLatLonNearbyQuery.m in Sources */,
 				4A748D7211A20DE4000AA9DD /* SGHistoryQuery.m in Sources */,
 				4A748D7311A20DE4000AA9DD /* SGGeohashNearbyQuery.m in Sources */,
-				4A71D8D411A5F5DA005E1588 /* SGLayerTest.m in Sources */,
+				4ACEA3DF11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */,
+				4ACEA56D11AB2848003BEED6 /* SGCommitLog.m in Sources */,
+				4A4ABE0F11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */,
+				4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */,
+				4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */,
+				4AC4F07B11C5556400EDD585 /* SGLocationManager.m in Sources */,
+				4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */,
+				4A68B8B611CE7BED0090C675 /* SGLocationManagerTests.m in Sources */,
+				4A68B92A11CE8A870090C675 /* SGLocationServiceTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -568,11 +637,9 @@
 			files = (
 				4A64A41D112095BE00D4E22D /* GeoJSON+NSArray.m in Sources */,
 				4A64A41F112095BE00D4E22D /* GeoJSON+NSDictionary.m in Sources */,
-				4A64A421112095BE00D4E22D /* NSArrayAdditions.m in Sources */,
 				4A64A423112095BE00D4E22D /* NSStringAdditions.m in Sources */,
 				4A64A426112095BE00D4E22D /* SGGeoJSONEncoder.m in Sources */,
 				4A64A428112095BE00D4E22D /* SGLocationService.m in Sources */,
-				4A64A42A112095BE00D4E22D /* SGLocationTypes.m in Sources */,
 				4A64A42C112095BE00D4E22D /* SGOAuth.m in Sources */,
 				4A64A42E112095BE00D4E22D /* SGLayer.m in Sources */,
 				4A64A430112095BE00D4E22D /* SGRecord.m in Sources */,
@@ -591,6 +658,13 @@
 				4A748CDE11A1FD60000AA9DD /* SGGeohashNearbyQuery.m in Sources */,
 				4A748CE211A1FD6A000AA9DD /* SGLatLonNearbyQuery.m in Sources */,
 				4A748CE611A1FDD7000AA9DD /* SGHistoryQuery.m in Sources */,
+				4ACEA3DE11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */,
+				4ACEA56F11AB2848003BEED6 /* SGCommitLog.m in Sources */,
+				4A4ABE0E11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */,
+				4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */,
+				4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */,
+				4AC4F07A11C5556400EDD585 /* SGLocationManager.m in Sources */,
+				4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,7 +688,7 @@
 				HEADER_SEARCH_PATHS = Classes;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
@@ -645,7 +719,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphonesimulator3.2;
 			};
 			name = Debug;
 		};
@@ -658,7 +732,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphonesimulator3.2;
 			};
 			name = Release;
 		};
@@ -666,7 +740,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
@@ -695,7 +769,8 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.2;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphonesimulator4.0;
 				VERSION_INFO_PREFIX = "";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -726,7 +801,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.1;
+				SDKROOT = iphoneos3.2;
 				VERSION_INFO_PREFIX = Resources/SGClient_Prefix.pch;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;

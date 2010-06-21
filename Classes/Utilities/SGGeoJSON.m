@@ -1,6 +1,6 @@
 //
-//  NSArrayAdditions.h
-//  SGClient
+//  SGGeoJSON.m
+//  SGStalker
 //
 //  Copyright (c) 2009-2010, SimpleGeo
 //  All rights reserved.
@@ -32,11 +32,32 @@
 //  Created by Derek Smith.
 //
 
-#import <Foundation/Foundation.h>
+#import "SGGeoJSON.h"
+#import "GeoJSON+NSArray.h"
+#import "GeoJSON+NSDictionary.h"
 
+NSMutableDictionary* SGGeometryCollectionCreate() {
+    NSMutableDictionary* geometryCollection = [NSMutableDictionary dictionary];
+    [geometryCollection setType:@"GeometryCollection"];
+    [geometryCollection setGeometries:[NSMutableArray array]];
+    return geometryCollection;
+}
 
-@interface NSArray (SimpleGeo)
+NSDictionary* SGGeometryCollectionAppend(NSDictionary* collection1, NSDictionary* collection2) {
+    NSMutableArray* geometries = [NSMutableArray arrayWithArray:[collection1 geometries]];
+    [geometries addObjectsFromArray:[collection2 geometries]];
+    NSMutableDictionary* geometryCollection = [NSMutableDictionary dictionaryWithDictionary:collection1];
+    [geometryCollection setGeometries:geometries];
+    return geometryCollection;
+}
 
-+ (BOOL) isValidNonEmptyArray:(NSArray*)array;
-
-@end
+NSDictionary* SGPointCreate(double lat, double lon) {
+    NSDictionary* point = [NSDictionary dictionaryWithObjectsAndKeys:
+                           @"Point", @"type",
+                           [NSArray arrayWithObjects:
+                            [NSNumber numberWithDouble:lon],
+                            [NSNumber numberWithDouble:lat],
+                            nil], @"coordinates",
+                           nil];
+    return point;
+}

@@ -32,19 +32,23 @@
 //  Created by Derek Smith.
 //
 
-#import "SGLocationTypes.h"
 #import "SGLocationService.h"
+#import "SGAdditions.h"
 
+#import "SGLocationTypes.h"
+#import "SGHistoryQuery.h"
+#import "SGNearbyQuery.h"
 #import "SGOAuth.h"
 #import "SGRecord.h"
 
-#import "SGAdditions.h"
+#import "SGCommitLog.h"
+#import "SGCacheHandler.h"
 
 #import "geohash.h"
 #import "CJSONSerializer.h"
 #import "NSDictionary_JSONExtensions.h"
 #import "SGGeoJSONEncoder.h"
-
+    
 enum SGHTTPRequestParamater {
  
     kSGHTTPRequestParameter_Method = 0,
@@ -61,23 +65,21 @@ static SGLocationService* sharedLocationService = nil;
 static int requestIdNumber = 0;
 static BOOL callbackOnMainThread = NO;
 
-static id<SGAuthorization> _dummyAuthorizer = nil;
-
 static NSString* mainURL = @"http://api.simplegeo.com";
 static NSString* apiVersion = @"0.1";
 
-@interface SGLocationService (Private) <SGAuthorization>
+@interface SGLocationService (Private) <SGLocationServiceDelegate>
 
-- (NSString*) _getNextResponseId;
+- (NSString*) getNextResponseId;
 
-- (void) _pushInvocationWithArgs:(NSArray*)args;
-- (void) _pushMultiInvovationWithArgs:(NSArray *)args;
+- (void) pushInvocationWithArgs:(NSArray*)args;
+- (void) pushMultiInvocationWithArgs:(NSArray *)args;
 
-- (NSObject*) _deleteRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push;
-- (NSObject*) _retrieveRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push;
-- (NSObject*) _updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties push:(BOOL)push;
+- (NSObject*) deleteRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push;
+- (NSObject*) retrieveRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push;
+- (NSObject*) updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties push:(BOOL)push;
 
-- (NSArray*) _allTypes;
+- (NSArray*) allTypes;
 
 - (void) succeeded:(NSDictionary*)responseDictionary;
 - (void) failed:(NSDictionary*)responseDictionary;
@@ -92,28 +94,47 @@ static NSString* apiVersion = @"0.1";
 - (void) sendMultipleHTTPRequest:(NSArray*)requestList
                        requestId:(NSString*)requestId;
 
+- (void) updateBackgroundRecords:(NSArray*)records;
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void) initializeCommitLog;
+- (void) replayCommitLog;
+- (void) cacheBackgroundRecords:(NSArray*)records;
+
+#endif
+
 @end
 
 @implementation SGLocationService
-
-@synthesize operationQueue;
+@synthesize operationQueue, useGPS, useWiFiTowers, trackRecords, locationManager, accuracy;
 @dynamic HTTPAuthorizer;
 
 - (id) init
 {
     if(self = [super init]) {
-                
         operationQueue = [[NSOperationQueue alloc] init];
         
-        _delegates = [[NSMutableArray alloc] init];
+        delegates = [[NSMutableArray alloc] init];
         
-        if(!_dummyAuthorizer)
-            _dummyAuthorizer = [[SGOAuth alloc] initWithKey:@"key" secret:@"secret"];
+        [self setHTTPAuthorizer:[[SGOAuth alloc] initWithKey:@"key" secret:@"secret"]];
         
-        [self setHTTPAuthorizer:_dummyAuthorizer];
+        useGPS = NO;
+        useWiFiTowers = YES;
+        
+        trackRecords = nil;
+        locationManager = nil;
+        
+        accuracy = kCLLocationAccuracyBest;        
+        
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+        
+        commitLog = nil;
+        cachedResponseIds = [[NSMutableArray alloc] init];
+      
+#endif
         
         callbackOnMainThread = YES;
-        
     }
     
     return self;
@@ -134,19 +155,19 @@ static NSString* apiVersion = @"0.1";
 
 - (void) addDelegate:(id<SGLocationServiceDelegate>)delegate
 {
-    if([_delegates indexOfObject:delegate] == NSNotFound &&
+    if([delegates indexOfObject:delegate] == NSNotFound &&
                     [delegate conformsToProtocol:@protocol(SGLocationServiceDelegate)])
-        [_delegates addObject:delegate];
+        [delegates addObject:delegate];
 }
 
 - (void) removeDelegate:(id<SGLocationServiceDelegate>)delegate
 {
-    [_delegates removeObject:delegate];
+    [delegates removeObject:delegate];
 }
 
-- (NSArray*) _delegates
+- (NSArray*) delegates
 {
-    return _delegates;
+    return delegates;
 }
 
 - (id<SGAuthorization>) HTTPAuthorizer
@@ -156,13 +177,343 @@ static NSString* apiVersion = @"0.1";
 
 - (void) setHTTPAuthorizer:(id<SGAuthorization>)authorizer
 {
-    if(authorizer && [authorizer conformsToProtocol:@protocol(SGAuthorization)])
+    if(authorizer && [authorizer conformsToProtocol:@protocol(SGAuthorization)]) {
+        // Whenever the authorizer changes, the username can also change.
+        // We need to save the current dictionary to the proper directory
+        // and reload a new one.
         HTTPAuthorizer = authorizer;
+        
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+        
+        [self initializeCommitLog];   
+
+#endif
+
+    }
+}
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void) initializeCommitLog
+{
+    if(!commitLog) {
+        SGLog(@"SGLocationService - Initializing the commit log");
+        commitLog = [[SGCommitLog alloc] initWithName:@"SGLocationService"];
+    }
+}
+
+- (void) replayCommitLog
+{
+    SGLog(@"SGLocationService - Replaying the commit log");
+    if(!commitLog)
+        [self initializeCommitLog];
+
+    [commitLog reload];
+    
+    if(HTTPAuthorizer) {
+        NSString* username = [HTTPAuthorizer username];
+        NSString* key = @"record_updates";
+        NSDictionary* updateCommits = [[commitLog getCommitsForUsername:username key:key] retain];
+        NSMutableArray* features = [NSMutableArray array];
+        NSDictionary* featureCollection = nil;
+        NSError* error = nil;
+        for(NSString* commitKey in updateCommits) {
+            featureCollection = [NSDictionary dictionaryWithJSONData:[updateCommits objectForKey:commitKey] error:&error];
+            if(featureCollection && !error)
+                [features addObjectsFromArray:[featureCollection features]];
+            error = nil;
+        }
+        
+        SGLog(@"SGLocationService - Discovered %i cached records.", [features count]);
+        
+        // Create a proper GeoJSON object with the given features.
+        if(features && [features count]) {
+            featureCollection = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              @"FeatureCollection", @"type",
+                                               features, @"features",
+                                               nil];
+
+            [self updateBackgroundRecords:[SGGeoJSONEncoder recordsForGeoJSONObject:featureCollection]];
+        }
+        
+        // Remove the commits because they are no longer needed.
+        [commitLog deleteUsername:username key:key];
+        [updateCommits release];
+    }
 }
 
 #pragma mark -
+#pragma mark Background location methods
+
+- (void) becameActive
+{
+    [self replayCommitLog];
+}
+
+- (void) willBeTerminated
+{
+    [self leaveBackground];
+}
+
+- (void) enterBackground
+{
+    UIDevice* device = [UIDevice currentDevice];
+    BOOL backgroundSupported = [device respondsToSelector:@selector(isMultitaskingSupported)] && device.multitaskingSupported;
+    if(backgroundSupported) {        
+        SGLog(@"SGLocationService - Entering as a background process");
+        // We also need to monitory ourself because
+        // sockets loss is common in the background processes.
+        [self initializeCommitLog];        
+        [self addDelegate:self];
+        
+        // See if the NSOperationQueue has emptied out.
+        // If it hasn't, then we ask for more time to deliver
+        // the requests.
+        if(self.operationQueue && [self.operationQueue operationCount]) {
+            UIApplication* application = [UIApplication sharedApplication];
+            self->backgroundTask = [application beginBackgroundTaskWithExpirationHandler:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(self->backgroundTask != UIBackgroundTaskInvalid) {
+                        [application endBackgroundTask:self->backgroundTask];
+                        self->backgroundTask = UIBackgroundTaskInvalid;
+                    }
+                });
+            }];            
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                SGLog(@"SGLocationService - Waiting for NSOperationQueue to empty");
+                if(self->backgroundTask != UIBackgroundTaskInvalid) {
+                    [self->operationQueue waitUntilAllOperationsAreFinished];                    
+                    [application endBackgroundTask:self->backgroundTask];
+                    self->backgroundTask = UIBackgroundTaskInvalid;
+                }
+            });
+        }
+        
+        [self startTrackingRecords];
+                
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"start_timestamp"];
+        [userDefaults removeObjectForKey:@"stop_timestamp"];
+        [userDefaults removeObjectForKey:@"duration"];
+        [userDefaults removeObjectForKey:@"records_updated"];
+        [userDefaults removeObjectForKey:@"records_cached"];
+    }
+}
+
+- (void) leaveBackground
+{
+    if(commitLog)
+        [commitLog flush];
+
+    [self removeDelegate:self];
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"stop_timestamp"];
+}
+
+- (NSDictionary*) getBackgroundActivityInformation
+{
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    double startTimestamp = [defaults doubleForKey:@"start_timestamp"];
+    double stopTimestamp = [defaults doubleForKey:@"stop_timestamp"];
+    int recordsCached = [defaults integerForKey:@"records_cached"];
+    int recordsUpdated = [defaults integerForKey:@"record_updated"];
+    
+    NSMutableDictionary* dictionary = nil;
+    if(startTimestamp && stopTimestamp) {
+        dictionary = [NSMutableDictionary dictionary];
+        [dictionary setObject:[NSDate dateWithTimeIntervalSince1970:startTimestamp] forKey:@"start"];
+        [dictionary setObject:[NSDate dateWithTimeIntervalSince1970:stopTimestamp] forKey:@"end"];
+        [dictionary setObject:[NSNumber numberWithDouble:(stopTimestamp - startTimestamp)] forKey:@"duration"];
+        [dictionary setObject:[NSNumber numberWithInt:recordsCached] forKey:@"records_cached"];
+        [dictionary setObject:[NSNumber numberWithInt:recordsUpdated] forKey:@"records_updated"];
+    }
+    
+    return dictionary;
+}
+
+- (void) updateBackgroundRecords:(NSArray*)records
+{
+    // We can only update records in sets of 100
+    NSMutableArray* updatableRecords = [NSMutableArray arrayWithArray:records];
+    int amountOfRecords = [records count];
+    NSString* responseId = nil;
+    while(amountOfRecords) {
+        if(amountOfRecords <= 100) {
+            responseId = [self updateRecordAnnotations:[NSArray arrayWithArray:updatableRecords]];
+            [updatableRecords removeAllObjects];
+        } else {
+            NSRange range;
+            range.location = 0;
+            range.length = 100;
+            responseId = [self updateRecordAnnotations:[updatableRecords subarrayWithRange:range]];
+            range.length = amountOfRecords;
+            records = [NSMutableArray arrayWithArray:[updatableRecords subarrayWithRange:range]];
+        }
+        if(responseId)
+            [cachedResponseIds addObject:responseId];
+        amountOfRecords = [updatableRecords count];
+        
+        SGLog(@"SGLocationService - Updated %i records that were created in the background", [records count]);
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        int amount = [userDefaults integerForKey:@"records_updated"];
+        [userDefaults setInteger:amount + [records count] forKey:@"records_updated"];
+    }
+}
+
+- (void) cacheBackgroundRecords:(NSArray*)records
+{
+    if([records count]) {
+        NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:records];        
+        NSData* featureCollectionData = [[[CJSONSerializer serializer] serializeObject:featureCollection] dataUsingEncoding:NSASCIIStringEncoding];
+        if(commitLog && HTTPAuthorizer) {
+            NSString* username = [HTTPAuthorizer username];
+            [commitLog addCommit:featureCollectionData forUsername:username andKey:@"record_updates"];
+        }
+        
+        SGLog(@"SGLocationService - Cached %i records that were created in the background", [records count]);
+        NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+        int amount = [userDefaults integerForKey:@"records_cached"];
+        [userDefaults setInteger:amount + [records count] forKey:@"records_cached"];        
+    }       
+}
+
+#endif
+
+#pragma mark -
+#pragma mark Tracker methods 
+
+- (void) startTrackingRecords
+{
+    if(!locationManager) {
+        locationManager = [[CLLocationManager alloc] init];
+        locationManager.delegate = self;    
+    }
+    
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
+    if(useWiFiTowers)
+        [locationManager startMonitoringSignificantLocationChanges];        
+    else
+        [locationManager stopMonitoringSignificantLocationChanges];
+    
+#endif
+
+    
+    if(useGPS)
+        [locationManager startUpdatingLocation];
+    else
+        [locationManager stopUpdatingLocation];
+    
+    locationManager.desiredAccuracy = accuracy;
+}
+
+- (void) stopTrackingRecords
+{
+    if(locationManager) {
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+        [locationManager stopMonitoringSignificantLocationChanges];
+
+#endif
+
+        [locationManager stopUpdatingLocation];
+        locationManager.delegate = nil;
+        [locationManager release];
+        locationManager = nil;
+    }    
+}
+
+#pragma mark -
+#pragma mark CLLocationManager delegate methods 
+
+- (void) locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation
+{
+    double newLat = newLocation.coordinate.latitude;
+    double newLon = newLocation.coordinate.longitude;
+
+    if(!oldLocation || oldLocation.coordinate.latitude != newLat ||  oldLocation.coordinate.longitude != newLon) {
+        SGLog(@"SGLocationService - Location changed to %f, %f", newLat, newLon);
+
+        NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
+        if(trackRecords && [trackRecords count]) {
+            // We can't assume that the objects are SGRecords so we have to create
+            // our own history update
+            NSTimeInterval created = [[NSDate date] timeIntervalSince1970];        
+            NSDictionary* featureCollection = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:trackRecords];
+            for(NSMutableDictionary* feature in [featureCollection features]) {
+                [((NSMutableDictionary*)[feature geometry]) setCoordinates:[NSArray arrayWithObjects:[NSString stringWithFormat:@"%f", newLon],
+                                                                  [NSString stringWithFormat:@"%f", newLat],
+                                                                   nil]];
+                [feature setCreated:created];
+                [totalUpdatedRecords addObject:feature];
+            }
+        }
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+        NSMutableArray* totalCachedRecords = [NSMutableArray array];
+        if(backgroundTask) {
+            NSArray* records = nil;
+            for(id<SGLocationServiceDelegate> delegate in delegates) {
+                if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
+                    records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
+                    if(records)
+                        [totalUpdatedRecords addObjectsFromArray:records];
+                }
+            }
+            
+            for(id<SGLocationServiceDelegate> delegate in delegates) {
+                if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
+                    for(id<SGRecordAnnotation> record in totalUpdatedRecords)
+                        if([delegate locationService:self shouldCacheRecord:record])
+                            [totalCachedRecords addObject:record];
+                }
+            }
+
+            [totalUpdatedRecords removeObjectsInArray:totalCachedRecords];
+            [self cacheBackgroundRecords:totalCachedRecords];
+        }
+
+#endif
+        
+        [self updateBackgroundRecords:totalUpdatedRecords];
+    }
+}
+
+- (void) locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
+{
+    SGLog(@"SGLocationService - Error obtaining lcoation (%@)", [error description]);
+}
+
+#pragma mark -
+#pragma mark SGLocationService delegate methods 
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
+{
+    if([cachedResponseIds containsObject:requestId]) {
+        SGLog(@"SGLocationService - Cached request successfully sent");
+        [cachedResponseIds removeObject:requestId];
+    }
+}
+
+ - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
+{
+    if([cachedResponseIds containsObject:requestId]) {
+        SGLog(@"SGLocationService - Cached request was unsuccessfully (%@)", [error description]);
+        // We might want to recommit the bad request
+        [cachedResponseIds removeObject:requestId];
+    }
+}
+
+#endif
+
+#pragma mark -
 #pragma mark Record Information 
- 
 
 - (NSString*) deleteRecordAnnotation:(id<SGRecordAnnotation>)record
 {
@@ -174,8 +525,7 @@ static NSString* apiVersion = @"0.1";
     NSMutableArray* requests = [NSMutableArray array];
     NSArray* request = nil;
     for(id<SGRecordAnnotation> recordAnnotation in records) {
-        
-        request = (NSArray*)[self _deleteRecord:recordAnnotation.recordId
+        request = (NSArray*)[self deleteRecord:recordAnnotation.recordId
                                 layer:recordAnnotation.layer
                                  push:NO];
         
@@ -183,16 +533,12 @@ static NSString* apiVersion = @"0.1";
             return nil;
         else
             [requests addObject:request];
-        
     }
     
     NSString* requestId = nil;
-    
     if([requests count]) {
-        
-        requestId = [self _getNextResponseId];
-        [self _pushMultiInvovationWithArgs:[NSArray arrayWithObjects:requests, requestId, nil]];
-        
+        requestId = [self getNextResponseId];
+        [self pushMultiInvocationWithArgs:[NSArray arrayWithObjects:requests, requestId, nil]];
     }
     
     return requestId;    
@@ -200,19 +546,16 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) deleteRecord:(NSString*)recordId layer:(NSString*)layer
 {
-    return (NSString*)[self _deleteRecord:recordId layer:layer push:YES];
+    return (NSString*)[self deleteRecord:recordId layer:layer push:YES];
 }
 
-- (NSObject*) _deleteRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push
+- (NSObject*) deleteRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push
 {
     NSString* requestId = nil;
     NSArray* params = nil;
     if(recordId && ![recordId isKindOfClass:[NSNull class]] &&
        layer && ![layer isKindOfClass:[NSNull class]]) {
-        
-        requestId = [self _getNextResponseId];
-        
-        SGLog(@"SGLocationService - Deleting record <%@, %@> with response %@", recordId, layer, requestId);
+        requestId = [self getNextResponseId];
         
         params = [NSArray arrayWithObjects:
                            @"DELETE",
@@ -223,7 +566,7 @@ static NSString* apiVersion = @"0.1";
                            nil];
         
         if(push)
-            [self _pushInvocationWithArgs:params];
+            [self pushInvocationWithArgs:params];
     }
     
     return push ? requestId : (NSObject*)params;    
@@ -246,7 +589,7 @@ static NSString* apiVersion = @"0.1";
     NSString* responseId = nil;
     if([recordIds count]) {
         
-        responseId = [self _getNextResponseId];
+        responseId = [self getNextResponseId];
         
         NSString* layerId = [((id<SGRecordAnnotation>)[records lastObject]) layer];
      
@@ -258,9 +601,7 @@ static NSString* apiVersion = @"0.1";
                            responseId,
                            nil];
         
-        SGLog(@"SGLocationService - Retrieving information for %i records with response %@", [records count], responseId);
-        
-        [self _pushInvocationWithArgs:params];
+        [self pushInvocationWithArgs:params];
     }
     
     return responseId;    
@@ -268,19 +609,17 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) retrieveRecord:(NSString*)recordId layer:(NSString*)layer
 {
-    return (NSString*)[self _retrieveRecord:recordId layer:layer push:YES];
+    return (NSString*)[self retrieveRecord:recordId layer:layer push:YES];
 }
 
-- (NSObject*) _retrieveRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push
+- (NSObject*) retrieveRecord:(NSString*)recordId layer:(NSString*)layer push:(BOOL)push
 {
     NSString* requestId = nil;
     NSArray* params = nil;
     if(recordId && ![recordId isKindOfClass:[NSNull class]] &&
        layer && ![layer isKindOfClass:[NSNull class]]) {
         
-        requestId = [self _getNextResponseId];
-        
-        SGLog(@"SGLocationService - Retrieving record <%@, %@> with response %@", recordId, layer, requestId);
+        requestId = [self getNextResponseId];
         
         params = [NSArray arrayWithObjects:
                            @"GET",
@@ -291,7 +630,7 @@ static NSString* apiVersion = @"0.1";
                            nil];
         
         if(push)
-            [self _pushInvocationWithArgs:params];
+            [self pushInvocationWithArgs:params];
         
     }
     
@@ -313,13 +652,13 @@ static NSString* apiVersion = @"0.1";
     // Bail if we have nothing.
     if(!records || (records && ![records count]))
         return nil;
-    
+
     NSDictionary* geoJSONDictionary = [SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:records];
 
     NSString* responseId = nil;
     if(geoJSONDictionary) {
      
-        responseId = [self _getNextResponseId];
+        responseId = [self getNextResponseId];
         NSData* body = [[[CJSONSerializer serializer] serializeObject:geoJSONDictionary] dataUsingEncoding:NSASCIIStringEncoding];
         
         NSString* layer = [((id<SGRecordAnnotation>)[records lastObject]) layer];
@@ -331,10 +670,7 @@ static NSString* apiVersion = @"0.1";
                                                   [NSNull null],
                                                   responseId,
                                                   nil];
-        
-        SGLog(@"SGLocationService - Updating %i records with response %@", [records count], responseId);
-                                
-        [self _pushInvocationWithArgs:params];
+        [self pushInvocationWithArgs:params];
     }
     
     return responseId;
@@ -342,17 +678,17 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties
 {
-    return (NSString*)[self _updateRecord:recordId layer:layer coord:coord properties:properties push:YES];   
+    return (NSString*)[self updateRecord:recordId layer:layer coord:coord properties:properties push:YES];   
 }
 
-- (NSObject*) _updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties push:(BOOL)push       
+- (NSObject*) updateRecord:(NSString*)recordId layer:(NSString*)layer coord:(CLLocationCoordinate2D)coord properties:(NSDictionary*)properties push:(BOOL)push       
 {
     NSArray* params = nil;
     NSString* requestId = nil;
     if(recordId && ![recordId isKindOfClass:[NSNull class]] &&
        layer && ![layer isKindOfClass:[NSNull class]]) {
         
-        requestId = [self _getNextResponseId];
+        requestId = [self getNextResponseId];
         
         SGRecord* record = [[SGRecord alloc] init];
         record.recordId = recordId;
@@ -379,41 +715,26 @@ static NSString* apiVersion = @"0.1";
         [record release];
         
         if(push)
-            [self _pushInvocationWithArgs:params];
+            [self pushInvocationWithArgs:params];
     }    
     
     return push ? requestId : (NSObject*)params;
 }
 
-
-- (NSString*) retrieveRecordAnnotationHistory:(id<SGRecordAnnotation>)record limit:(int)limit
+- (NSString*) history:(SGHistoryQuery*)query
 {
-    return [self retrieveRecordHistory:record.recordId layer:record.layer limit:limit];
-}
-
-- (NSString*) retrieveRecordHistory:(NSString*)recordId layer:(NSString*)layer limit:(int)limit
-{
-    NSString* requestId = nil;
+    NSString* requestId = [self getNextResponseId];
     
-    if(recordId && ![recordId isKindOfClass:[NSNull class]] &&
-       layer && ![layer isKindOfClass:[NSNull class]]) {
-        
-        requestId = [self _getNextResponseId];
-        
-        NSObject* limitParam = [NSNull null];
-        if(limit > 0)
-            limitParam = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [query uri],
+                       [NSNull null],
+                       [query params],
+                       requestId,
+                       nil];
 
-        NSArray* params = [NSArray arrayWithObjects:
-                           @"GET",
-                           [NSString stringWithFormat:@"/records/%@/%@/history.json", layer, recordId],
-                           [NSNull null],
-                           limitParam,
-                           requestId,
-                           nil];
-
-        [self _pushInvocationWithArgs:params];
-    }
+    query.requestId = requestId;
+    [self pushInvocationWithArgs:params];
 
     return requestId;
 }
@@ -423,7 +744,7 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) layerInformation:(NSString*)layerName
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
@@ -433,7 +754,7 @@ static NSString* apiVersion = @"0.1";
                        responseId,
                        nil];
     
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
     
     return responseId;
 }
@@ -443,7 +764,7 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) nearby:(SGNearbyQuery*)query
 {
-    NSString* requestId = [self _getNextResponseId];
+    NSString* requestId = [self getNextResponseId];
     
     NSMutableArray* params = [NSArray arrayWithObjects:
                               @"GET",
@@ -452,7 +773,7 @@ static NSString* apiVersion = @"0.1";
                               [query params],
                               requestId,
                               nil];
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
     
     query.requestId = requestId;
     
@@ -461,7 +782,7 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) reverseGeocode:(CLLocationCoordinate2D)coord
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     
     
     NSArray* params = [NSArray arrayWithObjects:
@@ -471,7 +792,7 @@ static NSString* apiVersion = @"0.1";
                        [NSNull null],
                        responseId,
                        nil];
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
     
     return responseId;
 }
@@ -487,7 +808,7 @@ static NSString* apiVersion = @"0.1";
     if(!day)
         day = kSpotRank_Monday;
     
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     
     NSArray* params = [NSArray arrayWithObjects:
                             @"GET",
@@ -497,14 +818,14 @@ static NSString* apiVersion = @"0.1";
                             responseId,
                        nil];
     
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
     
     return responseId;                   
 }
 
 - (NSString*) densityForCoordinate:(CLLocationCoordinate2D)coord day:(NSString*)day
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     
     if(!day)
         day = kSpotRank_Monday;
@@ -517,7 +838,7 @@ static NSString* apiVersion = @"0.1";
                        responseId,
                        nil];
     
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
     
     return responseId;                   
 }
@@ -527,7 +848,7 @@ static NSString* apiVersion = @"0.1";
 
 - (NSString*) contains:(CLLocationCoordinate2D)coord;
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
@@ -537,14 +858,14 @@ static NSString* apiVersion = @"0.1";
                        responseId,
                        nil];
     
-    [self _pushInvocationWithArgs:params];
+    [self pushInvocationWithArgs:params];
 
     return responseId;                       
 }
 
 - (NSString*) boundary:(NSString*)featureId
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
                        [NSString stringWithFormat:@"/boundary/%@.json", featureId],
@@ -553,14 +874,14 @@ static NSString* apiVersion = @"0.1";
                        responseId,
                        nil];
     
-    [self _pushInvocationWithArgs:params];    
+    [self pushInvocationWithArgs:params];    
     
     return responseId;
 }
 
 - (NSString*) overlapsType:(NSString*)type inPolygon:(SGEnvelope)envelope withLimit:(int)limit
 {
-    NSString* responseId = [self _getNextResponseId];
+    NSString* responseId = [self getNextResponseId];
     NSString* envelopeString = SGEnvelopeGetString(envelope);
     
     NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
@@ -579,7 +900,7 @@ static NSString* apiVersion = @"0.1";
                        responseId,
                        nil];
 
-    [self _pushInvocationWithArgs:params];    
+    [self pushInvocationWithArgs:params];    
     
     return responseId;
 }
@@ -594,9 +915,8 @@ static NSString* apiVersion = @"0.1";
     NSObject* responseObject = [[responseDictionary objectForKey:@"responseObject"] retain];
 
     SGLog(@"SGLocationService - Request %@ succeeded with %i queued operations", requestId, [self.operationQueue.operations count]);
-    
-    NSArray* delegates = [NSArray arrayWithArray:_delegates];
-    for(id<SGLocationServiceDelegate> delegate in delegates)
+    NSArray* currentDelegates = [NSArray arrayWithArray:delegates];
+    for(id<SGLocationServiceDelegate> delegate in currentDelegates)
         [delegate locationService:self succeededForResponseId:requestId responseObject:responseObject];
     
     [requestId release];
@@ -609,9 +929,8 @@ static NSString* apiVersion = @"0.1";
     NSError* error = [[responseDictionary objectForKey:@"error"] retain];
     
     SGLog(@"SGLocationService - Request failed: %@ Error: %@", requestId, [error description]);
-
-    NSArray* delegates = [NSArray arrayWithArray:_delegates];
-    for(id<SGLocationServiceDelegate> delegate in delegates)
+    NSArray* currentDelegates = [NSArray arrayWithArray:delegates];
+    for(id<SGLocationServiceDelegate> delegate in currentDelegates)
         [delegate locationService:self failedForResponseId:requestId error:error];
     
     [requestId release];
@@ -674,10 +993,7 @@ static NSString* apiVersion = @"0.1";
                          callback:(NSNumber*)callback
 {
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
-    
-    if(!HTTPAuthorizer)
-        HTTPAuthorizer = self;
-    
+        
     if(params && [params isKindOfClass:[NSNull class]])
         params = nil;
     
@@ -696,11 +1012,8 @@ static NSString* apiVersion = @"0.1";
     NSData* data = [returnDictionary objectForKey:@"data"];
     NSHTTPURLResponse* response = [returnDictionary objectForKey:@"response"];
     NSError* error = [returnDictionary objectForKey:@"error"];
-    
     NSDictionary* jsonObject = nil;;
-        
     if(data && ![data isKindOfClass:[NSNull class]]) {
-        
         NSError* error = nil;
         jsonObject = [NSDictionary dictionaryWithJSONData:data error:&error];
                 
@@ -715,12 +1028,10 @@ static NSString* apiVersion = @"0.1";
                                 userInfo:nil];
 
     if((!error || (error && [error isKindOfClass:[NSNull class]])) && response && ![response isKindOfClass:[NSNull class]]) {
-        
         NSInteger responseCode = [response statusCode];
 
         // Make sure we get 20x
         if((responseCode - 200) >= 0 && (responseCode - 200) < 100) {
-
             NSDictionary* responseObject = [NSDictionary dictionaryWithObjectsAndKeys:
                                       requestId, @"requestId",
                                       jsonObject ? jsonObject : (NSObject*)[NSDictionary dictionary], @"responseObject",
@@ -728,7 +1039,6 @@ static NSString* apiVersion = @"0.1";
 
             
             if([callback boolValue]) {
-            
                 if(callbackOnMainThread)
                     [self performSelectorOnMainThread:@selector(succeeded:) withObject:responseObject waitUntilDone:NO];
                 else
@@ -746,9 +1056,7 @@ static NSString* apiVersion = @"0.1";
     
     
     NSDictionary* responseObject = [NSDictionary dictionaryWithObjectsAndKeys:requestId, @"requestId", error, @"error", nil];
-     
     if([callback boolValue]) {
-        
         if(callbackOnMainThread)
             [self performSelectorOnMainThread:@selector(failed:) withObject:responseObject waitUntilDone:NO];
         else
@@ -758,9 +1066,8 @@ static NSString* apiVersion = @"0.1";
     return responseObject;
 }
 
-- (void) _pushMultiInvovationWithArgs:(NSArray*)args
-{
-    
+- (void) pushMultiInvocationWithArgs:(NSArray*)args
+{   
     NSMethodSignature* methodSignature = [self methodSignatureForSelector:@selector(sendMultipleHTTPRequest:requestId:)];
     NSInvocation* httpRequestInvocation = [NSInvocation invocationWithMethodSignature:methodSignature];
     [httpRequestInvocation setSelector:@selector(sendMultipleHTTPRequest:requestId:)];
@@ -768,7 +1075,6 @@ static NSString* apiVersion = @"0.1";
     
     NSString* arg;
 	for(int i = 0; i < [args count]; i++) {
-        
         arg = [args objectAtIndex:i];
 		[httpRequestInvocation setArgument:&arg atIndex:i + 2];
     }
@@ -778,9 +1084,8 @@ static NSString* apiVersion = @"0.1";
     
 }
 
-- (void) _pushInvocationWithArgs:(NSArray*)args 
+- (void) pushInvocationWithArgs:(NSArray*)args 
 {	
-    
     NSMethodSignature* methodSignature = [self methodSignatureForSelector:@selector(sendHTTPRequest:toURL:body:withParams:requestId:callback:)];
     NSInvocation* httpRequestInvocation = [NSInvocation invocationWithMethodSignature:methodSignature];
     [httpRequestInvocation setSelector:@selector(sendHTTPRequest:toURL:body:withParams:requestId:callback:)];
@@ -788,7 +1093,6 @@ static NSString* apiVersion = @"0.1";
 
     NSString* arg;
 	for(int i = 0; i < [args count]; i++) {
-        
         arg = [args objectAtIndex:i];
 		[httpRequestInvocation setArgument:&arg atIndex:i + 2];
     }
@@ -803,14 +1107,14 @@ static NSString* apiVersion = @"0.1";
 #pragma mark -
 #pragma mark Helper methods 
 
-- (NSArray*) _allTypes
+- (NSArray*) allTypes
 {
     return [NSArray arrayWithObjects:kSGLocationType_Place, kSGLocationType_Person, kSGLocationType_Object,
             kSGLocationType_Note, kSGLocationType_Audio, kSGLocationType_Video, nil];
 }
 
 
-- (NSString*) _getNextResponseId
+- (NSString*) getNextResponseId
 {
     requestIdNumber++;
     return [NSString stringWithFormat:@"SGLocationService-%i", requestIdNumber];
@@ -818,8 +1122,18 @@ static NSString* apiVersion = @"0.1";
 
 - (void) dealloc
 {
-    [_delegates release];
+    [delegates release];
     [operationQueue release];
+    [requestIds release];
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
+    if(commitLog)
+        [commitLog release];
+    [cachedResponseIds release];
+    
+    [locationManager release];
+#endif
     
     [super dealloc];
 }

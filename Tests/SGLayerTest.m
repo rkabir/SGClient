@@ -55,27 +55,27 @@ static NSString* testingLayer = kSGTesting_Layer;
 - (void) testLayerFetching
 {
     SGLayer* layer = [[SGLayer alloc] initWithLayerName:kSGTesting_Layer];
-    [self.locatorService addDelegate:layer];
+    [self.locationService addDelegate:layer];
     
     SGRecord* r = [self createRandomRecord];
-    [layer addRecordAnnotation:r];
+    [layer addRecordAnnotation:r update:NO];
     STAssertTrue([[layer recordAnnotations] count] == 1, @"Should be one record in the layer.");
     
     [self addRecordResponseId:[layer updateAllRecords]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];    
     WAIT_FOR_WRITE();
     
     double oldLat = r.latitude;
     r.latitude = 1000.0;
 
     [self retrieveRecordResponseId:[layer retrieveAllRecords]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished]; 
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished]; 
     
     STAssertEquals(r.latitude, oldLat, @"The expected lat should be %f, but was %f", oldLat, r.latitude);
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotation:r]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:r]];
     
     
-    [layer removeAllRecordAnnotations];
+    [layer removeAllRecordAnnotations:NO];
     STAssertNil([layer retrieveAllRecords], @"No records means no response id");
 
 }
@@ -93,16 +93,16 @@ static NSString* testingLayer = kSGTesting_Layer;
         [records addObject:record];
     }
         
-    [layer addRecordAnnotations:records];
+    [layer addRecordAnnotations:records update:NO];
     STAssertTrue([[layer recordAnnotations] count] == amount, @"The layer should have %i records registered.", amount);
     [self addRecordResponseId:[layer updateAllRecords]];
-    
     WAIT_FOR_WRITE();
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [layer removeAllRecordAnnotations:NO];
     
-    [self retrieveRecordResponseId:[self.locatorService retrieveRecordAnnotations:records]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[layer retrieveRecordAnnotations:records]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
     STAssertNotNil(geoJSONObject, @"Return object should not be nil.");
@@ -111,16 +111,13 @@ static NSString* testingLayer = kSGTesting_Layer;
     STAssertNotNil(features, @"Features should be defined.");
     STAssertTrue([records count] == 20, @"There should be 20 records returned.");
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
-    
     STAssertFalse([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
-    [layer removeRecordAnnotation:[records lastObject]];
+    [layer removeRecordAnnotation:[records lastObject] update:YES];
     STAssertTrue([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
     
-    [layer removeAllRecordAnnotations];
+    [layer removeAllRecordAnnotations:YES];
     STAssertTrue([[layer recordAnnotations] count] == 0, @"There should be no records.");
     STAssertNil([layer updateAllRecords], @"No records means no response id");
-    
 }
 
 - (void) testLayerInformation
@@ -128,9 +125,9 @@ static NSString* testingLayer = kSGTesting_Layer;
     NSString* layerName = kSGTesting_Layer;
 
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to retrieve layer information"]
-                        forKey:[self.locatorService layerInformation:layerName]];
+                        forKey:[self.locationService layerInformation:layerName]];
 
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* jsonObject = (NSDictionary*)recentReturnObject;
     
@@ -162,14 +159,14 @@ static NSString* testingLayer = kSGTesting_Layer;
         [records addObject:record];
     }
     
-    [layer addRecordAnnotations:records];
+    [layer addRecordAnnotations:records update:NO];
     STAssertTrue([[layer recordAnnotations] count] == amount, @"The layer should have %i records registered.", amount);
     [self addRecordResponseId:[layer updateAllRecords]];
     
     WAIT_FOR_WRITE();
     WAIT_FOR_WRITE();
     
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:testingLayer];
     query.coordinate = coords;
@@ -178,9 +175,9 @@ static NSString* testingLayer = kSGTesting_Layer;
     query.start = currentTime;
     query.end = weekLater;
     
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];     
     
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     NSArray* features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
@@ -189,14 +186,14 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     query.start = currentTime * 2.0;
     query.end = weekLater * 2.0;
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];     
 
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     features = [recentReturnObject features];
     STAssertTrue([features count] == 0, @"No features should be returned");
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     [layer release];
 }
 
@@ -214,7 +211,7 @@ static NSString* testingLayer = kSGTesting_Layer;
      SGLayer* layer = [[SGLayer alloc] initWithLayerName:testingLayer];
     
     [self addRecordResponseId:[layer updateRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
@@ -223,17 +220,17 @@ static NSString* testingLayer = kSGTesting_Layer;
     query.limit = 1;
     
     [self retrieveRecordResponseId:[layer nearby:query]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertTrue([[recentReturnObject features] count] == 1, @"A single record should be returned.");
     
     STAssertNotNil(layer.recentNearbyQuery.cursor, @"A new cursor should have been applied to the layer object.");
     
     layer.recentNearbyQuery.limit = 9;
     [self retrieveRecordResponseId:[layer nextNearby]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertTrue([[recentReturnObject features] count] == 9, @"Another 9 records should be returned.");
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
     [query release];
     [layer release];
 }

@@ -35,24 +35,21 @@
 #import "SGOAuth.h"
 
 #import "SGLocationService.h"
-
 #import "SGAdditions.h"
-
 #import "hmac.h"
 #import "Base64Transcoder.h"
 
 @interface SGOAuth (Private) 
 
-- (NSString*) _signatureBaseStringFromRequest:(NSURLRequest*)request params:(NSDictionary*)params;
-- (NSString*) _normalizeRequestParams:(NSDictionary*)params;
-- (NSString*) _generateTimestamp;
-- (NSString*) _generateNonce;
+- (NSString*) signatureBaseStringFromRequest:(NSURLRequest*)request params:(NSDictionary*)params;
+- (NSString*) normalizeRequestParams:(NSDictionary*)params;
+- (NSString*) generateTimestamp;
+- (NSString*) generateNonce;
 - (NSString*) signText:(NSString *)text withSecret:(NSString *)secret;
 
 @end
 
 @implementation SGOAuth 
-
 @synthesize consumerKey, secretKey;
 
 - (id) initWithKey:(NSString*)key secret:(NSString*)secret
@@ -61,7 +58,6 @@
         return nil;
     
     if(self = [super init]) {
-        
         SGLog(@"SGOAuth - creating token with secret %@ and consumer %@", secret, key);
         consumerKey = [key retain];
         secretKey = [secret retain];
@@ -70,8 +66,6 @@
                                                 key, @"oauth_consumer_key",
                                                 @"HMAC-SHA1", @"oauth_signature_method", 
                                                 @"1.0", @"oauth_version", nil] retain];
-        
-                
     }
     
     return self;
@@ -109,6 +103,11 @@
 
 #pragma mark -
 #pragma mark SGAuthorization methods 
+
+- (NSString*) username
+{
+    return [self signText:consumerKey withSecret:secretKey];
+}
  
 - (NSDictionary*) dataAtURL:(NSString*)url 
                        file:(NSString*)file
@@ -127,17 +126,17 @@
     
     NSMutableDictionary* newOAuthParams = [NSMutableDictionary dictionary];
     [newOAuthParams addEntriesFromDictionary:oAuthParams];
-    [newOAuthParams setValue:[self _generateTimestamp] forKey:@"oauth_timestamp"];
-    [newOAuthParams setValue:[self _generateNonce] forKey:@"oauth_nonce"];
+    [newOAuthParams setValue:[self generateTimestamp] forKey:@"oauth_timestamp"];
+    [newOAuthParams setValue:[self generateNonce] forKey:@"oauth_nonce"];
     
     if(params)
         [newOAuthParams addEntriesFromDictionary:params];
 
-    NSString* baseString = [self _signatureBaseStringFromRequest:request params:newOAuthParams];
+    NSString* baseString = [self signatureBaseStringFromRequest:request params:newOAuthParams];
     NSString* signature = [self signText:baseString withSecret:[NSString stringWithFormat:@"%@&", secretKey]];
     [newOAuthParams setValue:signature forKey:@"oauth_signature"];
                            
-    NSString* newURL = [NSString stringWithFormat:@"%@?%@", [requestURL absoluteString], [self _normalizeRequestParams:newOAuthParams]];
+    NSString* newURL = [NSString stringWithFormat:@"%@?%@", [requestURL absoluteString], [self normalizeRequestParams:newOAuthParams]];
     [request setURL:[NSURL URLWithString:newURL]];
     
     SGLog(@"SGOAuth - %@ %@", method, newURL);
@@ -164,15 +163,15 @@
 #pragma mark -
 #pragma mark Helper methods 
 
-- (NSString*) _signatureBaseStringFromRequest:(NSURLRequest*)request params:(NSDictionary*)params
+- (NSString*) signatureBaseStringFromRequest:(NSURLRequest*)request params:(NSDictionary*)params
 {
     return [NSString stringWithFormat:@"%@&%@&%@",
             [request HTTPMethod],
             [[[request URL] absoluteString] URLEncodedString],
-            [[self _normalizeRequestParams:params] URLEncodedString]];
+            [[self normalizeRequestParams:params] URLEncodedString]];
 }
 
-- (NSString*) _normalizeRequestParams:(NSDictionary*)params
+- (NSString*) normalizeRequestParams:(NSDictionary*)params
 {
     NSMutableArray *parameterPairs = [NSMutableArray arrayWithCapacity:([params count])];
     
@@ -188,12 +187,12 @@
     return [sortedPairs componentsJoinedByString:@"&"];
 }
 
-- (NSString*) _generateTimestamp
+- (NSString*) generateTimestamp
 {
     return [NSString stringWithFormat:@"%d", time(NULL)];
 }
 
-- (NSString *) _generateNonce
+- (NSString *) generateNonce
 {
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);

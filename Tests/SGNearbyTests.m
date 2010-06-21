@@ -56,9 +56,9 @@
         [records addObject:record];
     }
 
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
     WAIT_FOR_WRITE();
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
     query.coordinate = coord;
@@ -68,8 +68,8 @@
     
     for(int i = 0; i < 10; i++) {
         recentReturnObject = nil;
-        [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
-        [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+        [self retrieveRecordResponseId:[self.locationService nearby:query]];     
+        [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
         STAssertNotNil(recentReturnObject, @"Return object should not be nil");
         
         NSArray* features = [(NSDictionary*)recentReturnObject features];
@@ -87,7 +87,7 @@
         STAssertTrue([(NSArray*)recentReturnObject count] > 0, @"Return amount should be greater than zero.");
     }
     
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
 }
 
 
@@ -106,9 +106,9 @@
         [records addObject:record];
     }    
         
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
+    [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
     WAIT_FOR_WRITE();
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
     query.coordinate = coord;
@@ -117,9 +117,9 @@
     query.start = currentTime;
     query.end = weekLater;
     
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];
      
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     NSArray* features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
@@ -127,24 +127,24 @@
      
     query.start = currentTime * 2.0;
     query.end = weekLater * 2.0;
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];     
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];     
     
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     features = [recentReturnObject features];
     STAssertTrue([features count] == 0, @"No features should be returned");
     
     query.start = currentTime;
     query.end = weekLater + 120;
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];
 
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertNotNil(recentReturnObject, @"Return object should not be nil");
     features = (NSArray*)[recentReturnObject features];
     STAssertNotNil(features, @"Features should be returned");
     STAssertTrue([features count] >= 1, @"There should be more than 10 records that are returned.");
     
     [query release];
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
 }
 
 - (void) testNearbyPagination
@@ -159,8 +159,8 @@
         [records addObject:record];
     }    
     
-    [self addRecordResponseId:[self.locatorService updateRecordAnnotations:records]];    
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     WAIT_FOR_WRITE();
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
@@ -168,8 +168,8 @@
     query.radius = 1.0;
     query.limit = 1;
     
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertTrue([[recentReturnObject features] count] == 1, @"A single record should be returned.");
     
     NSString* cursor = [recentReturnObject objectForKey:@"next_cursor"];
@@ -178,22 +178,22 @@
     query.cursor = cursor;
     query.limit = 9;
     
-    [self retrieveRecordResponseId:[self.locatorService nearby:query]];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     STAssertTrue([[recentReturnObject features] count] == 9, @"Another 9 records should be returned.");
     
     [query release];
-    [self deleteRecordResponseId:[self.locatorService deleteRecordAnnotations:records]];
+    [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
 }
 
 - (void) testReverseGeocoder
 {
     CLLocationCoordinate2D coords = {40.017294990861913, -105.27759999949176};
-    NSString* responseId = [self.locatorService reverseGeocode:coords];
+    NSString* responseId = [self.locationService reverseGeocode:coords];
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a reverse geocode object."]
                         forKey:responseId];
-    [self.locatorService.operationQueue waitUntilAllOperationsAreFinished];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
 
     STAssertNotNil(recentReturnObject, @"Reverse geocoder should return an object.");
     NSDictionary* properties = [(NSDictionary*)recentReturnObject objectForKey:@"properties"];

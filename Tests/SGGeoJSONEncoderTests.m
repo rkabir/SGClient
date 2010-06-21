@@ -40,7 +40,6 @@
 
 @end
 
-
 @implementation SGGeoJsonEncoderTests
 
 - (void) validateJSONObject:(NSDictionary*)dictionary record:(SGRecord*)record
@@ -59,7 +58,7 @@
     value = [feature created];
     STAssertTrue(value == record.created, @"Creation date should be %f, but was %f", record.created, value);
     
-    STAssertTrue([[feature id] isEqualToString:record.recordId], @"Record ID should be %@", record.recordId);
+    STAssertTrue([[feature recordId] isEqualToString:record.recordId], @"Record ID should be %@", record.recordId);
     
     NSDictionary* properties = [feature properties];
     STAssertTrue([[properties objectForKey:@"me"] isEqualToString:@"you"], @"Me should map to you.");
@@ -88,9 +87,18 @@
     record.recordId = @"sup123";
 
     NSDictionary* dictionary = [[SGGeoJSONEncoder geoJSONObjectForRecordAnnotations:[NSArray arrayWithObject:record]] retain];
-    NSString* recordId = [[[dictionary features] objectAtIndex:0] id];
+    NSString* recordId = [[[dictionary features] objectAtIndex:0] recordId];
     STAssertTrue([recordId isEqualToString:record.recordId], @"The record id should be equal to %@, but was %@", record.recordId, recordId);
     [dictionary release];
 }
 
+- (void) testGeoJSONObjectConformsToRecordAnnotation
+{
+    NSMutableDictionary* geoJSON = [NSMutableDictionary dictionary];    
+    STAssertTrue([geoJSON conformsToProtocol:@protocol(SGRecordAnnotation)], @"A dictionary with id and layer set should be a valid record annotation");
+}
+
 @end
+
+
+

@@ -34,11 +34,13 @@
 
 #import "SGRecord.h"
 
+#import "SGPointHelper.h"
+#import "SGLocationService.h"
 #import "SGLocationTypes.h"
-
 #import "SGGeoJSONEncoder.h"
-#import "GeoJSON+NSArray.h"
-#import "GeoJSON+NSDictionary.h"
+#import "SGGeoJSON.h"
+#import "SGAdditions.h"
+#import "SGHistoryQuery.h"
 
 @interface SGRecord (Private)
 
@@ -46,9 +48,8 @@
 
 @end
 
-@implementation SGRecord 
-
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink;
+@implementation SGRecord
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history, historyQuery;
 @dynamic type;
 
 - (id) init
@@ -65,9 +66,13 @@
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
         layer = nil;
+        history = nil;
+        historyQuery = nil;
         
         if(!layer)
-            layer = @"missing";
+            layer = @"";
+        
+        historyChanged = NO;
     }
     
     return self;
@@ -94,13 +99,21 @@
     return recordType;
 }
 
+- (void) updateHistory:(NSDictionary*)newHistory
+{
+    historyChanged = YES;
+    if(history)
+        newHistory = SGGeometryCollectionAppend(history, newHistory);
+    
+    history = [newHistory retain];
+}
+
 #pragma mark -
 #pragma mark MKAnnotation methods 
 
 - (CLLocationCoordinate2D) coordinate
 {    
     CLLocationCoordinate2D myCoordinate = {[self latitude], [self longitude]};
-    
     return myCoordinate;
 }
 
@@ -120,18 +133,13 @@
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)geoJSONObject
 {
     if(geoJSONObject) {
-        
         NSDictionary* geometry = [geoJSONObject geometry];
-        
         if(geometry) {
-            
             NSArray* coordinates = [geometry coordinates];        
             if([self _isValid:coordinates]) {
-     
                 [self setLatitude:[coordinates latitude]];
                 [self setLongitude:[coordinates longitude]];
             }
-            
         }
         
         NSDictionary* prop = [geoJSONObject properties];
@@ -140,9 +148,12 @@
         
         [self setExpires:[geoJSONObject expires]];
         [self setCreated:[geoJSONObject created]];
-        [self setRecordId:[geoJSONObject id]];
-
-        [self setLayer:[SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]]];
+        [self setRecordId:[geoJSONObject recordId]];
+        
+        NSString* jsonLayer = [geoJSONObject layer];
+        if(!jsonLayer)
+            jsonLayer = [SGGeoJSONEncoder layerNameFromLayerLink:[geoJSONObject layerLink]];
+        [self setLayer:jsonLayer];
     }
 }
 
@@ -151,6 +162,58 @@
     return [NSString stringWithFormat:@"<%@: type=%@, layer=%@, lat=%f, long=%f, expires=%i, created=%i>", self.recordId, self.type,
             self.layer, self.latitude, self.longitude, (int)self.expires, (int)self.created];
 }
+
+- (NSString*) getHistory:(int)limit cursor:(NSString*)cursor
+{
+    historyQuery = [[SGHistoryQuery alloc] initWithRecord:self];
+    historyQuery.cursor = cursor;
+    historyQuery.limit = limit;
+    return [[SGLocationService sharedLocationService] history:historyQuery];
+}
+
+- (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
+{
+    NSString* updateResponseId = nil;
+    double newLatitude = coord.latitude;
+    double newLongitude = coord.longitude;
+    if(longitude && latitude && (newLatitude != latitude && newLongitude != longitude)) {
+        SGLog(@"SGRecord - Updating record coordinates to %f,%f from %f,%f", newLatitude, newLongitude, latitude, longitude);
+        if(!history) {
+            NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
+            history = [geometryCollection retain];
+        } 
+        [(NSMutableDictionary*)history addGeometry:SGPointCreate(latitude, longitude)];        
+        
+        latitude = coord.latitude;
+        longitude = coord.longitude;
+        created = [[NSDate date] timeIntervalSince1970];        
+        
+        updateResponseId = [[SGLocationService sharedLocationService] updateRecordAnnotation:self];
+    }
+    
+    return updateResponseId;
+}
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (MKPolyline*) historyPolyline
+{
+    if(history && historyChanged) {
+        NSMutableArray* coords = [NSMutableArray array];
+        for(NSDictionary* geometry in [history geometries])
+            [coords addObject:[geometry coordinates]];
+        
+        if(polyline)
+            [polyline release];
+
+        polyline = [[MKPolyline polylineWithCoordinates:SGLonLatArrayToCLLocationCoordArray(coords) 
+                                                 count:[coords count]] retain];
+    }
+    
+    return polyline;
+}
+
+#endif
 
 #pragma mark -
 #pragma mark Helper methods 
@@ -168,6 +231,7 @@
     [properties release];
     [layerLink release];
     [selfLink release];
+    [history release];
     
     [super dealloc];
 }

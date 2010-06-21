@@ -1,6 +1,6 @@
 //
-//  NSStringAdditions.h
-//  SGClient
+//  SGGeoJSON.h
+//  SGStalker
 //
 //  Copyright (c) 2009-2010, SimpleGeo
 //  All rights reserved.
@@ -32,30 +32,27 @@
 //  Created by Derek Smith.
 //
 
-#import <Foundation/Foundation.h>
+/*!
+* @function SGGeometryCollectionCreate()
+* @abstract Creates a new GeoJSON geometry collection object.
+* @result A new GeometryCollection
+*/
+extern NSMutableDictionary* SGGeometryCollectionCreate();
 
 /*!
-* @category NSString (SimpleGeo)
-* @abstract A category to help encode NSString for URLs. 
+* @function SGGeometryCollectionAppend(NSDictionary*, NSDictionary*);
+* @abstract Appends the geoemetries from one collection to another.
+* @param collection1
+* @param collection2
+* @result A new GeometryCollections
 */
-@interface NSString (SimpleGeo) 
+extern NSDictionary* SGGeometryCollectionAppend(NSDictionary* collection1, NSDictionary* collection2);
 
 /*!
-* @method URLEncodedString
-* @result ￼
+* @function SGPointCreate(double, double)
+* @abstract Creates a new Point geometry type
+* @param lat
+* @param lon
+* @result A new Point geometry type.
 */
-- (NSString*) URLEncodedString;
-
-/*!
-* @method  minimalURLEncodedString
-* @result ￼
-*/
-- (NSString*) minimalURLEncodedString;
-
-/*!
-* @method  URLDecodedString
-* @result ￼
-*/
-- (NSString*) URLDecodedString;
-
-@end
+extern NSDictionary* SGPointCreate(double lat, double lon);

@@ -33,21 +33,23 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
+#import <time.h>
+
 #import "SGClient.h"
 #import "SGTestingMacros.h"
 
 // Delay requests after writes to give them a chance to be 
 // registered.
-#define WAIT_FOR_WRITE()              sleep(3)
+#define WAIT_FOR_WRITE()              sleep(5)
 
 @interface SGLocationServiceTests : SenTestCase <SGLocationServiceDelegate> {
     
-    SGLocationService* locatorService;
+    SGLocationService* locationService;
     NSMutableDictionary* requestIds;
     NSDictionary* recentReturnObject;
 }
 
-@property (nonatomic, retain) SGLocationService* locatorService;
+@property (nonatomic, retain) SGLocationService* locationService;
 @property (nonatomic, retain) NSMutableDictionary* requestIds;
 @property (nonatomic, retain) NSObject* recentReturnObject;
 
