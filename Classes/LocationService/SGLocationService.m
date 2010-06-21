@@ -94,11 +94,12 @@ static NSString* apiVersion = @"0.1";
 - (void) sendMultipleHTTPRequest:(NSArray*)requestList
                        requestId:(NSString*)requestId;
 
+- (void) updateBackgroundRecords:(NSArray*)records;
+
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
 - (void) initializeCommitLog;
 - (void) replayCommitLog;
-- (void) updateBackgroundRecords:(NSArray*)records;
 - (void) cacheBackgroundRecords:(NSArray*)records;
 
 #endif
@@ -378,6 +379,8 @@ static NSString* apiVersion = @"0.1";
     }       
 }
 
+#endif
+
 #pragma mark -
 #pragma mark Tracker methods 
 
@@ -388,16 +391,20 @@ static NSString* apiVersion = @"0.1";
         locationManager.delegate = self;    
     }
     
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
     if(useWiFiTowers)
         [locationManager startMonitoringSignificantLocationChanges];        
     else
         [locationManager stopMonitoringSignificantLocationChanges];
+    
+#endif
 
     
     if(useGPS)
         [locationManager startUpdatingLocation];
     else
-        [locationManager stopUpdatingHeading];
+        [locationManager stopUpdatingLocation];
     
     locationManager.desiredAccuracy = accuracy;
 }
@@ -405,7 +412,14 @@ static NSString* apiVersion = @"0.1";
 - (void) stopTrackingRecords
 {
     if(locationManager) {
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
         [locationManager stopMonitoringSignificantLocationChanges];
+
+#endif
+
+        [locationManager stopUpdatingLocation];
         locationManager.delegate = nil;
         [locationManager release];
         locationManager = nil;
@@ -423,11 +437,6 @@ static NSString* apiVersion = @"0.1";
     if(!oldLocation || oldLocation.coordinate.latitude != newLat ||  oldLocation.coordinate.longitude != newLon) {
         SGLog(@"SGLocationService - Location changed to %f, %f", newLat, newLon);
 
-        /* 
-         * The only time this object should be registered to recieve location updates
-         * is when the surrounding application enters the background state. 
-         */    
-        NSMutableArray* totalCachedRecords = [NSMutableArray array];
         NSMutableArray* totalUpdatedRecords = [NSMutableArray array];
         if(trackRecords && [trackRecords count]) {
             // We can't assume that the objects are SGRecords so we have to create
@@ -445,6 +454,7 @@ static NSString* apiVersion = @"0.1";
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
+        NSMutableArray* totalCachedRecords = [NSMutableArray array];
         if(backgroundTask) {
             NSArray* records = nil;
             for(id<SGLocationServiceDelegate> delegate in delegates) {
@@ -480,6 +490,8 @@ static NSString* apiVersion = @"0.1";
 
 #pragma mark -
 #pragma mark SGLocationService delegate methods 
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
 
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {

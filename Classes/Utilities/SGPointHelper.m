@@ -59,6 +59,8 @@ NSArray* SGCLLocationCoordArrayToLonLatArray(CLLocationCoordinate2D* coordArray,
     return coordinates;
 }
 
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
 MKMapRect SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D* coordArray, int length) {
 
     CLLocationDegrees bigLat, bigLon, smallLat, smallLon = 0;
@@ -85,3 +87,5 @@ MKMapRect SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D* coordArray, int le
     
     return MKMapRectMake(x, y, width, height);
 }
+
+#endif

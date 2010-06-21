@@ -52,6 +52,8 @@ extern CLLocationCoordinate2D* SGLonLatArrayToCLLocationCoordArray(NSArray* lonL
 */
 extern NSArray* SGCLLocationCoordArrayToLonLatArray(CLLocationCoordinate2D* coordArray, int length);
 
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
 /*!
 * @function SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D*, int);
 * @abstract Creates an axis aligned bounding box for the given list of coordinates.
@@ -61,4 +63,6 @@ extern NSArray* SGCLLocationCoordArrayToLonLatArray(CLLocationCoordinate2D* coor
 * @result A MKMapRect representation of the AABB.
 */
 extern MKMapRect SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D* coordArray, int length);
+
+#endif
 

@@ -196,6 +196,8 @@
     return updateResponseId;
 }
 
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
 - (MKPolyline*) historyPolyline
 {
     if(history && historyChanged) {
@@ -212,6 +214,8 @@
     
     return polyline;
 }
+
+#endif
 
 #pragma mark -
 #pragma mark Helper methods 

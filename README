@@ -102,6 +102,13 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
+Version 0.4.0
+- SGRecordAnnotations can now be updated in the background and tracked
+in the foreground
+- A wrapper around CLLocationManager provides the delegate with notifications
+of when the device enters and leaves a region defined by SimpleGeo's PushPin
+service
+
 Version 0.3.9
 - SGLayer objects can use pagination automatically
 
