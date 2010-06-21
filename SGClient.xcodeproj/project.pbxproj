@@ -185,6 +185,7 @@
 		4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHistoryQuery.m; sourceTree = "<group>"; };
 		4A859EBD11C13E3300F50676 /* SGPointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGPointHelper.h; sourceTree = "<group>"; };
 		4A859EBE11C13E3300F50676 /* SGPointHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPointHelper.m; sourceTree = "<group>"; };
+		4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BACKGROUND_LOCATION.markdown; sourceTree = "<group>"; };
 		4A930FAC119DF50E0034828D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = SDKROOT; };
 		4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationManagerTests.m; sourceTree = "<group>"; };
 		4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGeoJSON.m; sourceTree = "<group>"; };
@@ -244,6 +245,7 @@
 		0867D691FE84028FC02AAC07 /* SGClient */ = {
 			isa = PBXGroup;
 			children = (
+				4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */,
 				4A64B5F41120D54C00D4E22D /* build_client */,
 				4A64A3AA112095BE00D4E22D /* Classes */,
 				4A64A3C6112095BE00D4E22D /* README */,

@@ -2,7 +2,7 @@
 
 CLIENT_PATH=.
 NAME=SGClient
-VERSION=0.3.9
+VERSION=0.4.0
 CLIENT_DIR=$CLIENT_PATH/$NAME-v$VERSION
 
 HEADER_DIR=$CLIENT_DIR/Headers
@@ -29,7 +29,12 @@ do
   cp $header_file $HEADER_DIR/
 done
 
-SDKs=( iphoneos3.1 iphonesimulator3.1 )
+if [ $1 ]; then
+  VERSION=$1
+else
+  VERSION=4.0
+fi
+SDKs=( iphoneos$VERSION iphonesimulator$VERSION )
 
 for sdk in ${SDKs[@]}
 do
@@ -57,7 +62,7 @@ rm headerDoc2HTML.config
 rm $CLIENT_DIR/this.hdoc
 
 cp README $CLIENT_DIR
-cp LICENSE.txt $CLIENT_DIR
+cp LICENSE $CLIENT_DIR
 
 for i in $*
 do

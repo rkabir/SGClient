@@ -165,9 +165,7 @@
 
 - (NSString*) getHistory:(int)limit cursor:(NSString*)cursor
 {
-    historyQuery = [[SGHistoryQuery alloc] init];
-    historyQuery.recordId = recordId;
-    historyQuery.layer = layer;
+    historyQuery = [[SGHistoryQuery alloc] initWithRecord:self];
     historyQuery.cursor = cursor;
     historyQuery.limit = limit;
     return [[SGLocationService sharedLocationService] history:historyQuery];
