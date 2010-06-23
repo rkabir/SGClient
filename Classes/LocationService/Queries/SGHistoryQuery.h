@@ -34,6 +34,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SGQuery.h"
+#import "SGRecordAnnotation.h"
 
 /*!
 * @class SGHistoryQuery 

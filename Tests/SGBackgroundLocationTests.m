@@ -141,7 +141,10 @@
     NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[record getHistory:100 cursor:nil]];
+    SGHistoryQuery* historyQuery = [[SGHistoryQuery alloc] initWithRecord:record];
+    historyQuery.limit = 100;
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] 
+                        forKey:[self.locationService history:historyQuery]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;

@@ -74,7 +74,6 @@
 		4A64B55F1120BB9100D4E22D /* NSDictionary_JSONExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A409112095BE00D4E22D /* NSDictionary_JSONExtensions.m */; };
 		4A64B5601120BB9100D4E22D /* NSCharacterSet_Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A407112095BE00D4E22D /* NSCharacterSet_Extensions.m */; };
 		4A64B5611120BB9200D4E22D /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3CC112095BE00D4E22D /* hmac.c */; };
-		4A68B8B611CE7BED0090C675 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
 		4A68B92A11CE8A870090C675 /* SGLocationServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A417112095BE00D4E22D /* SGLocationServiceTests.m */; };
 		4A748CD111A1FC3C000AA9DD /* SGQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CCF11A1FC3C000AA9DD /* SGQuery.h */; };
 		4A748CD911A1FD55000AA9DD /* SGNearbyQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */; };
@@ -89,6 +88,14 @@
 		4A748D7111A20DE3000AA9DD /* SGLatLonNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */; };
 		4A748D7211A20DE4000AA9DD /* SGHistoryQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */; };
 		4A748D7311A20DE4000AA9DD /* SGGeohashNearbyQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A748CDC11A1FD60000AA9DD /* SGGeohashNearbyQuery.m */; };
+		4A752CE911D11D2C005E55B9 /* SGCacheHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA46811AB0B89003BEED6 /* SGCacheHandlerTests.m */; };
+		4A752CEA11D11D2D005E55B9 /* SGCommitLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA57711AB3B8F003BEED6 /* SGCommitLogTests.m */; };
+		4A752CEB11D11D2E005E55B9 /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
+		4A752CEC11D11D2F005E55B9 /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
+		4A752CED11D11D30005E55B9 /* SGPushPinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */; };
+		4A752CEE11D11D30005E55B9 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
+		4A752CEF11D11D31005E55B9 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
+		4A752CF011D11D32005E55B9 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
 		4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
 		4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A859EBD11C13E3300F50676 /* SGPointHelper.h */; };
 		4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
@@ -626,8 +633,15 @@
 				4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07B11C5556400EDD585 /* SGLocationManager.m in Sources */,
 				4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */,
-				4A68B8B611CE7BED0090C675 /* SGLocationManagerTests.m in Sources */,
 				4A68B92A11CE8A870090C675 /* SGLocationServiceTests.m in Sources */,
+				4A752CE911D11D2C005E55B9 /* SGCacheHandlerTests.m in Sources */,
+				4A752CEA11D11D2D005E55B9 /* SGCommitLogTests.m in Sources */,
+				4A752CEB11D11D2E005E55B9 /* SGGeoJSONEncoderTests.m in Sources */,
+				4A752CEC11D11D2F005E55B9 /* SGLayerTest.m in Sources */,
+				4A752CED11D11D30005E55B9 /* SGPushPinTests.m in Sources */,
+				4A752CEE11D11D30005E55B9 /* SGNearbyTests.m in Sources */,
+				4A752CEF11D11D31005E55B9 /* SGRecordTests.m in Sources */,
+				4A752CF011D11D32005E55B9 /* SGSpotRankTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -240,7 +240,10 @@
         WAIT_FOR_WRITE();
     }
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[r1 getHistory:5 cursor:nil]];
+    SGHistoryQuery* historyQuery = [[SGHistoryQuery alloc] initWithRecord:r1];
+    historyQuery.limit = 5;
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] 
+                        forKey:[self.locationService history:historyQuery]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
