@@ -18,7 +18,6 @@
 
 #import "SGCacheHandler.h"
 #import "SGCommitLog.h"
-#import "SGPointHelper.h"
 
 #import "SGAuthorization.h"
 #import "SGGeoJSONEncoder.h"

@@ -78,13 +78,15 @@
 {
     NSArray* backgroundLocations = [self getLocations];
     CLLocation* oldLocation = nil;
-    for(CLLocation* location in backgroundLocations) {
+    CLLocation* location = nil;
+    for(int i = [backgroundLocations count] - 1; i >= 0; i--) {
+        location = [backgroundLocations objectAtIndex:i];
         [locationService locationManager:locationService.locationManager
                     didUpdateToLocation:location
                            fromLocation:oldLocation];
         oldLocation = location;
-        [locationService.operationQueue waitUntilAllOperationsAreFinished];
         WAIT_FOR_WRITE();
+        [locationService.operationQueue waitUntilAllOperationsAreFinished];
     }    
 }
 
@@ -103,6 +105,8 @@
 
     [locationService enterBackground];   
     [self updateLocationManager];
+    WAIT_FOR_WRITE();
+
     [locationService leaveBackground];
     [locationService becameActive];
  
@@ -128,7 +132,7 @@
     [locationService becameActive];
     
     WAIT_FOR_WRITE();
-    
+
     [self validateHistory:cachedRecord];
 }
 
@@ -141,7 +145,10 @@
     NSInteger recordId = [[(NSDictionary*)recentReturnObject recordId] intValue];
     STAssertEquals(recordId, expectedId, @"Expected %i recordId, but was %i", expectedId, recordId);
     
-    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] forKey:[record getHistory:100 cursor:nil]];
+    SGHistoryQuery* historyQuery = [[SGHistoryQuery alloc] initWithRecord:record];
+    historyQuery.limit = 100;
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Must return an object."] 
+                        forKey:[self.locationService history:historyQuery]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     NSDictionary* geoJSONObject = (NSDictionary*)recentReturnObject;
@@ -151,11 +158,11 @@
     NSArray* backgroundLocations = [self getLocations];
     NSArray* geometries = [geoJSONObject geometries];
     int backgroundLocationCount = [backgroundLocations count];
-    STAssertTrue([geometries count] == (backgroundLocationCount + 1), @"There were %i background location updates.", [geometries count]);
+    STAssertTrue([geometries count] >= backgroundLocationCount , @"There were %i location update but %i were required.", [geometries count], backgroundLocationCount);
     
     // We don't care about the initial lon/lat
     for(int i = 0; i < backgroundLocationCount; i++) {
-        NSDictionary* geometry = [geometries objectAtIndex:backgroundLocationCount - i - 1];
+        NSDictionary* geometry = [geometries objectAtIndex:i];
         NSArray* coordinates = [geometry coordinates];
         CLLocation* location = [backgroundLocations objectAtIndex:i];
         

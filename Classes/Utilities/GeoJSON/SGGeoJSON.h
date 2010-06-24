@@ -1,6 +1,6 @@
 //
-//  SGPointHelper.h
-//  SGClient
+//  SGGeoJSON.h
+//  SGStalker
 //
 //  Copyright (c) 2009-2010, SimpleGeo
 //  All rights reserved.
@@ -32,37 +32,30 @@
 //  Created by Derek Smith.
 //
 
-#import <MapKit/MapKit.h>
+#import "GeoJSON+NSArray.h"
+#import "GeoJSON+NSDictionary.h"
 
 /*!
-* @function SGLonLatArrayToCLLocationCoordArray(NSArray*)
-* @abstract Converts a (lon, lat) array into the proper CoreLocation coordiante.
-* @param lonLatArray
-* @result A new array of CoreLocation coordinates.
+* @function SGGeometryCollectionCreate()
+* @abstract Creates a new GeoJSON geometry collection object.
+* @result A new GeometryCollection
 */
-extern CLLocationCoordinate2D* SGLonLatArrayToCLLocationCoordArray(NSArray* lonLatArray);
+extern NSMutableDictionary* SGGeometryCollectionCreate();
 
 /*!
-* @function SGCLLocationCoordArrayToLonLatArray(CLLocationCoordinate2D*, int);
-* @abstract Creates an array of [lon,lat] objects from an array of CoreLocation
-* coordiantes.
-* @param coordArray
-* @param length
-* @result A new array of [lon,lat] arrays.
+* @function SGGeometryCollectionAppend(NSDictionary*, NSDictionary*);
+* @abstract Appends the geoemetries from one collection to another.
+* @param collection1
+* @param collection2
+* @result A new GeometryCollections
 */
-extern NSArray* SGCLLocationCoordArrayToLonLatArray(CLLocationCoordinate2D* coordArray, int length);
-
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+extern NSDictionary* SGGeometryCollectionAppend(NSDictionary* collection1, NSDictionary* collection2);
 
 /*!
-* @function SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D*, int);
-* @abstract Creates an axis aligned bounding box for the given list of coordinates.
-* @see http://en.wikipedia.org/wiki/Minimum_bounding_box
-* @param coordArray
-* @param length
-* @result A MKMapRect representation of the AABB.
+* @function SGPointCreate(double, double)
+* @abstract Creates a new Point geometry type
+* @param lat
+* @param lon
+* @result A new Point geometry type.
 */
-extern MKMapRect SGGetAxisAlignedBoundingBox(CLLocationCoordinate2D* coordArray, int length);
-
-#endif
-
+extern NSDictionary* SGPointCreate(double lat, double lon);

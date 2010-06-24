@@ -32,7 +32,6 @@
 //  Created by Derek Smith.
 //
 
-#import <MapKit/MapKit.h>
 #import "SGRecordAnnotation.h"
 
 @class SGHistoryQuery;
@@ -48,7 +47,7 @@
 * It is recommended that this class be subclassed because most records stored in SimpleGeo will have user-defined properties. See 
 * @link //simplegeo/ooc/cl/SGGeoJSONEncoder SGGeoJSONEncoder @/link.
 */
-@interface SGRecord : NSObject <SGRecordAnnotation>
+@interface SGRecord : NSObject <SGRecordAnnotation, SGHistoricRecordAnnoation>
 {
     NSString* recordId;
  
@@ -65,18 +64,7 @@
     NSString* selfLink;
     
     NSMutableDictionary* properties;
-    
     NSDictionary* history;
-    SGHistoryQuery* historyQuery;
-
-    @private
-    BOOL historyChanged;
-    
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-    
-    MKPolyline* polyline;
-    
-#endif
 }
 
 /*!
@@ -147,18 +135,11 @@
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
 /*!
-* @method 
-* @abstract ￼
-* @discussion ￼
+* @property
+* @abstract The history of this record.
+>>>>>>> mapview-abstraction
 */
 @property (nonatomic, retain) NSDictionary* history;
-
-/*!
-* @method 
-* @abstract ￼
-* @discussion ￼
-*/
-@property (nonatomic, readonly) SGHistoryQuery* historyQuery;
 
 /*!
 * @method updateRecordWithGeoJSONObject:
@@ -168,43 +149,22 @@
 - (void) updateRecordWithGeoJSONObject:(NSDictionary*)dictionary;
 
 /*!
-* @method getHistory:cursor:
-* @abstract ￼
-* @discussion ￼
-* @param limit ￼
-* @param cursor ￼
-* @result ￼
-*/
-- (NSString*) getHistory:(int)limit cursor:(NSString*)cursor;
-
-/*!
 * @method updateHistory:
-* @abstract ￼
-* @discussion ￼
+* @abstract ￼Appends the new history with the current history.
+>>>>>>> mapview-abstraction
 * @param newHistory ￼
 */
 - (void) updateHistory:(NSDictionary*)newHistory;
 
 /*!
 * @method updateCoordinate:
-* @abstract ￼
-* @discussion ￼
+* @abstract ￼Updates the history and @link coordinate coordinate @/link while sending
+* a request an update to SimpleGeo.
+>>>>>>> mapview-abstraction
 * @param coord ￼
 * @result ￼
 */
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord;
-
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
-/*!
-* @method  historyPolyline
-* @abstract ￼
-* @discussion ￼
-* @result ￼
-*/
-- (MKPolyline*) historyPolyline;
-
-#endif
 
 @end
 

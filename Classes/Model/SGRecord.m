@@ -34,7 +34,6 @@
 
 #import "SGRecord.h"
 
-#import "SGPointHelper.h"
 #import "SGLocationService.h"
 #import "SGLocationTypes.h"
 #import "SGGeoJSONEncoder.h"
@@ -49,7 +48,7 @@
 @end
 
 @implementation SGRecord
-@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history, historyQuery;
+@synthesize longitude, latitude, created, expires, layer, recordId, properties, layerLink, selfLink, history;
 @dynamic type;
 
 - (id) init
@@ -61,18 +60,15 @@
         recordId = nil;
         created = [[NSDate date] timeIntervalSince1970];
         expires = 0;
-        type = nil;
+        type = @"object";
         layerLink = nil;
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
         layer = nil;
         history = nil;
-        historyQuery = nil;
         
         if(!layer)
             layer = @"";
-        
-        historyChanged = NO;
     }
     
     return self;
@@ -101,7 +97,6 @@
 
 - (void) updateHistory:(NSDictionary*)newHistory
 {
-    historyChanged = YES;
     if(history)
         newHistory = SGGeometryCollectionAppend(history, newHistory);
     
@@ -163,20 +158,12 @@
             self.layer, self.latitude, self.longitude, (int)self.expires, (int)self.created];
 }
 
-- (NSString*) getHistory:(int)limit cursor:(NSString*)cursor
-{
-    historyQuery = [[SGHistoryQuery alloc] initWithRecord:self];
-    historyQuery.cursor = cursor;
-    historyQuery.limit = limit;
-    return [[SGLocationService sharedLocationService] history:historyQuery];
-}
-
 - (NSString*) updateCoordinate:(CLLocationCoordinate2D)coord
 {
     NSString* updateResponseId = nil;
     double newLatitude = coord.latitude;
     double newLongitude = coord.longitude;
-    if(longitude && latitude && (newLatitude != latitude && newLongitude != longitude)) {
+    if(newLatitude != latitude && newLongitude != longitude) {
         SGLog(@"SGRecord - Updating record coordinates to %f,%f from %f,%f", newLatitude, newLongitude, latitude, longitude);
         if(!history) {
             NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
@@ -193,27 +180,6 @@
     
     return updateResponseId;
 }
-
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
-- (MKPolyline*) historyPolyline
-{
-    if(history && historyChanged) {
-        NSMutableArray* coords = [NSMutableArray array];
-        for(NSDictionary* geometry in [history geometries])
-            [coords addObject:[geometry coordinates]];
-        
-        if(polyline)
-            [polyline release];
-
-        polyline = [[MKPolyline polylineWithCoordinates:SGLonLatArrayToCLLocationCoordArray(coords) 
-                                                 count:[coords count]] retain];
-    }
-    
-    return polyline;
-}
-
-#endif
 
 #pragma mark -
 #pragma mark Helper methods 
