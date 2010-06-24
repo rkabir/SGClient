@@ -453,29 +453,27 @@ static NSString* apiVersion = @"0.1";
         }
 
 #if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
-
-        NSMutableArray* totalCachedRecords = [NSMutableArray array];
-        if(backgroundTask) {
-            NSArray* records = nil;
-            for(id<SGLocationServiceDelegate> delegate in delegates) {
-                if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
-                    records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
-                    if(records)
-                        [totalUpdatedRecords addObjectsFromArray:records];
-                }
+    
+    NSMutableArray* totalCachedRecords = [NSMutableArray array];
+        NSArray* records = nil;
+        for(id<SGLocationServiceDelegate> delegate in delegates) {
+            if([delegate respondsToSelector:@selector(locationService:recordsForBackgroundLocationUpdate:)]) {
+                records = [delegate locationService:self recordsForBackgroundLocationUpdate:newLocation];
+                if(records)
+                    [totalUpdatedRecords addObjectsFromArray:records];
             }
-            
-            for(id<SGLocationServiceDelegate> delegate in delegates) {
-                if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
-                    for(id<SGRecordAnnotation> record in totalUpdatedRecords)
-                        if([delegate locationService:self shouldCacheRecord:record])
-                            [totalCachedRecords addObject:record];
-                }
-            }
-
-            [totalUpdatedRecords removeObjectsInArray:totalCachedRecords];
-            [self cacheBackgroundRecords:totalCachedRecords];
         }
+        
+        for(id<SGLocationServiceDelegate> delegate in delegates) {
+            if([delegate respondsToSelector:@selector(locationService:shouldCacheRecord:)]) {
+                for(id<SGRecordAnnotation> record in totalUpdatedRecords)
+                    if([delegate locationService:self shouldCacheRecord:record])
+                        [totalCachedRecords addObject:record];
+            }
+        }
+
+        [totalUpdatedRecords removeObjectsInArray:totalCachedRecords];
+        [self cacheBackgroundRecords:totalCachedRecords];
 
 #endif
         

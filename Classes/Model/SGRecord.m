@@ -34,7 +34,6 @@
 
 #import "SGRecord.h"
 
-#import "SGPointHelper.h"
 #import "SGLocationService.h"
 #import "SGLocationTypes.h"
 #import "SGGeoJSONEncoder.h"
