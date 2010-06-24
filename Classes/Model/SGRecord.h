@@ -45,7 +45,7 @@
 * It is recommended that this class be subclassed because most records stored in SimpleGeo will have user-defined properties. See 
 * @link //simplegeo/ooc/cl/SGGeoJSONEncoder SGGeoJSONEncoder @/link.
 */
-@interface SGRecord : NSObject <SGRecordAnnotation>
+@interface SGRecord : NSObject <SGRecordAnnotation, SGHistoricRecordAnnoation>
 {
     NSString* recordId;
  
@@ -132,6 +132,10 @@
 */
 @property (nonatomic, retain) NSMutableDictionary* properties;
 
+/*!
+* @property
+* @abstract The history of this record.
+*/
 @property (nonatomic, retain) NSDictionary* history;
 
 /*!
@@ -143,16 +147,15 @@
 
 /*!
 * @method updateHistory:
-* @abstract ￼
-* @discussion ￼
+* @abstract ￼Appends the new history with the current history.
 * @param newHistory ￼
 */
 - (void) updateHistory:(NSDictionary*)newHistory;
 
 /*!
 * @method updateCoordinate:
-* @abstract ￼
-* @discussion ￼
+* @abstract ￼Updates the history and @link coordinate coordinate @/link while sending
+* a request an update to SimpleGeo.
 * @param coord ￼
 * @result ￼
 */

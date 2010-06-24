@@ -96,9 +96,6 @@
 		4A752CEE11D11D30005E55B9 /* SGNearbyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A418112095BE00D4E22D /* SGNearbyTests.m */; };
 		4A752CEF11D11D31005E55B9 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4A752CF011D11D32005E55B9 /* SGSpotRankTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A094381115C028E007E3538 /* SGSpotRankTests.m */; };
-		4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
-		4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A859EBD11C13E3300F50676 /* SGPointHelper.h */; };
-		4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A859EBE11C13E3300F50676 /* SGPointHelper.m */; };
 		4A930FAD119DF50E0034828D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A930FAC119DF50E0034828D /* SenTestingKit.framework */; };
 		4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DEFDE11C9CFF100395688 /* SGGeoJSON.m */; };
 		4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A9DEFDF11C9CFF100395688 /* SGGeoJSON.h */; };
@@ -118,6 +115,8 @@
 		4ACEA56E11AB2848003BEED6 /* SGCommitLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 4ACEA56B11AB2848003BEED6 /* SGCommitLog.h */; };
 		4ACEA56F11AB2848003BEED6 /* SGCommitLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
+		4AF65A0211D3C54E005B6205 /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
+		4AF65A0311D3C54F005B6205 /* SGBackgroundLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA46211AB0AD4003BEED6 /* SGBackgroundLocationTests.m */; };
 		4AF85B4311A5E84D00B97ADA /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 4AF85B4211A5E84D00B97ADA /* LICENSE */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -190,8 +189,6 @@
 		4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLatLonNearbyQuery.m; sourceTree = "<group>"; };
 		4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGHistoryQuery.h; sourceTree = "<group>"; };
 		4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHistoryQuery.m; sourceTree = "<group>"; };
-		4A859EBD11C13E3300F50676 /* SGPointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGPointHelper.h; sourceTree = "<group>"; };
-		4A859EBE11C13E3300F50676 /* SGPointHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPointHelper.m; sourceTree = "<group>"; };
 		4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BACKGROUND_LOCATION.markdown; sourceTree = "<group>"; };
 		4A930FAC119DF50E0034828D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = SDKROOT; };
 		4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationManagerTests.m; sourceTree = "<group>"; };
@@ -459,8 +456,6 @@
 				4ACEA3DC11AAE8CD003BEED6 /* SGCacheHandler.m */,
 				4ACEA56B11AB2848003BEED6 /* SGCommitLog.h */,
 				4ACEA56C11AB2848003BEED6 /* SGCommitLog.m */,
-				4A859EBD11C13E3300F50676 /* SGPointHelper.h */,
-				4A859EBE11C13E3300F50676 /* SGPointHelper.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -504,7 +499,6 @@
 				4ACEA3DD11AAE8CD003BEED6 /* SGCacheHandler.h in Headers */,
 				4ACEA56E11AB2848003BEED6 /* SGCommitLog.h in Headers */,
 				4A4ABE0D11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h in Headers */,
-				4A859EC011C13E3300F50676 /* SGPointHelper.h in Headers */,
 				4AC4F07611C5553900EDD585 /* SGLocationTypes.h in Headers */,
 				4AC4F07911C5556400EDD585 /* SGLocationManager.h in Headers */,
 				4A9DEFE111C9CFF100395688 /* SGGeoJSON.h in Headers */,
@@ -629,7 +623,6 @@
 				4ACEA3DF11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */,
 				4ACEA56D11AB2848003BEED6 /* SGCommitLog.m in Sources */,
 				4A4ABE0F11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */,
-				4A859EBF11C13E3300F50676 /* SGPointHelper.m in Sources */,
 				4AC4F06D11C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07B11C5556400EDD585 /* SGLocationManager.m in Sources */,
 				4A9DEFE211C9CFF100395688 /* SGGeoJSON.m in Sources */,
@@ -642,6 +635,8 @@
 				4A752CEE11D11D30005E55B9 /* SGNearbyTests.m in Sources */,
 				4A752CEF11D11D31005E55B9 /* SGRecordTests.m in Sources */,
 				4A752CF011D11D32005E55B9 /* SGSpotRankTests.m in Sources */,
+				4AF65A0211D3C54E005B6205 /* SGLocationManagerTests.m in Sources */,
+				4AF65A0311D3C54F005B6205 /* SGBackgroundLocationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,7 +670,6 @@
 				4ACEA3DE11AAE8CD003BEED6 /* SGCacheHandler.m in Sources */,
 				4ACEA56F11AB2848003BEED6 /* SGCommitLog.m in Sources */,
 				4A4ABE0E11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */,
-				4A859EC111C13E3300F50676 /* SGPointHelper.m in Sources */,
 				4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07A11C5556400EDD585 /* SGLocationManager.m in Sources */,
 				4A9DEFE011C9CFF100395688 /* SGGeoJSON.m in Sources */,
@@ -715,7 +709,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Resources/SGClient_Prefix.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "SG_DEBUG=1";
 				INSTALL_PATH = /usr/local/lib;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
 				PRODUCT_NAME = SGClient;

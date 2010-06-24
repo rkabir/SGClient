@@ -61,7 +61,7 @@
         recordId = nil;
         created = [[NSDate date] timeIntervalSince1970];
         expires = 0;
-        type = nil;
+        type = @"object";
         layerLink = nil;
         selfLink = nil;
         properties = [[NSMutableDictionary alloc] init];
@@ -164,7 +164,7 @@
     NSString* updateResponseId = nil;
     double newLatitude = coord.latitude;
     double newLongitude = coord.longitude;
-    if(longitude && latitude && (newLatitude != latitude && newLongitude != longitude)) {
+    if(newLatitude != latitude && newLongitude != longitude) {
         SGLog(@"SGRecord - Updating record coordinates to %f,%f from %f,%f", newLatitude, newLongitude, latitude, longitude);
         if(!history) {
             NSMutableDictionary* geometryCollection = SGGeometryCollectionCreate();
