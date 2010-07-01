@@ -492,19 +492,31 @@ static NSString* apiVersion = @"0.1";
 
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
     if([cachedResponseIds containsObject:requestId]) {
         SGLog(@"SGLocationService - Cached request successfully sent");
         [cachedResponseIds removeObject:requestId];
     }
+    
+#endif
+
 }
 
  - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
 {
+    
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+    
     if([cachedResponseIds containsObject:requestId]) {
         SGLog(@"SGLocationService - Cached request was unsuccessfully (%@)", [error description]);
         // We might want to recommit the bad request
         [cachedResponseIds removeObject:requestId];
     }
+    
+#endif
+
 }
 
 #pragma mark -

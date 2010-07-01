@@ -10,6 +10,12 @@
 		4A4ABE0D11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A4ABE0B11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h */; };
 		4A4ABE0E11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */; };
 		4A4ABE0F11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A4ABE0C11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m */; };
+		4A5E092A11DCFDD400CAC744 /* SGGeoJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF65AA011D3D916005B6205 /* SGGeoJSON.m */; };
+		4A5E092B11DCFDD400CAC744 /* SGGeoJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF65A9F11D3D916005B6205 /* SGGeoJSON.h */; };
+		4A5E092C11DCFDD500CAC744 /* GeoJSON+NSDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF65A9E11D3D916005B6205 /* GeoJSON+NSDictionary.m */; };
+		4A5E092D11DCFDD500CAC744 /* GeoJSON+NSDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF65A9D11D3D916005B6205 /* GeoJSON+NSDictionary.h */; };
+		4A5E092E11DCFDD600CAC744 /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF65A9C11D3D916005B6205 /* GeoJSON+NSArray.m */; };
+		4A5E092F11DCFDD600CAC744 /* GeoJSON+NSArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF65A9B11D3D916005B6205 /* GeoJSON+NSArray.h */; };
 		4A64A422112095BE00D4E22D /* NSStringAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B4112095BE00D4E22D /* NSStringAdditions.h */; };
 		4A64A423112095BE00D4E22D /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B5112095BE00D4E22D /* NSStringAdditions.m */; };
 		4A64A424112095BE00D4E22D /* SGAuthorization.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A64A3B7112095BE00D4E22D /* SGAuthorization.h */; };
@@ -501,6 +507,9 @@
 				4A4ABE0D11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.h in Headers */,
 				4AC4F07611C5553900EDD585 /* SGLocationTypes.h in Headers */,
 				4AC4F07911C5556400EDD585 /* SGLocationManager.h in Headers */,
+				4A5E092B11DCFDD400CAC744 /* SGGeoJSON.h in Headers */,
+				4A5E092D11DCFDD500CAC744 /* GeoJSON+NSDictionary.h in Headers */,
+				4A5E092F11DCFDD600CAC744 /* GeoJSON+NSArray.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,6 +678,9 @@
 				4A4ABE0E11AC42C6002CA6F8 /* SGGeoJSON+NSDictionary.m in Sources */,
 				4AC4F07511C5553900EDD585 /* SGLocationTypes.m in Sources */,
 				4AC4F07A11C5556400EDD585 /* SGLocationManager.m in Sources */,
+				4A5E092A11DCFDD400CAC744 /* SGGeoJSON.m in Sources */,
+				4A5E092C11DCFDD500CAC744 /* GeoJSON+NSDictionary.m in Sources */,
+				4A5E092E11DCFDD600CAC744 /* GeoJSON+NSArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -706,10 +718,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Resources/SGClient_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = "SG_DEBUG=1";
+				HEADER_SEARCH_PATHS = "Classes/**";
 				INSTALL_PATH = /usr/local/lib;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = SGClient;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Release;
 		};
@@ -805,7 +818,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos4.0;
 				VERSION_INFO_PREFIX = Resources/SGClient_Prefix.pch;
 				WRAPPER_EXTENSION = octest;
 				ZERO_LINK = NO;
