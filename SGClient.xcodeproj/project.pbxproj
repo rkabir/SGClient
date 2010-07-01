@@ -168,7 +168,6 @@
 		4A64B4D31120A78200D4E22D /* SGAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAdditions.h; sourceTree = "<group>"; };
 		4A64B52D1120B9CF00D4E22D /* SGClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGClient.h; sourceTree = "<group>"; };
 		4A64B5471120BB0C00D4E22D /* SGTestingMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGTestingMacros.h; sourceTree = "<group>"; };
-		4A64B5F41120D54C00D4E22D /* build_client */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_client; sourceTree = "<group>"; };
 		4A6A8F9C116AAACD004503B3 /* SGPushPinTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGPushPinTests.m; sourceTree = "<group>"; };
 		4A748CCF11A1FC3C000AA9DD /* SGQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQuery.h; sourceTree = "<group>"; };
 		4A748CD711A1FD55000AA9DD /* SGNearbyQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGNearbyQuery.h; sourceTree = "<group>"; };
@@ -179,6 +178,7 @@
 		4A748CE011A1FD6A000AA9DD /* SGLatLonNearbyQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLatLonNearbyQuery.m; sourceTree = "<group>"; };
 		4A748CE311A1FDD7000AA9DD /* SGHistoryQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGHistoryQuery.h; sourceTree = "<group>"; };
 		4A748CE411A1FDD7000AA9DD /* SGHistoryQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGHistoryQuery.m; sourceTree = "<group>"; };
+		4A75538511DBDBED003E8D8A /* build_dist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = build_dist; sourceTree = "<group>"; };
 		4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BACKGROUND_LOCATION.markdown; sourceTree = "<group>"; };
 		4A930FAC119DF50E0034828D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Developer/Library/Frameworks/SenTestingKit.framework; sourceTree = SDKROOT; };
 		4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGLocationManagerTests.m; sourceTree = "<group>"; };
@@ -243,8 +243,8 @@
 		0867D691FE84028FC02AAC07 /* SGClient */ = {
 			isa = PBXGroup;
 			children = (
+				4A75538511DBDBED003E8D8A /* build_dist */,
 				4A910B7E11D00F6F001B3750 /* BACKGROUND_LOCATION.markdown */,
-				4A64B5F41120D54C00D4E22D /* build_client */,
 				4A64A3AA112095BE00D4E22D /* Classes */,
 				4A64A3C6112095BE00D4E22D /* README */,
 				4A64A3C7112095BE00D4E22D /* Resources */,

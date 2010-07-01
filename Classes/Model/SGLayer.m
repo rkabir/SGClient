@@ -65,8 +65,8 @@
 #pragma mark -
 #pragma mark Accessor methods 
 
-- (SGRecord*) recordAnnotationFromGeoJSONObject:(NSDictionary*)dictionary
-{   
+- (id<SGRecordAnnotation>) recordAnnotationFromGeoJSONObject:(NSDictionary*)dictionary
+{
     // Standard.
     SGRecord* record = [[[SGRecord alloc] init] autorelease];
     [record updateRecordWithGeoJSONObject:dictionary];

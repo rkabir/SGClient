@@ -51,7 +51,7 @@
         [features addObject:geojsonObject];
 
     for(NSDictionary* feature in features) {
-        SGRecord* record = [SGGeoJSONEncoder recordForGeoJSONObject:feature];
+        id<SGRecordAnnotation> record = [SGGeoJSONEncoder recordForGeoJSONObject:feature];
         if(record)
             [records addObject:record];
     }
@@ -59,7 +59,7 @@
     return records;
 }
 
-+ (SGRecord*) recordForGeoJSONObject:(NSDictionary*)geojsonObject
++ (id<SGRecordAnnotation>) recordForGeoJSONObject:(NSDictionary*)geojsonObject
 {
     SGRecord* record = nil;
     if(!record) {
