@@ -63,7 +63,7 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     [self addRecordResponseId:[layer updateAllRecords]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];    
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     double oldLat = r.latitude;
     r.latitude = 1000.0;
@@ -96,7 +96,7 @@ static NSString* testingLayer = kSGTesting_Layer;
     [layer addRecordAnnotations:records update:NO];
     STAssertTrue([[layer recordAnnotations] count] == amount, @"The layer should have %i records registered.", amount);
     [self addRecordResponseId:[layer updateAllRecords]];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     [layer removeAllRecordAnnotations:NO];
@@ -113,7 +113,7 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     STAssertFalse([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
     [layer removeRecordAnnotation:[records lastObject] update:YES];
-    STAssertTrue([layer recordAnnotationCount] == amount - 1, @"There should be %i records.", amount - 1);
+    STAssertTrue([layer recordAnnotationCount] == 0, @"There should be %i records.", amount - 1);
     
     [layer removeAllRecordAnnotations:YES];
     STAssertTrue([[layer recordAnnotations] count] == 0, @"There should be no records.");
@@ -163,8 +163,8 @@ static NSString* testingLayer = kSGTesting_Layer;
     STAssertTrue([[layer recordAnnotations] count] == amount, @"The layer should have %i records registered.", amount);
     [self addRecordResponseId:[layer updateAllRecords]];
     
-    WAIT_FOR_WRITE();
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
+    [SGLocationServiceTests waitForWrite];
     
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
@@ -212,7 +212,7 @@ static NSString* testingLayer = kSGTesting_Layer;
     
     [self addRecordResponseId:[layer updateRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
     query.coordinate = coord;

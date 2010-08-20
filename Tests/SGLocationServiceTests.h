@@ -33,14 +33,8 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import <time.h>
-
 #import "SGClient.h"
 #import "SGTestingMacros.h"
-
-// Delay requests after writes to give them a chance to be 
-// registered.
-#define WAIT_FOR_WRITE()              sleep(5)
 
 @interface SGLocationServiceTests : SenTestCase <SGLocationServiceDelegate> {
     
@@ -61,5 +55,7 @@
 - (void) deleteRecordResponseId:(NSString*)responseId;
 - (void) addRecordResponseId:(NSString*)responseId;
 - (void) retrieveRecordResponseId:(NSString*)responseId;
+
++ (void) waitForWrite;
 
 @end

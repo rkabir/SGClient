@@ -37,6 +37,11 @@
 
 @synthesize locationService, requestIds, recentReturnObject;
 
++ (void) waitForWrite
+{
+    [NSThread sleepForTimeInterval:5.0];
+}
+
 - (void) setUp
 {
     locationService = [SGLocationService sharedLocationService];

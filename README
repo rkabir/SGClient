@@ -1,4 +1,4 @@
-SGClient v0.4.0
+SGClient v0.4.1
 
 ================================================================================
 ABSTRACT:
@@ -160,6 +160,9 @@ Headers
 
 ================================================================================
 CHANGES FROM PREVIOUS VERSIONS:
+Version 0.4.1
+- Fixed linking issues that were present in the Release configuration
+
 Version 0.4.0
 - SGRecordAnnotations can now be updated in the background and tracked
 in the foreground

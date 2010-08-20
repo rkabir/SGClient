@@ -57,7 +57,7 @@
     }
 
     [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
@@ -107,7 +107,7 @@
     }    
         
     [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
@@ -161,7 +161,7 @@
     
     [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
     query.coordinate = coord;

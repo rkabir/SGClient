@@ -97,7 +97,7 @@
     NSString* requestId = nil;    
     for(id<SGRecordAnnotation> recordAnnotation in records) {
         if([recordAnnotation respondsToSelector:@selector(setLayer:)])
-            [recordAnnotation setLayer:layerId];
+            [(SGRecord*)recordAnnotation setLayer:layerId];
         [sgRecords setObject:recordAnnotation forKey:[recordAnnotation recordId]];
     }
     

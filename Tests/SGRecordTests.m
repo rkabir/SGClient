@@ -54,7 +54,7 @@
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
     
     STAssertTrue([[self.locationService.operationQueue operations] count] == 0, @"There should be 0 operations in the queue");       
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record]];
     [self deleteRecordResponseId:[self.locationService deleteRecordAnnotation:record1]];
@@ -77,7 +77,7 @@
     SGRecord* record = [self createRandomRecord];
     [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];     
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     NSInteger expectedId = [record.recordId intValue];
     [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId layer:record.layer]];    
@@ -99,8 +99,8 @@
 
     [self addRecordResponseId:[self.locationService updateRecord:record.recordId layer:record.layer coord:record.coordinate properties:properties]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
+    [SGLocationServiceTests waitForWrite];
     
     [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId layer:record.layer]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
@@ -130,7 +130,7 @@
     
     [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
@@ -143,7 +143,7 @@
     [((NSMutableDictionary*)[record properties]) setObject:@"hi" forKey:@"there"];
     [self addRecordResponseId:[self.locationService updateRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
 
     [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotations:records]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
@@ -170,13 +170,13 @@
     
     [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     double newLat = 10.01;
     record.latitude = newLat;
     [self addRecordResponseId:[self.locationService updateRecordAnnotation:record]];    
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     record.latitude = -newLat;
     
@@ -195,7 +195,7 @@
                                                           coord:record.coordinate
                                                      properties:record.properties]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
 
     [self retrieveRecordResponseId:[self.locationService retrieveRecord:record.recordId
                                                                  layer:record.layer]];
@@ -216,7 +216,7 @@
     [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];    
     [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];        
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     [self retrieveRecordResponseId:[self.locationService retrieveRecordAnnotation:r1]];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
@@ -237,7 +237,7 @@
         r1.created = r1.created+100;
         [self addRecordResponseId:[self.locationService updateRecordAnnotation:r1]];    
         [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-        WAIT_FOR_WRITE();
+        [SGLocationServiceTests waitForWrite];
     }
     
     SGHistoryQuery* historyQuery = [[SGHistoryQuery alloc] initWithRecord:r1];

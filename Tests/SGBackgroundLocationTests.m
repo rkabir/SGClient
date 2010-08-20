@@ -85,7 +85,7 @@
                     didUpdateToLocation:location
                            fromLocation:oldLocation];
         oldLocation = location;
-        WAIT_FOR_WRITE();
+        [SGLocationServiceTests waitForWrite];
         [locationService.operationQueue waitUntilAllOperationsAreFinished];
     }    
 }
@@ -97,7 +97,7 @@
     
     // Make sure the record has a clean history
     [self.locationService deleteRecordAnnotation:r1];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add record."]
                         forKey:[self.locationService updateRecordAnnotation:r1]];
@@ -105,7 +105,7 @@
 
     [locationService enterBackground];   
     [self updateLocationManager];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
 
     [locationService leaveBackground];
     [locationService becameActive];
@@ -120,7 +120,7 @@
     
     // Make sure the record has a clean history
     [self.locationService deleteRecordAnnotation:cachedRecord];
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
     
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to add record."]
                         forKey:[self.locationService updateRecordAnnotation:cachedRecord]];
@@ -131,7 +131,7 @@
     [locationService leaveBackground];
     [locationService becameActive];
     
-    WAIT_FOR_WRITE();
+    [SGLocationServiceTests waitForWrite];
 
     [self validateHistory:cachedRecord];
 }
