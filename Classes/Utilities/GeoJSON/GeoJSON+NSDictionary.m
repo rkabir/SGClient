@@ -59,7 +59,7 @@
 - (NSArray*) coordinates
 {
     NSArray* coordinates = nil;
-    if([self isPoint])
+    if([self isPoint] || [self isPolygon] || [self isMultiPolygon])
         coordinates = [self objectForKey:@"coordinates"];
     
     return coordinates;
