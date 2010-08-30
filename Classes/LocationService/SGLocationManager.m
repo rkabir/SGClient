@@ -25,19 +25,18 @@
 {
     if(self = [super init]) {
         regions = nil;
-        conformsToSGDelegate = NO;
         regionResponseId = nil;
+        trueDelegate = nil;
+        [super setDelegate:self];
     }
     
     return self;
 }
 
-- (void) setDelegate:(id<CLLocationManagerDelegate>)newDelegate
+- (void) setDelegate:(id<SGLocationManagerDelegate>)newDelegate
 {
-    conformsToSGDelegate = [newDelegate conformsToProtocol:@protocol(SGLocationManagerDelegate)];
-    [super setDelegate:newDelegate];
-    
-    if(conformsToSGDelegate)
+    trueDelegate = newDelegate;
+    if([newDelegate conformsToProtocol:@protocol(SGLocationManagerDelegate)])
         [[SGLocationService sharedLocationService] addDelegate:self];
 }
 
@@ -46,9 +45,55 @@
 
 - (void) locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation
 {
-    if(conformsToSGDelegate && !regionResponseId)
+    if(!regionResponseId)
         regionResponseId = [[[SGLocationService sharedLocationService] contains:newLocation.coordinate] retain];
+    
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:didUpdateToLocation:fromLocation:)])
+        [trueDelegate locationManager:self didUpdateToLocation:newLocation fromLocation:oldLocation];
 }
+
+- (void) locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
+{
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:didFailWithError:)])
+        [trueDelegate locationManager:self didFailWithError:error];
+}
+
+- (void) locationManager:(CLLocationManager*)manager didUpdateHeading:(CLHeading*)newHeading
+{
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:didUpdateHeading:)])
+        [trueDelegate locationManager:self didUpdateHeading:newHeading];    
+}
+
+#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+
+- (BOOL) locationManagerShouldDisplayHeadingCalibration:(CLLocationManager*)manager
+{
+    BOOL value = NO;
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManagerShouldDisplayHeadingCalibration:)])
+        value = [trueDelegate locationManagerShouldDisplayHeadingCalibration:self];
+    
+    return value;
+}
+
+- (void) locationManager:(CLLocationManager *)managerdidEnterRegion:(CLRegion*)region
+{
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:didUpdateToLocation:fromLocation:)])
+        [trueDelegate locationManager:self didEnterRegion:region];
+}
+
+- (void) locationManager:(CLLocationManager*)manager didExitRegion:(CLRegion*)region
+{
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:didExitRegion:)])
+        [trueDelegate locationManager:self didExitRegion:region];
+}
+
+- (void) locationManager:(CLLocationManager*)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    if(trueDelegate && [trueDelegate respondsToSelector:@selector(locationManager:monitoringDidFailForRegion:withError:)])
+        [trueDelegate locationManager:self monitoringDidFailForRegion:region withError:error];
+}
+
+#endif
 
 #pragma mark -
 #pragma mark SGLocationService delegate methods 
@@ -87,7 +132,6 @@
         regions = [newRegions retain];
         [addedRegions addObjectsFromArray:regions];
     } else {
-
         for(NSDictionary* region in regions)
             if(![self isRegion:region foundInSet:newRegions])
                 [removedRegions addObject:region];
@@ -98,15 +142,13 @@
                 
         [regions release];
         regions = [newRegions retain];
-    }   
+    }
+
+    if([addedRegions count])
+        [trueDelegate locationManager:self didEnterRegions:addedRegions];
     
-    if(conformsToSGDelegate) {
-        if([addedRegions count])
-            [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didEnterRegions:addedRegions];
-        
-        if([removedRegions count])
-            [(id<SGLocationManagerDelegate>)self.delegate locationManager:self didLeaveRegions:removedRegions];
-    }    
+    if([removedRegions count])
+        [trueDelegate locationManager:self didLeaveRegions:removedRegions];
 }
 
 - (BOOL) isRegion:(NSDictionary*)newRegion foundInSet:(NSArray*)regionSet
@@ -125,6 +167,7 @@
           
 - (void) dealloc
 {
+    [[SGLocationService sharedLocationService] removeDelegate:self];
     [regionResponseId release];
     [regions release];
     [super dealloc];
