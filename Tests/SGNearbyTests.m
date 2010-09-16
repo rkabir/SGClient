@@ -64,7 +64,7 @@
     query.coordinate = coord;
     query.radius = 10.0;
     query.layer = kSGTesting_Layer;
-    query.limit = 100;
+    query.limit = 40;
     
     for(int i = 0; i < 10; i++) {
         recentReturnObject = nil;
@@ -113,7 +113,7 @@
     SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:kSGTesting_Layer];
     query.coordinate = coord;
     query.radius = 10.0;
-    query.limit = 100;
+    query.limit = 40;
     query.start = currentTime;
     query.end = weekLater;
     

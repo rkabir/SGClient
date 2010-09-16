@@ -74,7 +74,7 @@
  
     id<SGAuthorization> HTTPAuthorizer;
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     BOOL useGPS;
     BOOL useWiFiTowers;
@@ -86,7 +86,7 @@
     NSMutableArray* requestIds;
     NSMutableArray* delegates;
     
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
     UIBackgroundTaskIdentifier backgroundTask;
     SGCommitLog* commitLog;
@@ -145,7 +145,7 @@
 */
 @property (nonatomic, assign) CLLocationAccuracy accuracy;
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
 /*!
 * @method becameActive
@@ -548,7 +548,7 @@
 */
 - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error;
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
 @optional
 

@@ -45,7 +45,7 @@
 #import "SGCacheHandler.h"
 
 #import "geohash.h"
-#import "CJSONSerializer.h"
+#import "CJSONSerializer.h" 
 #import "NSDictionary_JSONExtensions.h"
 #import "SGGeoJSONEncoder.h"
     
@@ -96,7 +96,7 @@ static NSString* apiVersion = @"0.1";
 
 - (void) updateBackgroundRecords:(NSArray*)records;
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
 - (void) initializeCommitLog;
 - (void) replayCommitLog;
@@ -127,7 +127,7 @@ static NSString* apiVersion = @"0.1";
         
         accuracy = kCLLocationAccuracyBest;        
         
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
         
         commitLog = nil;
         cachedResponseIds = [[NSMutableArray alloc] init];
@@ -183,7 +183,7 @@ static NSString* apiVersion = @"0.1";
         // and reload a new one.
         HTTPAuthorizer = authorizer;
         
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
         
         [self initializeCommitLog];   
 
@@ -192,7 +192,7 @@ static NSString* apiVersion = @"0.1";
     }
 }
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
 - (void) initializeCommitLog
 {
@@ -391,7 +391,7 @@ static NSString* apiVersion = @"0.1";
         locationManager.delegate = self;    
     }
     
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     if(useWiFiTowers)
         [locationManager startMonitoringSignificantLocationChanges];        
@@ -413,7 +413,7 @@ static NSString* apiVersion = @"0.1";
 {
     if(locationManager) {
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
 
         [locationManager stopMonitoringSignificantLocationChanges];
 
@@ -453,7 +453,7 @@ static NSString* apiVersion = @"0.1";
             }
         }
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     NSMutableArray* totalCachedRecords = [NSMutableArray array];
         NSArray* records = nil;
@@ -484,7 +484,7 @@ static NSString* apiVersion = @"0.1";
 
 - (void) locationManager:(CLLocationManager*)manager didFailWithError:(NSError*)error
 {
-    SGLog(@"SGLocationService - Error obtaining lcoation (%@)", [error description]);
+    SGLog(@"SGLocationService - Error obtaining location (%@)", [error description]);
 }
 
 #pragma mark -
@@ -493,7 +493,7 @@ static NSString* apiVersion = @"0.1";
 - (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
 {
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     if([cachedResponseIds containsObject:requestId]) {
         SGLog(@"SGLocationService - Cached request successfully sent");
@@ -507,7 +507,7 @@ static NSString* apiVersion = @"0.1";
  - (void) locationService:(SGLocationService*)service failedForResponseId:(NSString*)requestId error:(NSError*)error
 {
     
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     if([cachedResponseIds containsObject:requestId]) {
         SGLog(@"SGLocationService - Cached request was unsuccessfully (%@)", [error description]);
@@ -1133,7 +1133,7 @@ static NSString* apiVersion = @"0.1";
     [operationQueue release];
     [requestIds release];
 
-#if __IPHONE_4_0 >= __IPHONE_OS_VERSION_MAX_ALLOWED
+#if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
     
     if(commitLog)
         [commitLog release];

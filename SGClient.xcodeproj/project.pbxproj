@@ -109,9 +109,6 @@
 		4AD38D891214CD6500C9F19D /* SGLocationManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9868D611CA4D620043ABB3 /* SGLocationManagerTests.m */; };
 		4AD38D8A1214CD6600C9F19D /* SGLayerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A415112095BE00D4E22D /* SGLayerTest.m */; };
 		4AD38D8B1214CD6600C9F19D /* SGGeoJSONEncoderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A414112095BE00D4E22D /* SGGeoJSONEncoderTests.m */; };
-		4AD38D8C1214CD6600C9F19D /* SGCommitLogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA57711AB3B8F003BEED6 /* SGCommitLogTests.m */; };
-		4AD38D8D1214CD6700C9F19D /* SGCacheHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA46811AB0B89003BEED6 /* SGCacheHandlerTests.m */; };
-		4AD38D8E1214CD6700C9F19D /* SGBackgroundLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEA46211AB0AD4003BEED6 /* SGBackgroundLocationTests.m */; };
 		4AE03B6A115547ED00096B6E /* SGGeoJSONEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A3B9112095BE00D4E22D /* SGGeoJSONEncoder.m */; };
 		4AE347EC1211D60A00BEC607 /* SGRecordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64A419112095BE00D4E22D /* SGRecordTests.m */; };
 		4AF65AA111D3D916005B6205 /* GeoJSON+NSArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF65A9C11D3D916005B6205 /* GeoJSON+NSArray.m */; };
@@ -561,7 +558,14 @@
 			};
 			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "SGClient" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* SGClient */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
@@ -642,9 +646,6 @@
 				4AD38D891214CD6500C9F19D /* SGLocationManagerTests.m in Sources */,
 				4AD38D8A1214CD6600C9F19D /* SGLayerTest.m in Sources */,
 				4AD38D8B1214CD6600C9F19D /* SGGeoJSONEncoderTests.m in Sources */,
-				4AD38D8C1214CD6600C9F19D /* SGCommitLogTests.m in Sources */,
-				4AD38D8D1214CD6700C9F19D /* SGCacheHandlerTests.m in Sources */,
-				4AD38D8E1214CD6700C9F19D /* SGBackgroundLocationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,7 +705,7 @@
 				HEADER_SEARCH_PATHS = Classes;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = SGClient;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 			};
 			name = Debug;
 		};
@@ -787,7 +788,7 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = SGClientTests;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphonesimulator4.1;
 				VERSION_INFO_PREFIX = "";
 				WRAPPER_EXTENSION = octest;
 			};

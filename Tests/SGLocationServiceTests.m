@@ -39,7 +39,7 @@
 
 + (void) waitForWrite
 {
-    [NSThread sleepForTimeInterval:5.0];
+    [NSThread sleepForTimeInterval:3.0];
 }
 
 - (void) setUp
