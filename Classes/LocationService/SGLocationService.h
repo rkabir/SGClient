@@ -110,7 +110,7 @@
 * @property
 * @abstract The type of authorization to apply to all HTTP requests.
 */
-@property (nonatomic, assign) id<SGAuthorization> HTTPAuthorizer;
+@property (nonatomic, retain) id<SGAuthorization> HTTPAuthorizer;
 
 /*!
 * @property
