@@ -35,7 +35,7 @@
 #import "SGNearbyQuery.h"
 
 @implementation SGNearbyQuery
-@synthesize cursor, layer, types, start, end, limit, requestId;
+@synthesize cursor, layer, types, start, end, limit, requestId, tag;
 
 - (id) initWithLayer:(NSString*)newLayer
 {
@@ -48,7 +48,7 @@
         end= -1;
         
         limit = 25;
-        
+        tag = nil;
         requestId = nil;
     }
     
@@ -66,12 +66,12 @@
         [params setObject:[NSString stringWithFormat:@"%f", start] forKey:@"start"];
         [params setObject:[NSString stringWithFormat:@"%f", end] forKey:@"end"];
     }
-    
-    if(types && [types count])
-        [params setObject:[types componentsJoinedByString:@","] forKey:@"types"];
-    
+        
     if(limit > 0)
         [params setObject:[NSString stringWithFormat:@"%i", limit] forKey:@"limit"];
+    
+    if(tag && ![tag isEqualToString:@""])
+        [params setObject:tag forKey:@"tag"];
     
     return params;
 }
@@ -88,9 +88,9 @@
     
     if(layer)
         [layer release];
-    
-    if(types)
-        [types release];
+        
+    if(tag)
+        [tag release];
  
     [super dealloc];
 }

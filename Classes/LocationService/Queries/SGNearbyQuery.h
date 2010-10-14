@@ -44,7 +44,6 @@
 
     NSString* cursor;
     NSString* layer;
-    NSArray* types;
     
     double start;
     double end;
@@ -52,6 +51,7 @@
     int limit;
     
     NSString* requestId;
+    NSString* tag;
 }
 
 /*!
@@ -63,6 +63,8 @@
 */
 - (id) initWithLayer:(NSString*)newLayer;
 
+@property (nonatomic, retain) NSString* layer;
+
 /*!
 * @property
 * @abstract The cursor that is obtained from a previous nearby query.
@@ -70,12 +72,6 @@
 * successful query. It is only used for paginiation.
 */
 @property (nonatomic, retain) NSString* cursor;
-
-/*!
-* @property
-* @abstract The layer to search in.
-*/
-@property (nonatomic, retain) NSString* layer;
 
 /*!
 * @property
@@ -118,5 +114,12 @@
 * is sent through the @link //simplegeo/ooc/cl/SGLocationService SGLocationService @/link.
 */
 @property (nonatomic, retain) NSString* requestId;
+
+
+/*!
+* @property
+* @abstract The tag to filter by when sending the nearby request.
+*/
+@property (nonatomic, retain) NSString* tag;
 
 @end
