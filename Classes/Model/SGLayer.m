@@ -170,6 +170,7 @@
     [[SGLocationService sharedLocationService] addDelegate:self];
     
     query.layer = layerId;
+
     NSString* responseId = [[SGLocationService sharedLocationService] nearby:query];
     if(responseId) {
         [layerResponseIds addObject:responseId];

@@ -81,7 +81,7 @@
 @property (nonatomic, retain) SGNearbyQuery* recentNearbyQuery;
 
 /*!
-* @protocol
+* @property
 * @abstract If a @link nearby: nearby: @/link request is sent this
 * value is set to YES, then retrieved records will be added to this
 * object. If NO, then records will be ignored.
