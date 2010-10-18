@@ -42,7 +42,6 @@
 @end
 
 @implementation SGNearbyTests
-
 - (void) testNearbyDistanceSort
 {
     CLLocationCoordinate2D coord = {10.0, 10.0};
@@ -184,6 +183,17 @@
     
     [query release];
     [self deleteRecordResponseId:[self.locationService deleteRecordAnnotations:records]];
+}
+
+- (void) testNearbyIPAddress
+{
+    SGIPAddressQuery* query = [[SGIPAddressQuery alloc] initWithLayer:@"com.simplegeo.us.business"];
+    query.ipAddress = @"173.164.32.245";
+    [self retrieveRecordResponseId:[self.locationService nearby:query]];
+    [SGLocationServiceTests waitForWrite];
+    STAssertTrue([recentReturnObject isFeatureCollection], @"A feature colleciton should be returned.");    
+    for(NSDictionary* feature in [recentReturnObject features])
+        STAssertTrue([[[feature properties] objectForKey:@"city"] isEqualToString:@"Denver"], @"The business listings should be from Denver");
 }
 
 - (void) testReverseGeocoder
