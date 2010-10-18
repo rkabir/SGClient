@@ -175,10 +175,8 @@
     [requestIds removeAllObjects];
     
     if(recentReturnObject) {
-        
         [recentReturnObject release];
         recentReturnObject = nil;
-        
     }
 }
 
