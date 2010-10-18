@@ -873,6 +873,20 @@ static NSString* apiVersion = @"0.1";
     return responseId;                       
 }
 
+- (NSString*) containsIPAddress:(NSString*)ipAddress
+{
+    NSString* responseId = [self getNextResponseId];
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/contains/%@.json", ipAddress],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    [self pushInvocationWithArgs:params];
+    return responseId;
+}
+
 - (NSString*) boundary:(NSString*)featureId
 {
     NSString* responseId = [self getNextResponseId];

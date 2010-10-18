@@ -50,11 +50,17 @@
     [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a collection of polygons."]
                         forKey:responseId];
     [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
-    
     STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of json objects.");
-    
     int size = [recentReturnObject count];
     STAssertTrue(size == 9, @"Nine polygons should be returned but was %i", size);
+    
+    responseId = [self.locationService containsIPAddress:@"173.164.32.245"];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should return a collectoin of polygons."]
+                        forKey:responseId];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
+    STAssertTrue([recentReturnObject isKindOfClass:[NSArray class]], @"Return object should be a list of json objects.");
+    size = [recentReturnObject count];
+    STAssertTrue(size == 9, @"Nine polygons should be returned but was %i", size);    
 }
 
 - (void) testBoundary

@@ -482,6 +482,17 @@
 - (NSString*) contains:(CLLocationCoordinate2D)coord;
 
 /*!
+ * @method containsIPAddress:
+ * @abstract ￼Does a "pushpin" query through a series of polygon layers and identifies the "cone" of
+ * administrative and other boundaries in which the point lies.
+ * @discussion ￼@link contains: contains: @/link
+ * @param ipAddress ￼The desired ip address
+ * @result A response id that is used to identify the return value from SimpleGeo. 
+ * You can use this value in @link SGLocationServiceDelegate delegate @/link. 
+ */
+- (NSString*) containsIPAddress:(NSString*)ipAddress;
+
+/*!
 * @method boundary:
 * @abstract Returns a feature object from the SimpleGeo gazetteer, @link contains: contains: @/link, along with the geometry
 * of the feature in GeoJSON format in the geometry field. 
