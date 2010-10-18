@@ -181,7 +181,10 @@ static NSString* apiVersion = @"0.1";
         // Whenever the authorizer changes, the username can also change.
         // We need to save the current dictionary to the proper directory
         // and reload a new one.
-        HTTPAuthorizer = authorizer;
+        if(HTTPAuthorizer)
+            [HTTPAuthorizer release];
+        
+        HTTPAuthorizer = [authorizer retain];
         
 #if __IPHONE_4_0 && __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0  
         
