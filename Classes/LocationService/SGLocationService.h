@@ -418,6 +418,15 @@
 */
 - (NSString*) reverseGeocode:(CLLocationCoordinate2D)coord;
 
+/*!
+* @method locate:
+* @abstract Returns the latitude and longitude for a given ip address.
+* @param ipAddress ￼
+* @result A response id that is used to identify the return value from SimpleGeo. 
+* You can use this value in @link SGLocationServiceDelegate delegate @/link. 
+*/
+- (NSString*) locate:(NSString*)ipAddress;
+
 #pragma mark -
 #pragma mark SpotRank
 

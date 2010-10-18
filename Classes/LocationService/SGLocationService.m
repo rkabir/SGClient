@@ -793,8 +793,6 @@ static NSString* apiVersion = @"0.1";
 - (NSString*) reverseGeocode:(CLLocationCoordinate2D)coord
 {
     NSString* responseId = [self getNextResponseId];
-    
-    
     NSArray* params = [NSArray arrayWithObjects:
                        @"GET",
                        [NSString stringWithFormat:@"/nearby/address/%f,%f.json", coord.latitude, coord.longitude],
@@ -804,6 +802,20 @@ static NSString* apiVersion = @"0.1";
                        nil];
     [self pushInvocationWithArgs:params];
     
+    return responseId;
+}
+
+- (NSString*) locate:(NSString*)ipAddress
+{
+    NSString* responseId = [self getNextResponseId];
+    NSArray* params = [NSArray arrayWithObjects:
+                       @"GET",
+                       [NSString stringWithFormat:@"/locate/%@.json", ipAddress],
+                       [NSNull null],
+                       [NSNull null],
+                       responseId,
+                       nil];
+    [self pushInvocationWithArgs:params];
     return responseId;
 }
 
@@ -993,7 +1005,7 @@ static NSString* apiVersion = @"0.1";
     // then there was an error and the delegate should be notified.
     if([responses count] != [requestList count]) {
         [responseObject setObject:[response objectForKey:@"error"] forKey:@"error"];
-                        
+        
         if(callbackOnMainThread)
             [self performSelectorOnMainThread:@selector(failed:) withObject:responseObject waitUntilDone:NO];
         else

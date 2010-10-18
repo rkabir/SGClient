@@ -42,6 +42,7 @@
 @end
 
 @implementation SGNearbyTests
+
 - (void) testNearbyDistanceSort
 {
     CLLocationCoordinate2D coord = {10.0, 10.0};
@@ -210,6 +211,19 @@
     STAssertNotNil(properties, @"GeoJSON object should contain a properties field.");
     STAssertTrue([properties count] == 9, @"There should be 9 key/value pairs in the properties dictionary.");
     STAssertTrue([[properties objectForKey:@"country"] isEqualToString:@"US"], @"The country code should be US.");
+}
+
+- (void) testLocate
+{
+    NSString* responseId = [self.locationService locate:@"173.164.32.245"];
+    [self.requestIds setObject:[self expectedResponse:YES message:@"Should be able to geocde an ip address."]
+                        forKey:responseId];
+    [self.locationService.operationQueue waitUntilAllOperationsAreFinished];
+
+    STAssertNotNil(recentReturnObject, @"The return object should not be nil.");
+    STAssertTrue([recentReturnObject isFeature], @"The return object should be a feature.");
+    STAssertTrue([[recentReturnObject latitude] doubleValue] == 39.7437, @"Latitude is wrong.");
+    STAssertTrue([[recentReturnObject longitude] doubleValue] == -1049793, @"Longitude is wrong.");
 }
 
 @end
