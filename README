@@ -39,6 +39,49 @@ USAGE:
 4. Goto your target's info and add "-all_load -ObjC -l SGClient" to the "Other Linker Flags" setting under the Build tag. This will
 inform the linker to load the categories from the static library.
 
+Once the files have been imported into the Xcode project, initialize a shared
+instance of SGLocationService and add the proper OAuth credentials.
+
+SGLocationService* locationService = [SGLocationService sharedLocationService];
+SGOAuth* oAuth = [[SGOAuth alloc] initWithKey:@"my_key" secret:@"my_secret"];
+locationSErvice.HTTPAuthorizer = oAuth;
+
+The next step will be to register an object as a delegate with the SGLocationService.
+The delegate will receive callback notificaitions whenever a HTTP request returns
+from http://api.simplegeo.com.
+
+[locationService addDelegate:self]
+
+* * *
+
+- (void) locationService:(SGLocationService*)service succeededForResponseId:(NSString*)requestId responseObject:(NSObject*)responseObject
+{
+    NSLog(@"Got me a response back from SimpleGeo!");
+
+    // Do something with the responseObject.
+    NSDictionary* featureCollection = (NSDictionary*)responseObject;
+    for(NSDictionary* feature in featureCollection)
+        NSLog([feature description]);
+}
+
+Once we have implemeneted the deleagte methods defined by SGLocationServiceDelegate, we can
+start to fire off requests.
+
+// Fire off a nearby query for a layer
+SGLatLonNearbyQuery* query = [[SGLatLonNearbyQuery alloc] initWithLayer:@"my_layer"];
+CLLocationCoordinate coordinate = {40.1235, -105.213}
+query.coordinate = coordinate;
+query.radius = 10.0;
+
+[locationService nearby:query];
+
+
+In this instance, invoking the nearby: method will spawn an async request to http://api.simplegeo.com/0.1/nearby/my_layer/40.1235,-105.213.json.
+The results of the query will be returned in the responseObject parameter of the locationService:succeededForResponseId:resposneObject:
+delegate method.
+
+For an example application, checkout http://github.com/simplegeo/SGDemoApp.
+
 ================================================================================
 BUILD REQUIREMENTS:
 
