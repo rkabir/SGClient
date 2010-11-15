@@ -39,13 +39,13 @@
 #import "hmac.h"
 #import "Base64Transcoder.h"
 
-@interface SGOAuth (Private) 
+@interface SGOAuth (Private)
 
 - (NSString*) signatureBaseStringFromRequest:(NSURLRequest*)request params:(NSDictionary*)params;
 - (NSString*) normalizeRequestParams:(NSDictionary*)params;
 - (NSString*) generateTimestamp;
 - (NSString*) generateNonce;
-- (NSString*) signText:(NSString *)text withSecret:(NSString *)secret;
+- (NSString*) signText:(NSString*)text withSecret:(NSString *)secret;
 
 @end
 
@@ -74,7 +74,6 @@
 + (SGOAuth*) resume
 {
     SGOAuth* oauth = nil;
-    
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     NSString* key = [defaults objectForKey:@"SGOAuthKey"];
@@ -197,8 +196,7 @@
     CFUUIDRef theUUID = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, theUUID);
     NSMakeCollectable(theUUID);
-    
-    return  (NSString*)string;
+    return (NSString*)string;
 }
 
 - (NSString*) signText:(NSString*)text withSecret:(NSString*)secret 
