@@ -32,7 +32,7 @@ them.
 ================================================================================
 USAGE:
 
-1. Make sure SGClient-v*.*.* is built.
+1. Run ./build_dist
 2. Add /path/to/SGClient-v*.*.*/Headers to the "Header Search Paths" setting.
 3. Add /path/to/SGClient-v*.*.*/$(PLATFORM_NAME) to "Library Search Paths" setting.
 3. Add the following frameworks: CoreLocation, Foundation
